@@ -7,14 +7,10 @@
     }
     require('../config.php');
     // 拼接refresh_token路径
-    $page_url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $page_url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
+    $page_url = str_replace("/index.php","",$page_url);
     $redirecturl = urlencode($page_url);
-    $if_index = 'index.php';  // 是否存在index
-    if(substr_compare($page_url, $if_index, -strlen($if_index)) === 0){
-        $page_url = substr($page_url,0,strlen($page_url)-strlen($if_index));
-        
-    }
-    $refresh_token = $page_url.'refresh_token.php'; // end
+    $refresh_token = $page_url.'/refresh_token.php'; // end
     // 判断token天数
     $pass_time = time()-$config['identify']['conn_time'];
     $express_day = ($config['identify']['expires_in']-$pass_time)/3600/24;

@@ -8,6 +8,9 @@
     }else{
         $action = '登录';
     }
+    // 获取当前路径
+    $page_url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
+    $page_url = str_replace("/index.php","",$page_url);
 ?>
 <!doctype html>
 <html>
@@ -147,8 +150,8 @@
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename</td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
-              <a href='https://bp3.52dixiaowo.com/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='https://bp3.52dixiaowo.com/dn.php?fsid=$fsid'>复制</button>
+              <a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
+              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
               </div>
           </td>
         </tr>";
@@ -197,8 +200,8 @@
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
-              <a type='button' class='btn btn-default' href='https://bp3.52dixiaowo.com/dn.php?fsid=$fsid'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='https://bp3.52dixiaowo.com/dn.php?fsid=$fsid'>复制</button>
+              <a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
+              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
               </div>
           </td>
         </tr>";

@@ -10,7 +10,7 @@
     require('../functions.php');
     // 获取当前路径
     $page_url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
-    $page_url = str_replace("/index.php","",$page_url);
+    $page_url = str_replace("/admin/file.php","",$page_url);
 ?>
 <!doctype html>
 <html>

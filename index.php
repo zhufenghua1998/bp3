@@ -193,7 +193,7 @@
                     // 去掉前缀
                     $path = substr($row->path,strlen($predir));
                     $encode_path = urlencode($path);
-                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info' colspan='3' ><a href='?dir=$encode_path' style='display:block'>$path</a></td></tr>";
+                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info' colspan='3' ><a href='?dir=$encode_path' style='display:block'>$row->server_filename</a></td></tr>";
                  }else{
                      $fsid = $row->fs_id;
                      $show_size = height_show_size($row->size);

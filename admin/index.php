@@ -20,7 +20,7 @@
     $redrect_uri = $config['connect']['redirect_uri'];
     $state = rand(10,100);
     $_SESSION['state'] = $state;
-    $conn = "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&redirect_uri=$redrect_uri&scope=basic&display=popup&state=$state";
+    $conn = "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&redirect_uri=$redrect_uri&scope=basic,netdisk&display=popup&state=$state";
     // 判断网盘会员类型
     $vip_type = $config['basic']['vip_type'];
     if(isset($vip_type)){

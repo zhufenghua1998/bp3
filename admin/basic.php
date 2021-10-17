@@ -18,7 +18,6 @@
   $config['basic']['uk'] = $json->uk;
   $config['basic']['vip_type'] = $json->vip_type;
   $text='<?php $config='.var_export($config,true).';'; 
-  $config_file = "../config.php";
   file_put_contents($config_file,$text);
   // 完成
 ?>

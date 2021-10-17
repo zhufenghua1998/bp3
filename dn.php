@@ -38,7 +38,7 @@
     curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data);
     // 设置user-agent
     curl_setopt($ch, CURLOPT_USERAGENT,"pan.baidu.com");
-    // 允许302
+    // 允许301,302
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     // 取消https验证
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

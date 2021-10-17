@@ -89,16 +89,16 @@
                 <h2>连接说明</h2>
             </div>
             <div class="col-xs-6">
-                <h2><a href="<?php echo $refresh_token.'?redirect='.$redirecturl;?>">刷新token</a></h2>
+                <h2><a href="<?php echo $conn;?>">获取授权</a></h2>
             </div>
         </div>
         <div>
-        <p>本程序需要连接到百度网盘，token每次有效期为30天</p>
-        <p>当前token有效期剩余：<b><?php echo $express_day;?></b>天</p>
-        <p>如果您需要刷新token，请点击<b>刷新token</b></p>
-        <p>php程序定时脚本容易被自动释放，您要么手动刷新，要么定期访问URL</p>
-        <p>提供自动刷新token的URL：<b><?php echo $refresh_token;?></b></p>
-        <p>如果您未授权，或更换授权，点击<b>重新授权</b></p>
+        <p>本程序需要连接到百度网盘。</p>
+        <p>如果您是首次配置，请点击<b>获取授权</b>，登录百度账号以完成授权</p>
+        <p>授权后有效期10年，在此期间你无需重新点击授权。</p>
+        <p>注意：授权时，必须允许访问网盘数据，否则无法正常使用。</p>
+        <p>如果你的浏览器已经登录百度，会自动检测百度cookie。</p>
+        <p>在完成授权后，在下方会自动获取你的百度基础信息。</p>
         </div>
 
         <div class="row">
@@ -106,7 +106,7 @@
                 <h2>百度信息</h2>
             </div>
             <div class="col-xs-6">
-                <h2><a href="<?php echo $conn;?>">重新授权</a></h2>
+                <h2><a href="<?php echo $refresh_token.'?redirect='.$redirecturl;?>">刷新信息</a></h2>
             </div>
         </div>
         
@@ -143,7 +143,7 @@
               </tbody>
             </table>
           </div><!-- table-example -->
-          <p>注意：授权时，如果你的浏览器已经登录百度，本程序会自动完成授权。</p>
+          <p>注意：不要泄露你的access_token，以免带来不必要的麻烦。</p>
     </div>
 </main>
 <footer class="navbar navbar-default navbar-inverse copyright">

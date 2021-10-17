@@ -1,6 +1,14 @@
 <?php
-    // BP3辅助工具模块
+    // BP3辅助工具模块，在此之前需要导入$config.php
 
+
+    /**
+     * 自动刷新token，必须导入config.php
+     */
+    function auto_refresh_token(){
+        var_dump($config);
+    }
+    
     /**
      * 高可用显示文件大小
      * @param $byte 字节

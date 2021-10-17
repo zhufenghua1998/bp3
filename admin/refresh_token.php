@@ -8,7 +8,7 @@
     $secret = $config['connect']['secret_key'];
     
     $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=refresh_token&refresh_token=$refresh_token&client_id=$app_id&client_secret=$secret";
-    $result = file_get_contents($url);
+    $result = file_get_contents($url,false);
     $json = json_decode($result);
     $config['identify']['expires_in'] = $json->expires_in;
     $config['identify']['conn_time'] = time();

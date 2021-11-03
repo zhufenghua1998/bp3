@@ -39,4 +39,9 @@
     'uk' => '',
     'vip_type' =>'',
   ),
+    'baidu' =>
+  array (
+      'baidu_account' => '',
+      'baidu_pwd' => '',
+  ),
 );

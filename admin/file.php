@@ -176,10 +176,13 @@
         $result = file_get_contents($url, false, $context);
         // var_dump($result);
         $json = json_decode($result);
+        $baidu_icon = '<svg t="1635907111308" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2224" width="20" height="20"><path d="M513.12 523.2m-464 0a464 464 0 1 0 928 0 464 464 0 1 0-928 0Z" p-id="2225"></path><path d="M752 631.2a33.76 33.76 0 0 0 33.28-36.96 130.24 130.24 0 0 0-24-76 128 128 0 0 0-78.4-53.44c-12.16-2.72-24.64-3.84-37.44-5.76a132 132 0 0 0-42.4-106.24 128 128 0 0 0-109.6-34.56 133.6 133.6 0 0 0-113.28 142.4 134.08 134.08 0 0 0-138.08 119.52 128 128 0 0 0 36.64 106.24 128 128 0 0 0 112 39.52 119.52 119.52 0 0 0 68.8-29.92c19.2-17.76 36.8-37.12 55.2-55.84 30.72-32 61.12-63.2 92-94.56a66.56 66.56 0 0 1 112.8 49.12A33.76 33.76 0 0 0 752 631.2z m-376.32 29.28a66.72 66.72 0 1 1 64.96-66.08 66.08 66.08 0 0 1-64.96 66.08z m136.8-144a66.72 66.72 0 1 1 66.4-65.76 66.08 66.08 0 0 1-66.88 65.6zM744.8 663.52a32 32 0 0 0-33.92 32 33.44 33.44 0 0 0 32.96 33.76 33.92 33.92 0 0 0 33.28-32 32.96 32.96 0 0 0-32.32-33.76z" fill="#FFFFFF" p-id="2226"></path></svg>';
+        echo("<thead><tr class='active'><th></th><th>文件<i class='glyphicon glyphicon-chevron-down'></i></th><th>大小<i class='glyphicon glyphicon-chevron-down'></i></th><th>下载<i class='glyphicon glyphicon-chevron-down'></i></th></tr></thead><tbody>");
+        echo("<tr class='success'><td>$baidu_icon</td><td colspan='3'><a href='https://pan.baidu.com/disk/home?#/all?vmode=list&path=$dir'  target='_blank' style='display:block'><i class='fa fa-arrow-circle-right'></i>百度网盘网页版当前目录</a></td></tr>");
         if(!$json->list){
-            echo("这儿似乎什么也没有...");
+            echo("<tr><td colspan='4' >这儿似乎什么都没有...</td></tr>");
+            echo("</tbody>");
         }else{
-            echo "<thead><tr class='active'><th></th><th>文件<i class='glyphicon glyphicon-chevron-down'></i></th><th>大小<i class='glyphicon glyphicon-chevron-down'></i></th><th>下载<i class='glyphicon glyphicon-chevron-down'></i></th></tr></thead><tbody>";
             // var_dump($json);
             foreach ($json->list as $row){
                 if($row->isdir==1){
@@ -200,8 +203,8 @@
         </tr>";
                 }
             }
-            echo "</tbody>";
         }
+        echo "</tbody>";
     }
 ?>
     </table>

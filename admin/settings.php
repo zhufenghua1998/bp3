@@ -23,6 +23,8 @@
         $config['control']['pre_dir'] = $_POST['s9'];
         $config['site']['blog'] = $_POST['s10'];
         $config['site']['github'] = $_POST['s11'];
+        $config['baidu']['baidu_account'] = $_POST['s12'];
+        $config['baidu']['baidu_pwd'] = $_POST['s13'];
         $text='<?php $config='.var_export($config,true).';'; 
         file_put_contents($config_file,$text);
         echo "<script>alert('保存成功')</script>";
@@ -163,6 +165,18 @@
           <td>github地址</td>
           <td class="br"><?php echo $config['site']['github'];?></td>
           <td><input name="s11" value="<?php echo $config['site']['github'];?>" class="form-control"/></td>
+        </tr>
+        <tr>
+          <th scope="row">12</th>
+          <td>baidu账号</td>
+          <td class="br"><?php echo $config['baidu']['baidu_account'];?></td>
+          <td><input name="s12" value="<?php echo $config['baidu']['baidu_account'];?>" class="form-control" /></td>
+        </tr>
+        <tr class="active">
+          <th scope="row">13</th>
+          <td>baidu密码</td>
+          <td><?php echo $config['baidu']['baidu_pwd'];?></td>
+          <td><input name="s13" value="<?php echo $config['baidu']['baidu_pwd'];?>" class="form-control" /></td>
         </tr>
       </tbody>
     </table>

@@ -21,4 +21,39 @@
         }
         return $hstr;
     }
+    
+    /**
+     * 获取当前页面的Url绝对地址
+     */ 
+    function getPageUrl(){
+        $page_url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
+        return $page_url;
+    }
+    
+    
+    /**
+     * 获取token，并可以自动更新
+     * @param $config 配置参数数组
+     * @param $refresh_php 刷新地址的绝对路径
+     * @return false|access_token
+     * 如果返回false，则说明执行了刷新token，请重新加载config文件
+     */
+     function get_token_refresh($config,$refresh_php){
+        //自动刷新token
+        if($config['identify']['access_token']){
+            $pass_time = time()-$config['identify']['conn_time'];
+            $express_time = $config['identify']['expires_in']-$pass_time;
+            if($express_time<36000){ //有效期小于10小时，自动刷新token
+                $arrContextOptions = [
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                    ]
+                ];
+                file_get_contents($refresh_php,false,stream_context_create($arrContextOptions));
+                return false;
+            }
+        }
+        return $config['identify']['access_token'];
+     }
 ?>

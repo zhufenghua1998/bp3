@@ -7,7 +7,11 @@
         die;  // 终止后续解析
     }
     require('../config.php');
-
+    require_once("../functions.php");
+    // 获取open地址
+    $page_url = getPageUrl();
+    $index_url = str_replace("/admin/help.php","",$page_url); 
+    $open_url = $index_url."/open.php"; // 
 ?>
 <!doctype html>
 <html>
@@ -18,6 +22,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <script src="../js/jquery.min.js"></script>
+    <script src="../js/clipboard.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
@@ -72,6 +77,14 @@
     <p>如果只是想上传文件，直接转到<a href="https://pan.baidu.com">百度网盘网页版</a>，bp3后台中可以快速定位到<b>百度网盘网页版相同目录</b></p>
     <p>我们在设置中添加了2个位置以便在bp3中存放您的百度账户信息，以便从bp3无缝跳转百度网盘网页版</p>
     <p>直接上传大文件的解决方案，还有待进一步研究，您也可以向我们提供建议，或加入我们一起做出贡献。</p>
+    <h3>开发者获取token接口</h3>
+    <p>bp3为其他应用提供token，为了安全起见目录仅本机可以获取，地址如下：</p>
+    <pre><?php echo $open_url; ?></pre>
+    <p>例如，你可以使用以下python代码获取access_token</p>
+    <pre><code>from urllib import request
+    
+resp = request.urlopen('<?php echo $open_url;?>')
+print(resp.read().decode())</code></pre>
     <h3>快速授权解决方案</h3>
     <p>通常来说，你应该申请一个百度网盘开发者app，但这样的步骤实际上是繁琐的</p>
     <p>通过测试，该过程是可以省略的，只需要有一个授权程序部署，不同的用户就都可以从该程序中获取<code>access_token</code></p>
@@ -107,6 +120,50 @@
         $(".copyright").removeClass(" navbar-fixed-bottom");
       }    
     });
+    // 复制代码
+    $("pre").mouseenter(function (e) {
+        var _that = $(this);
+        _that.css("position", "relative");
+        _that.addClass("activePre");
+        var copyBtn = _that.find('.copyBtn');
+        if (!copyBtn || copyBtn.length <= 0) {
+            var copyBtn = '<span class="copyBtn" style="position:absolute;top:2px;right:2px;z-index:999;padding:2px;font-size:13px;color:black;background-color: white;cursor: pointer;" onclick="copyCode()">Copy</span>';
+            _that.append(copyBtn);
+        }
+    }).mouseleave(function (e) {
+        var _that = $(this);
+        var copyBtn = _that.find('.copyBtn');
+        var copyBtnHover = _that.find('.copyBtn:hover');
+        if (copyBtnHover.length == 0) {
+            copyBtn.remove();
+            _that.removeClass("activePre");
+        }
+    });
+    function copyCode() {
+        var activePre = $(".activePre");
+        activePre = activePre[0];
+        var code = activePre.firstChild;
+        if(code.nodeName=="CODE"){
+            activePre = code;
+        }
+        var clone = $(activePre).clone();
+        clone.find('.copyBtn').remove();
+        var clipboard = new ClipboardJS('.copyBtn', {
+            text: function () {
+                return clone.text();
+            }
+        });
+        clipboard.on("success", function (e) {
+            $(".copyBtn").html("Copied!");
+            clipboard.destroy();
+            clone.remove();
+        });
+
+        clipboard.on("error", function (e) {
+            clipboard.destroy();
+            clone.remove();
+        });
+    }
 </script>
 </body>
 </html>

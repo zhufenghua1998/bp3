@@ -1,7 +1,7 @@
 <?php
     session_start();
-    require('config.php');
-    require('functions.php');
+    require('./config.php');
+    require('./functions.php');
     
     if($config['init']==false){
         header("Location: install.php");
@@ -13,22 +13,14 @@
         $action = '登录';
     }
     // 获取当前路径
-    $page_url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
+    $page_url = getPageUrl();
     $page_url = str_replace("/index.php","",$page_url);
+    $refresh_url = $page_url."/admin/refresh_token.php";
     
     //自动刷新token
-    if($config['identify']['access_token']){
-        $pass_time = time()-$config['identify']['conn_time'];
-        $express_time = $config['identify']['expires_in']-$pass_time;
-        if($express_time<36000){ //有效期小于10小时，自动刷新token
-            $arrContextOptions = [
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                ]
-            ];
-            file_get_contents("$page_url/admin/refresh_token.php",false,stream_context_create($arrContextOptions));
-        }
+    $access_token = get_token_refresh($config,$refresh_url);
+    if(!$access_token){
+        require('./config.php'); // 重新加载刷新后的config文件
     }
 ?>
 <!doctype html>

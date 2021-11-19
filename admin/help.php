@@ -78,13 +78,14 @@
     <p>我们在设置中添加了2个位置以便在bp3中存放您的百度账户信息，以便从bp3无缝跳转百度网盘网页版</p>
     <p>直接上传大文件的解决方案，还有待进一步研究，您也可以向我们提供建议，或加入我们一起做出贡献。</p>
     <h3>开发者获取token接口</h3>
-    <p>bp3为其他应用提供token，为了安全起见目录仅本机可以获取，地址如下：</p>
+    <p>bp3为其他应用提供token，为了安全起见仅本机程序可以获取，地址如下：</p>
     <pre><?php echo $open_url; ?></pre>
     <p>例如，你可以使用以下python代码获取access_token</p>
     <pre><code>from urllib import request
     
 resp = request.urlopen('<?php echo $open_url;?>')
 print(resp.read().decode())</code></pre>
+    <p>如果你希望远程测试，在登录bp3时（存在session），也可以使用此接口。</p>
     <h3>快速授权解决方案</h3>
     <p>通常来说，你应该申请一个百度网盘开发者app，但这样的步骤实际上是繁琐的</p>
     <p>通过测试，该过程是可以省略的，只需要有一个授权程序部署，不同的用户就都可以从该程序中获取<code>access_token</code></p>

@@ -1,5 +1,6 @@
 <?php
-
+    session_start();
+    $user = $_SESSION['user'];
     $configfile = "./config.php";
     require($configfile);
     require_once("functions.php");
@@ -45,6 +46,9 @@
             echo $config['identify']['access_token'];
         }
         echo $access_token;
+    }else if($user){
+        // 存在session情况下，也可以直接访问本页面获取token
+        echo $config['identify']['access_token'];
     }
 
 

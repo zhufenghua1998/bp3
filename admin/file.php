@@ -147,6 +147,7 @@
               <div class='btn-group' role='group' aria-label='...'>
               <a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
               <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
+              <a  target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>
               </div>
           </td>
         </tr>";
@@ -198,6 +199,7 @@
               <div class='btn-group' role='group' aria-label='...'>
               <a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
               <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
+              <a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>
               </div>
           </td>
         </tr>";

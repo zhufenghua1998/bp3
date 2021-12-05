@@ -44,8 +44,9 @@
         if(!$access_token){
             require($configfile);
             echo $config['identify']['access_token'];
+        }else{
+            echo $access_token;
         }
-        echo $access_token;
     }else if($user){
         // 存在session情况下，也可以直接访问本页面获取token
         echo $config['identify']['access_token'];

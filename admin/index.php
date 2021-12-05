@@ -11,10 +11,6 @@
     $page_url = str_replace("/index.php","",$page_url);
     $redirecturl = urlencode($page_url);
     $refresh_token = $page_url.'/refresh_token.php'; // end
-    // 判断token天数
-    $pass_time = time()-$config['identify']['conn_time'];
-    $express_day = ($config['identify']['expires_in']-$pass_time)/3600/24;
-    $express_day = number_format($express_day,2);
     // 拼接授权地址
     $app_id = $config['connect']['app_id'];
     $redrect_uri = $config['connect']['redirect_uri'];
@@ -102,11 +98,8 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <h2>百度信息</h2>
-            </div>
-            <div class="col-xs-6">
-                <h2><a href="<?php echo $refresh_token.'?redirect='.$redirecturl;?>">刷新信息</a></h2>
             </div>
         </div>
         

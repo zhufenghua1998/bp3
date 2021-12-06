@@ -19,7 +19,15 @@
     $result = file_get_contents($url, false);
     // 4.结果处理，存入session并重定向
     $_SESSION['result'] = $result;
-    header("Location: ./display.php");
+    if($_SESSION['display']=='display'){
+        header("Location: ./display.php");
+    }else{
+        $display = urldecode($_SESSION['display']);
+        $encode_result = urlencode($result);
+        // 重定向并携带参数
+        $redirect_param = $display.'?param='.$encode_result;
+        header("Location: $redirect_param");
+    }
 ?>
     
     

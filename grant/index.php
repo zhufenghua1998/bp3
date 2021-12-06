@@ -1,8 +1,21 @@
 <?php
 
     session_start();
-    // 提示：访问此页面时证明：本次从首页获取授权，而不是接口
-    $_SESSION['display'] = "display";
+    
+        
+    // 允许携带重定向参数，参数为get，参数名display
+    // 携带参数访问本页面，则在获取授权后携带结果重定向请求参数地址
+    $display = $_GET['display'];
+    if(isset($display)){
+        // 存在redirect参数
+        $_SESSION['display'] = $display;
+    }else{
+        // 不存在重定向，则在默认页面显示
+        $_SESSION['display'] = "display";
+    }
+    
+    
+
     require_once("./config.php");
     require_once("./functions.php");
     
@@ -39,7 +52,7 @@
         <p>手动授权方式，是指手动点击授权，即可获取授权信息</p>
         <p><b>提示：</b>原始access_token必须通过手动获取</p>
         <p>点击右边的链接，然后获取授权
-            》》<a id="link" href="<?php echo $conn;?>">跳转链接</a></p>
+            》》<a id="link" href="<?php echo $conn;?>">授权链接</a></p>
         <p><b>提示：</b>默认自动检测当前登录的百度账号，
         如果需要强制登录，请勾选<input id="force" type="checkbox"/><label for="force">强制登录</label></p>
         <script>

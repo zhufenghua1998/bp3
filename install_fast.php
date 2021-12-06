@@ -2,20 +2,34 @@
     // 体验版
     $config_file = "./config.php";
     require_once($config_file);
+    require_once("./functions.php");
     //仅在config['init']==false时该配置才可生效
     $init = $config['init'];
     
-    $identify = $_POST['identify'];
+    $identify = $_GET['param'];
+    $json = null;
     
-    $json = json_decode($identify,true);
+    // 如果存在参数param
+    if(isset($identify)){
+        $identify = urldecode($identify);
+        $json = json_decode($identify,true);
+        
+        $json['conn_time'] = time();
+    }
     
-    $json['conn_time'] = time();
+    $pageUrl = urlencode(getPageUrl());
     
+    $dirUrl = getDirUrl(basename(__FILE__));
+    
+    $redirect = $dirUrl.'admin/connect.php';
+
+    // 如果存在参数，且还未初始化
     if(!empty($identify) && !$init){
         $init = true;
         $config['user']['name']='bp3';
         $config['user']['pwd']='bp3';
         $config['init']=$init;
+        $config['connect']['redirect_uri']=$redirect;
         $config['identify'] = $json;
         
         // 2.获取basic
@@ -67,14 +81,16 @@
             <p>免app配置时，默认账户密码均为bp3</p>
             <p>请从以下列表中选取一个快速授权地址，并访问：</p>
             <ol>
-                <li><a href="https://bp3.52dixiaowo.com/grant/" target="_blank">bp3官方</a></li>
+                <li><a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $pageUrl;?>">bp3官方</a></li>
             </ol>
-            <p>任意点击上面在一个地址，将自动打开一个新页面</p>
-            <p>在新页面中授权，授权成功后，将得到的原始信息粘贴到下面：</p>
-            <form method="post">
-                <textarea name="identify" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
+            <p>任意点击上面在一个地址，进行账户授权，即可自动完成</p>
+            <p><b>提示：</b>如果上述地址均不可用，请手动获取授权原始信息，并粘贴到下面：</p>
+            <form method="get">
+                <textarea name="param" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
                 <p><input type="submit" value="提交"></p>
             </form>
+            <p><b>提示：</b>目前免app配置还未对接自动刷新token机制，超过10天会失效，如果仍要使用，请在后台补写app信息</p>
+            <p><b>提示：</b>如果安装遇到问题，可在github求助。</p>
         </div>
     </body>
 </html>

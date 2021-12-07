@@ -164,11 +164,15 @@
                     if($config['control']['pre_link']==1  || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>";
                     }
+                    $dn = "<a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
+              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>";
+                    if($config['control']['close_dload']==1){
+                        $dn="";
+                    }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename</td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
-              <a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>$pre_dlink
+              $dn $pre_dlink
               </div>
           </td>
         </tr>";
@@ -219,11 +223,15 @@
                     if($config['control']['pre_link']==1 || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>";
                     }
+                    $dn = "<a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
+              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>";
+                    if($config['control']['close_dload']){
+                        $dn = "";
+                    }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
-              <a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>$pre_dlink
+              $dn $pre_dlink
               </div>
           </td>
         </tr>";

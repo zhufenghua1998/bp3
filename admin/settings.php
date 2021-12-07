@@ -26,6 +26,7 @@
         $config['baidu']['baidu_account'] = $_POST['s12'];
         $config['baidu']['baidu_pwd'] = $_POST['s13'];
         $config['control']['pre_link'] = $_POST['s14'];
+        $config['control']['close_dload'] = $_POST['s15'];
         $text='<?php $config='.var_export($config,true).';'; 
         file_put_contents($config_file,$text);
         echo "<script>alert('保存成功')</script>";
@@ -183,7 +184,13 @@
           <th scope="row">14</th>
           <td>前台直链</td>
           <td><?php echo $config['control']['pre_link'] ?></td>
-          <td><input name="s14" value="" class="form-control" placeholder="填写1或0(默认)" /></td>
+          <td><input name="s14" value="<?php echo $config['control']['close_dload'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
+        </tr>
+        <tr>
+         <th scope="row">15</th>
+          <td>关闭下载</td>
+          <td><?php echo $config['control']['close_dload'] ?></td>
+          <td><input name="s15" value="<?php echo $config['control']['close_dload'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td> 
         </tr>
       </tbody>
     </table>

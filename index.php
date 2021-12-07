@@ -166,7 +166,7 @@
                     }
                     $dn = "<a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
               <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>";
-                    if($config['control']['close_dload']==1){
+                    if($config['control']['close_dload']==1 && empty($_SESSION['user'])){
                         $dn="";
                     }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename</td><td>$show_size</td>
@@ -225,7 +225,7 @@
                     }
                     $dn = "<a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
               <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>";
-                    if($config['control']['close_dload']){
+                    if($config['control']['close_dload']==1 && empty($_SESSION['user'])){
                         $dn = "";
                     }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>

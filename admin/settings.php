@@ -25,6 +25,7 @@
         $config['site']['github'] = $_POST['s11'];
         $config['baidu']['baidu_account'] = $_POST['s12'];
         $config['baidu']['baidu_pwd'] = $_POST['s13'];
+        $config['control']['pre_link'] = $_POST['s14'];
         $text='<?php $config='.var_export($config,true).';'; 
         file_put_contents($config_file,$text);
         echo "<script>alert('保存成功')</script>";
@@ -177,6 +178,12 @@
           <td>baidu密码</td>
           <td><?php echo $config['baidu']['baidu_pwd'];?></td>
           <td><input name="s13" value="<?php echo $config['baidu']['baidu_pwd'];?>" class="form-control" /></td>
+        </tr>
+        <tr>
+          <th scope="row">14</th>
+          <td>前台直链</td>
+          <td><?php echo $config['control']['pre_link'] ?></td>
+          <td><input name="s14" value="" class="form-control" placeholder="填写1或0(默认)" /></td>
         </tr>
       </tbody>
     </table>

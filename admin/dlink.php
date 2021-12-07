@@ -1,7 +1,9 @@
 <?php
     session_start();
+    require_once('../config.php');
+    require_once('../functions.php');
 /**
- *  文件下载模块，访客权限可用
+ *  文件下载模块，访客权限使用时需管理员开启
  */
     // 1.获取fsid
     $fsid =  $_GET['fsid'];
@@ -9,13 +11,14 @@
         echo '无效fsid';
         die;
     }
-    $user = $_SESSION['user'];
-    if(empty($user)){
-        echo '未登录';
-        die;
+    if($config['control']['pre_link']!=1){
+        $user = $_SESSION['user'];
+        if(empty($user)){
+            echo '未登录';
+            die;
+        }
     }
-    require_once('../config.php');
-    require_once('../functions.php');
+
     $access_token = $config['identify']['access_token'];
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
     $opts = array(
@@ -31,6 +34,7 @@
     $file_name = $json->list[0]->filename;
     $dlink = $dlink.'&access_token='.$access_token;
     $show_size = height_show_size($file_size);
+    $check_ua = $_SERVER['HTTP_USER_AGENT']=="pan.baidu.com"?"text-success":"text-danger";
 ?>
 <!doctype html>
 <html>
@@ -84,12 +88,16 @@
 <main>
 <div class="container help">
     <h2 class="h3">获取直链，仅针对chrome内核浏览器(chrome, edge, 360极速等)</h2>
-    <p>在使用前安装<a href="./bp3_ua.zip" target="_blank">bp3_ua</a>扩展，安装后选中52dixiaowo下的bp3-default选项即可</p>
+    <p><b>提示：</b>在使用前请安装<a href="./bp3_ua.zip" target="_blank">bp3_ua</a>扩展，安装后选中52dixiaowo下的bp3-default选项即可</p>
+    <p><b>提示：</b>需要User-Agent是：pan.baidu.com，您当前：<?php echo "<span class='$check_ua'>".$_SERVER['HTTP_USER_AGENT']."</span>"; ?></p>
     <p>当前预下载文件：<?php echo $file_name;?>，大小：<?php echo $show_size;?></p>
-    <p>点击以下链接（有效期8小时）即可自动下载：</p>
-    <p><a class="br" target="_blank" href="<?php echo $dlink;?>" download><?php echo $dlink;?></a></p>
-    <p><b>提示：</b>需要User-Agent是：pan.baidu.com，您当前：<?php echo $_SERVER['HTTP_USER_AGENT']; ?></p>
-    <p><b>提示</b>：由于浏览器或其他原因点击不下载，尝试手动粘贴URL可解决。造成的原因是：“混合下载”，由下载地址多次重定向且最终由http协议连接加载而导致chrome对下载地址的不信任，但最终是可以下载的。</p>
+    <p>链接有效期8小时：</p>
+    <div>
+        点击--><button id="btn" data-clipboard-text="<?php echo $dlink;?>">复制链接</button>
+    </div>
+    <p><b>提示：</b>请粘贴链接到chrome地址栏上即可下载</p>
+
+    <p><b>提示</b>：由于下载地址多次重定向且最终由http协议连接加载而导致chrome对下载地址的不信任，手动点击保存文件即可</p>
 </main>
 <footer class="navbar navbar-default navbar-fixed-bottom navbar-inverse copyright">
 <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © bp3 <?php echo date('Y')?></p>
@@ -103,6 +111,7 @@
     }
     .br{
         word-break: break-all;
+        white-space: normal;
     }
 </style>
 <script>
@@ -113,6 +122,18 @@
       else{
         $(".copyright").removeClass(" navbar-fixed-bottom");
       }    
+    });
+        // 获取此html元素
+    var btn = document.getElementById('btn');
+    // 生成对应的clipboard对象
+    var clipboard = new ClipboardJS(btn);
+// 复制成功事件
+    clipboard.on('success', function(e) {
+        alert("复制成功")
+    });
+// 复制失败事件
+    clipboard.on('error', function(e) {
+        alert("复制失败")
     });
 </script>
 </body>

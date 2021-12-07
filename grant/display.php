@@ -62,8 +62,18 @@
                 <td>scope</td>
                 <td><?php echo $json->scope;?></td>
             </tr>
+            <tr>
+                <td>授权地址(非原生)</td>
+                <td>grant_url</td>
+                <td><?php echo $json->grant_url;?></td>
+            </tr>
+            <tr>
+                <td>刷新地址(非原生)</td>
+                <td>refresh_url</td>
+                <td><?php echo $json->refresh_url;?></td>
+            </tr>
         </table>
-        <h2>原始信息 <button id="copy">复制</button></h2>
+        <h2>授权信息 <button id="copy">复制</button></h2>
         <div>
             <pre><code id="code"><?php echo $result;?></code></pre>
         </div>

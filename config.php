@@ -17,6 +17,7 @@
   'control' => 
   array (
     'pre_dir' => '',
+    'pre_link' => 0,
   ),
   'connect' => 
   array (

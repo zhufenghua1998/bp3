@@ -22,6 +22,7 @@
     if(!$access_token){
         require('./config.php'); // 重新加载刷新后的config文件
     }
+
 ?>
 <!doctype html>
 <html>
@@ -158,11 +159,16 @@
                  }else{
                      $fsid = $row->fs_id;
                      $show_size = height_show_size($row->size);
+                    //是否前台直链
+                    $pre_dlink = "";
+                    if($config['control']['pre_link']==1){
+                        $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>";
+                    }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename</td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
               <a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
+              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>$pre_dlink
               </div>
           </td>
         </tr>";
@@ -208,11 +214,16 @@
                  }else{
                      $fsid = $row->fs_id;
                      $show_size = height_show_size($row->size);
+                    //是否前台直链
+                    $pre_dlink = "";
+                    if($config['control']['pre_link']==1){
+                        $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>";
+                    }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
               <a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
+              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>$pre_dlink
               </div>
           </td>
         </tr>";

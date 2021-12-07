@@ -186,7 +186,7 @@
           <td><?php echo $config['control']['pre_link'] ?></td>
           <td><input name="s14" value="<?php echo $config['control']['close_dload'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
         </tr>
-        <tr>
+        <tr class="active">
          <th scope="row">15</th>
           <td>关闭下载</td>
           <td><?php echo $config['control']['close_dload'] ?></td>

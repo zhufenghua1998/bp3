@@ -65,13 +65,15 @@
 <main>
 <div class="container help">
     <h3>配置相关</h3>
-    <p>①如何配置回调地址？当前admin路径下的connect.php，即<a target="_blank" href="./connect.php">connect.php</a></p>
+    <p>①如何配置回调地址？当前admin路径下的connect.php，即 <span id="callback"></span></p>
     <p>②如何配置前台开放目录？在后台设置中，写上要省略的前置目录，例如：</p>
     <ul>
         <li>开放根目录：留空</li>
         <li>开放/apps目录：填写/apps，注意结尾不要/</li>
     </ul>
     <p>③更换网站图标？替换网站根目录的favicon.ico文件</p>
+    <p>④需要重新配置？请把根目录下config.php文件中init选项设置为false再访问首页</p>
+    <p>⑤账户密码修改？账户锁定？请查看并编辑config.php，该文件包含所有配置。</p>
     <h3>文件上传描述</h3>
     <p>bp3在某些功能的实现上，比如<b>大文件上传</b>，是困难的。</p>
     <p>如果只是想上传文件，直接转到<a href="https://pan.baidu.com">百度网盘网页版</a>，bp3后台中可以快速定位到<b>百度网盘网页版相同目录</b></p>
@@ -85,15 +87,9 @@
     
 resp = request.urlopen('<?php echo $open_url;?>')
 print(resp.read().decode())</code></pre>
-    <p>如果你希望远程测试，在登录bp3时（存在session），也可以使用此接口。</p>
-    <h3>快速授权解决方案</h3>
-    <p>通常来说，你应该申请一个百度网盘开发者app，但这样的步骤实际上是繁琐的</p>
-    <p>通过测试，该过程是可以省略的，只需要有一个授权程序部署，不同的用户就都可以从该程序中获取<code>access_token</code></p>
-    <p>而只要获得access_token，以及refresh_token，就可以一直刷新使用有效期长达10年，为此bp3将开发一个辅助简化的授权系统。</p>
-    <p>快速授权程序实际是安全的，因为无论该程序部署者是谁，只要它不保存、窃取你的access_token，那么它实际无法访问你的数据，同时你也可以在<a href="https://passport.baidu.com/v6/appAuthority">百度授权管理</a>中取消该应用授权</p>
-    <p>作为bp3配套的授权程序，它也是开源的，敬请等待！</p>
+    <p>如果你希望直接取得token，请登录后直接访问该页面即可返回token。</p>
     <h3>bp3二次开发</h3>
-    <p>百度网盘开发者官方文档为：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者文档</a>，但它并不够详细，我们将在后续制作一份更详细的文档，敬请等待！</p>
+    <p>百度网盘开发者官方文档为：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者文档</a>，但它可能有所欠缺，可参阅bp3维护的<a href="https://www.52dixiaowo.com/post-3245.html" target="_blank">php版百度网盘开发者文档</a></p>
     <p>基于bp3进行二次开发，或对bp3进行修改，需要掌握一定的php与前端开发技术，QQ交流群：1150064636</p>
 </div>
 
@@ -119,7 +115,11 @@ print(resp.read().decode())</code></pre>
       }
       else{
         $(".copyright").removeClass(" navbar-fixed-bottom");
-      }    
+      }
+      let loc = location.toString();
+      loc = loc.substring(0,loc.length-8)
+      loc += "connect.php"
+      $("#callback").text(loc);
     });
     // 复制代码
     $("pre").mouseenter(function (e) {

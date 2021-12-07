@@ -89,7 +89,7 @@
                 <textarea name="param" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
                 <p><input type="submit" value="提交"></p>
             </form>
-            <p><b>提示：</b>目前免app配置还未对接自动刷新token机制，超过10天会失效，如果仍要使用，请在后台补写app信息</p>
+            <p><b>提示：</b>如果后期需要内置app，请在后台填写并在后台重新授权连接</p>
             <p><b>提示：</b>如果安装遇到问题，可在github求助。</p>
         </div>
     </body>

@@ -14,13 +14,9 @@
     
     $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=authorization_code&code=$code&client_id=$app_id&client_secret=$secrect_key&redirect_uri=$redirect_uri&state=$state";
     $result = file_get_contents($url, false);
-    $json = json_decode($result);
-    $config['identify']['expires_in'] = $json->expires_in;
-    $config['identify']['conn_time'] = time();
-    $config['identify']['refresh_token'] = $json->refresh_token;
-    $config['identify']['access_token'] = $json->access_token;
-    $config['identify']['scope'] = $json->scope;
-    $text='<?php $config='.var_export($config,true).';'; 
+    $json = json_decode($result,true);
+    $json['conn_time'] = time();
+    $config['identify'] = $json; // 会清除掉refresh_url，以自动识别app而不是免app
     file_put_contents($config_file,$text);
     // 获取basic
     require('./basic.php');

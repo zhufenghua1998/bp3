@@ -161,7 +161,7 @@
                      $show_size = height_show_size($row->size);
                     //是否前台直链
                     $pre_dlink = "";
-                    if($config['control']['pre_link']==1){
+                    if($config['control']['pre_link']==1  || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>";
                     }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename</td><td>$show_size</td>
@@ -216,7 +216,7 @@
                      $show_size = height_show_size($row->size);
                     //是否前台直链
                     $pre_dlink = "";
-                    if($config['control']['pre_link']==1){
+                    if($config['control']['pre_link']==1 || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>";
                     }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>

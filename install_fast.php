@@ -21,7 +21,7 @@
     
     $dirUrl = getDirUrl(basename(__FILE__));
     
-    $redirect = $dirUrl.'admin/connect.php';
+    $redirect = $dirUrl.'grant/callback.php';
 
     // 如果存在参数，且还未初始化
     if(!empty($identify) && !$init){
@@ -89,8 +89,9 @@
                 <textarea name="param" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
                 <p><input type="submit" value="提交"></p>
             </form>
-            <p><b>提示：</b>如果后期需要内置app，请在后台填写并在后台重新授权连接</p>
+            <p><b>提示：</b>如果后期需要使用内置app，可在后台填写app信息并重新授权即可</p>
             <p><b>提示：</b>如果安装遇到问题，可在github求助。</p>
+            <p><a href="./install.php">返回配置app授权</a></p>
         </div>
     </body>
 </html>

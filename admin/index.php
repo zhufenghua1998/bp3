@@ -6,18 +6,16 @@
         die;  // 终止后续解析
     }
     require('../config.php');
-    // 拼接refresh_token路径
-    $page_url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
-    $page_url = str_replace("/index.php","",$page_url);
-    $redirecturl = urlencode($page_url);
-    $refresh_token = $page_url.'/refresh_token.php'; // end
+    require_once("../functions.php");
     // 拼接授权地址
-    $app_id = $config['connect']['app_id'];
-    $redrect_uri = $config['connect']['redirect_uri'];
-    $state = rand(10,100);
-    $_SESSION['state'] = $state;
-    $conn = "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&redirect_uri=$redrect_uri&scope=basic,netdisk&display=popup&state=$state";
-    $force_conn = $conn.'&force_login=1';
+    $dirUrl = getDirUrl(basename(__FILE__));
+    
+    $conn = urlencode($dirUrl.'connect.php');
+    
+    $guant_url = $config['identify']['grant_url'];
+    
+    $guant_url = "$guant_url?display=$conn";
+    
     // 判断网盘会员类型
     $vip_type = $config['basic']['vip_type'];
     if(isset($vip_type)){
@@ -86,15 +84,14 @@
                 <h2>连接说明</h2>
             </div>
             <div class="col-xs-6">
-                <h2><a id="link"  href="<?php echo $conn;?>">获取授权</a></h2>
+                <h2><a id="link"  href="<?php echo $guant_url;?>">获取授权</a></h2>
             </div>
         </div>
         <div>
         <p>本程序需要连接到百度网盘。</p>
-        <p>如果您是首次配置，请点击<b>获取授权</b>（免app配置时无须此项操作），登录百度账号以完成授权</p>
+        <p>如果您是首次配置，请点击<b>获取授权</b>（如已授权则覆盖原授权信息），登录百度账号以完成授权</p>
         <p>每次访问首页时，默认自动检测token有效期自动刷新，如果你的网站流量较少，请至少保证20天抓取一次首页。</p>
-        <p><b>注意：</b>授权时，必须允许访问网盘数据，否则无法正常使用。</p>
-        <p>如果你的浏览器已经登录百度，会自动检测百度cookie并尝试自动授权。你可以选择 <input id="force" type="checkbox"/><label for="force">强制登录</label></p>
+        <p></p>
         <p>在完成授权后，在下方会自动获取你的百度基础信息。</p>
         </div>
 
@@ -158,19 +155,6 @@
         $(".copyright").removeClass(" navbar-fixed-bottom");
       }    
     });
-    let auto_login = `<?php echo $conn;?>`
-    let force_ligin = `<?php echo $force_conn;?>`
-    let force = document.getElementById("force")
-    let link = document.getElementById("link")
-    let changeNum = 1;
-    force.onchange = function(){
-        changeNum++;
-        if(changeNum%2==0){
-            link.href = force_ligin
-        }else{
-            link.href = auto_login
-        }
-    }
 </script>
 </body>
 </html>

@@ -19,6 +19,7 @@
     'pre_dir' => '',
     'pre_link' => 0,
     'close_dload' => 0,
+    'open_grant' => 0,
   ),
   'connect' => 
   array (

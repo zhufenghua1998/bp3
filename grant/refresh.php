@@ -15,11 +15,11 @@ if(empty($refresh_token)){
 }
 
 // 获取配置文件
-require_once("./config.php");
-require_once("./functions.php");
+require_once("../config.php");
+require_once("../functions.php");
 
-    $app_id = $connect['app_id'];
-    $secret = $connect['secret_key'];
+    $app_id = $config['connect']['app_id'];
+    $secret = $config['connect']['secret_key'];
     $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=refresh_token&refresh_token=$refresh_token&client_id=$app_id&client_secret=$secret";
     
     echo @file_get_contents($url);

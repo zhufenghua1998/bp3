@@ -1,6 +1,16 @@
 <?php
 
     session_start();
+
+    require_once("../config.php");
+    require_once("../functions.php");
+    
+    if(empty($_SESSION['user'])){
+        if($config['control']['open_grant']==0){
+            echo '{"msg":"user not login"}';
+            die;
+        }
+    }
     
         
     // 允许携带重定向参数，参数为get，参数名display
@@ -15,13 +25,10 @@
     }
     
     
-
-    require_once("./config.php");
-    require_once("./functions.php");
-    
     // 1. 获取基础信息
-    $app_id = $connect['app_id'];
-    $redrect_uri = $connect['redirect_uri'];
+    $title = $config['site']['title'];
+    $app_id = $config['connect']['app_id'];
+    $redrect_uri = $config['connect']['redirect_uri'];
     
     // 2. 拼接授权信息
     $state = rand(10,100);
@@ -41,7 +48,7 @@
         <title>bp3授权系统</title>
     </head>
     <body>
-        <h2>这是<a href="..">bp3</a>的简易授权系统</h2>
+        <h2>这是<a href=".."><?php echo $title;?></a>的简易授权系统</h2>
         <?php
             if($_SESSION['result']){
                 echo "<h2>提示：当前已经获取授权，查看最后一次<a href='./display.php'>授权结果</a></h2>";

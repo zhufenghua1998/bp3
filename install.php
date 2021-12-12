@@ -7,6 +7,7 @@
     $init = $config['init'];
     $dirUrl = getDirUrl(basename(__FILE__));
     $redirect = $dirUrl."grant/callback.php";  // redirect_uri
+    $grant_url = $dirUrl."grant/";
     
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -22,6 +23,7 @@
         $config['connect']['app_id']=$app;
         $config['connect']['secret_key']=$secret;
         $config['connect']['redirect_uri']=$redirect;
+        $config['identify']['grant_url']=$grant_url;
         $text='<?php $config='.var_export($config,true).';'; 
         file_put_contents($config_file,$text);
         

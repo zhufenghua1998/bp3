@@ -18,6 +18,7 @@ bp3本身并不存储数据，而是对接百度网盘，完全使用官方接�
 
 - <a href="https://bp3.52dixiaowo.com" target="_blank">bp3官方demo站点</a>
 - [bp3官方国外IP备用demo站点](http://23.95.68.202/)
+- [Windows系统镜像 | 高速下载 (okduang.com)](http://pan.okduang.com/)
 
 ## 特点与使用技巧
 

@@ -70,7 +70,7 @@
             <form method="post">
               <div class="form-group">
                 <label for="exampleInputEmail1">bp3账户名</label>
-                <input name="username" type="text" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                <input name="username" type="text" class="form-control" id="exampleInputEmail1" placeholder="UserName">
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">bp3密码</label>
@@ -78,11 +78,11 @@
               </div>
               <div class="form-group">
                   <label for="app">填写AppKey</label>
-                  <input name="app" class="form-control" placeholder="请填写应用ID" id="app" required="required"/>
+                  <input name="app" class="form-control" placeholder="请填写应用AppKey" id="app" required="required"/>
               </div>
               <div class="form-group">
                   <label for="secret">填写SecretKey</label>
-                  <input name="secret" class="form-control" placeholder="请填写应用密钥" id="secret" required="required"/>
+                  <input name="secret" class="form-control" placeholder="请填写应用SecretKey" id="secret" required="required"/>
               </div>
               <div class="form-group">
                   <label for="redirect_uri">配置回调地址</label>

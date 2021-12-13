@@ -63,7 +63,7 @@
         <div class="container">
             <h3 class="text-center">欢迎使用bp3，当前正在配置config.php文件</h3>
             <p>您当前正在使用"一键配置"</p>
-            <p>如果本次配置未能成功，请把conf_base.php覆盖config.php重新配置</p>
+            <p>如果本次配置未能成功，请使用conf_base.php覆盖config.php重新配置</p>
             <h3><b>提示：</b>已推出免app方式，无须任何配置<a href="./install_fast.php">点击体验</a></h3>
             <p>如果非免app配置，你需要明白，使用本程序需要申请成为百度网盘开发者，并申请App，点击跳转<a href="https://pan.baidu.com/union/console/applist" target="_blank">百度网盘开发者控制台</a></p>
             <p>现在就开始配置吧：</p>

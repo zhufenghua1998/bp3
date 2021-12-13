@@ -78,7 +78,8 @@
     <body>
         <div class="container">
             <h3 class="text-center">欢迎使用bp3，正在体验免app配置</h3>
-            <p>免app配置时，默认账户密码均为bp3</p>
+            <p>免app配置时，默认<span class="text-danger">账户密码均为bp3</span></p>
+            <p>如果本次配置未能成功，请使用conf_base.php覆盖config.php重新配置</p>
             <p>请从以下列表中选取一个快速授权地址，并访问：</p>
             <ol>
                 <li><a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $pageUrl;?>">bp3官方</a></li>
@@ -89,8 +90,8 @@
                 <textarea name="param" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
                 <p><input type="submit" value="提交"></p>
             </form>
-            <p><b>提示：</b>如果后期需要使用内置app，可在后台填写app信息并重新授权即可</p>
-            <p><b>提示：</b>如果安装遇到问题，可在github求助。</p>
+            <p><b>提示：</b>如果后期需要使用内置app，可在后台填写app信息、修改授权地址、重新点击获取授权即可</p>
+            <p><b>提示：</b>如果安装遇到问题，可在github求助，或QQ交流群：1150064636。</p>
             <p><a href="./install.php">返回配置app授权</a></p>
         </div>
     </body>

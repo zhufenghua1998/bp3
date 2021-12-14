@@ -142,7 +142,7 @@
                 'header' => 'USER-AGENT: pan.baidu.com'
                 ));
         $context = stream_context_create($opts);
-        $result = file_get_contents($url, false, $context);
+        $result = @file_get_contents($url, false, $context);
         $json = json_decode($result);
         $has_more = $json->has_more;
         if(!$json->list){
@@ -201,7 +201,7 @@
                 'header' => 'USER-AGENT: pan.baidu.com'
                 ));
         $context = stream_context_create($opts);
-        $result = file_get_contents($url, false, $context);
+        $result = @file_get_contents($url, false, $context);
         // var_dump($result);
         $json = json_decode($result);
         if(!$json->list){

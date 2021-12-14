@@ -50,7 +50,7 @@
                         'verify_peer_name' => false,
                     ]
                 ];
-                file_get_contents($refresh_php,false,stream_context_create($arrContextOptions));
+                @file_get_contents($refresh_php,false,stream_context_create($arrContextOptions));
                 return false;
             }
         }

@@ -27,7 +27,7 @@
             'header' => 'User-Agent: pan.baidu.com'
             ));
     $context = stream_context_create($opts);
-    $result = file_get_contents($url, false, $context);
+    $result = @file_get_contents($url, false, $context);
     $json = json_decode($result);
     $dlink =  $json->list[0]->dlink;
     $file_size = $json->list[0]->size;

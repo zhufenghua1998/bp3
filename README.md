@@ -46,7 +46,7 @@ bp3是长期维护项目，会不定期更新，但目前来说，每一个版�
 
 延伸或相关项目推荐：
 
+- [yuantuo666/baiduwp-php: PanDownload网页复刻版 ](https://github.com/yuantuo666/baiduwp-php)
 - [dylanbai8/start_chrome_with_useragent ](https://github.com/dylanbai8/start_chrome_with_useragent)
 
-
-
+最后，感谢各位开发者对本项目给予的建议、帮助与支持

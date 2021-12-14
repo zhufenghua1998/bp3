@@ -11,7 +11,7 @@
         echo '无效fsid';
         die;
     }
-    if($config['control']['pre_link']!=1){
+    if($config['control']['pre_link']!=0){
         $user = $_SESSION['user'];
         if(empty($user)){
             echo '未登录';
@@ -35,6 +35,12 @@
     $dlink = $dlink.'&access_token='.$access_token;
     $show_size = height_show_size($file_size);
     $check_ua = $_SERVER['HTTP_USER_AGENT']=="pan.baidu.com"?"text-success":"text-danger";
+    $headerArray = array('User-Agent: pan.baidu.com');
+    $getRealLink = head($dlink, $headerArray); // 禁止重定向
+	$getRealLink = strstr($getRealLink, "Location");
+	$realLink =  substr($getRealLink, 10);
+	$realLink = substr($realLink,0,strpos($realLink,"\n")-1);
+	$client_link = $realLink."|".$file_name;
 ?>
 <!doctype html>
 <html>
@@ -87,16 +93,25 @@
     </header>
 <main>
 <div class="container help">
-    <h2 class="h3">获取直链，仅针对chrome内核浏览器(chrome, edge, 360极速等)</h2>
-    <p><b>提示：</b>在使用前请安装<a href="./bp3_ua.zip" target="_blank">bp3_ua</a>扩展，安装后选中52dixiaowo下的bp3-default选项即可</p>
-    <p><b>提示：</b>需要User-Agent是：pan.baidu.com，您当前：<?php echo "<span class='$check_ua'>".$_SERVER['HTTP_USER_AGENT']."</span>"; ?></p>
+    <h2 class="h3">当前正在使用bp3直链功能：</h2>
     <p>当前预下载文件：<?php echo $file_name;?>，大小：<?php echo $show_size;?></p>
-    <p>链接有效期8小时：</p>
-    <div>
-        点击--><button id="btn" data-clipboard-text="<?php echo $dlink;?>">复制链接</button>
+    <p>本次链接创建于<?php echo date("Y-m-d H:i:s");?>，以下链接8小时内有效：</p>
+    <div class="text-info">
+        点击==><button id="cbtn1">复制链接</button>
     </div>
+    <h2>通用下载方式：</h2>
+    <p>这是一些通用的解决方案，需要设置user-agent：pan.baidu.com</p>
+    <p>IDM、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS)</p>
+    <h2>bp3_client</h2>
+    <p>这是bp3提供的客户端，客户端专属链接：<button class="text-info" id="cbtn2">复制链接</button></p>
+    <p>若首次使用，请下载 <a href="./bp3_client_win_x64.zip">bp3客户端（仅windows x64）</a>，解压后点击bp3_client.exe运行，右键粘贴并回车即可下载</p>
+    <p><b>提示：</b>若无法右键粘贴，请右键点击窗口顶部=》编辑=》粘贴</p>
+    <p><b>提示：</b>下载后的文件，存放在download目录</p>
+    <p><b>提示：</b>如果发现下载失效，可能是版本更新所致，请点击上述链接下载新版客户端</p>
+    <h2>bp3_ua</h2>
+    <p><b>提示：</b>chrome系列可下载<a href="./bp3_ua.zip" target="_blank">bp3_ua</a>扩展，安装后选中52dixiaowo下的bp3-default选项即可</p>
+    <p><b>提示：</b>需要User-Agent是：pan.baidu.com，您当前：<?php echo "<span class='$check_ua'>".$_SERVER['HTTP_USER_AGENT']."</span>"; ?></p>
     <p><b>提示：</b>请粘贴链接到chrome地址栏上即可下载</p>
-
     <p><b>提示</b>：由于下载地址多次重定向且最终由http协议连接加载而导致chrome对下载地址的不信任，手动点击保存文件即可</p>
 </main>
 <footer class="navbar navbar-default navbar-fixed-bottom navbar-inverse copyright">
@@ -124,15 +139,30 @@
       }    
     });
         // 获取此html元素
-    var btn = document.getElementById('btn');
-    // 生成对应的clipboard对象
-    var clipboard = new ClipboardJS(btn);
+    var clipboard1 = new ClipboardJS('#cbtn1', {
+        text: function() {
+            return `<?php echo $realLink; ?>`;
+        }
+    });
 // 复制成功事件
-    clipboard.on('success', function(e) {
+    clipboard1.on('success', function(e) {
         alert("复制成功")
     });
 // 复制失败事件
-    clipboard.on('error', function(e) {
+    clipboard1.on('error', function(e) {
+        alert("复制失败")
+    });
+    var clipboard2 = new ClipboardJS('#cbtn2', {
+        text: function() {
+            return `<?php echo $client_link; ?>`;
+        }
+    });
+// 复制成功事件
+    clipboard2.on('success', function(e) {
+        alert("复制成功")
+    });
+// 复制失败事件
+    clipboard2.on('error', function(e) {
         alert("复制失败")
     });
 </script>

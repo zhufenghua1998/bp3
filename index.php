@@ -161,7 +161,7 @@
                      $show_size = height_show_size($row->size);
                     //是否前台直链
                     $pre_dlink = "";
-                    if($config['control']['pre_link']==1  || isset($_SESSION['user'])){
+                    if($config['control']['pre_link']==0  || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>";
                     }
                     $dn = "<a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
@@ -220,7 +220,7 @@
                      $show_size = height_show_size($row->size);
                     //是否前台直链
                     $pre_dlink = "";
-                    if($config['control']['pre_link']==1 || isset($_SESSION['user'])){
+                    if($config['control']['pre_link']==0 || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>";
                     }
                     $dn = "<a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>

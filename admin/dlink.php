@@ -40,7 +40,7 @@
 	$getRealLink = strstr($getRealLink, "Location");
 	$realLink =  substr($getRealLink, 10);
 	$realLink = substr($realLink,0,strpos($realLink,"\n")-1);
-	$client_link = $realLink."|".$file_name;
+	$client_link = $realLink."&filename=|".$file_name;
 ?>
 <!doctype html>
 <html>
@@ -103,7 +103,7 @@
     <p>这是一些通用的解决方案，需要设置user-agent：pan.baidu.com</p>
     <p>IDM、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS)</p>
     <h2>bp3_client</h2>
-    <p>这是bp3提供的客户端，客户端专属链接：<button class="text-info" id="cbtn2">复制链接</button></p>
+    <p>这是bp3提供的客户端</p>
     <p>若首次使用，请下载 <a href="./bp3_client_win_x64.zip">bp3客户端（仅windows x64）</a>，解压后点击bp3_client.exe运行，右键粘贴并回车即可下载</p>
     <p><b>提示：</b>若无法右键粘贴，请右键点击窗口顶部=》编辑=》粘贴</p>
     <p><b>提示：</b>下载后的文件，存放在download目录</p>
@@ -141,7 +141,7 @@
         // 获取此html元素
     var clipboard1 = new ClipboardJS('#cbtn1', {
         text: function() {
-            return `<?php echo $realLink; ?>`;
+            return `<?php echo $client_link; ?>`;
         }
     });
 // 复制成功事件
@@ -150,19 +150,6 @@
     });
 // 复制失败事件
     clipboard1.on('error', function(e) {
-        alert("复制失败")
-    });
-    var clipboard2 = new ClipboardJS('#cbtn2', {
-        text: function() {
-            return `<?php echo $client_link; ?>`;
-        }
-    });
-// 复制成功事件
-    clipboard2.on('success', function(e) {
-        alert("复制成功")
-    });
-// 复制失败事件
-    clipboard2.on('error', function(e) {
         alert("复制失败")
     });
 </script>

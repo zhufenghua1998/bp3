@@ -1,4 +1,4 @@
-<h2 align="center"><font color='blue'>B</font>aidu Interface <font color='blue'>P</font>an Version<font color='blue'>3</font></h2>
+<h2 align="center"><a href="#">B</a>aidu Interface <a href="#">P</a>an Version<a href="#">3</a></h2>
 
 <p align="center"><a href="https://github.com/zhufenghua1998/bp3/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/zhufenghua1998/bp3"></a> <a href="https://github.com/zhufenghua1998/bp3/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/zhufenghua1998/bp3"></a> <a href="https://github.com/zhufenghua1998/bp3/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/zhufenghua1998/bp3"></a> <a href="https://github.com/zhufenghua1998/bp3/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/zhufenghua1998/bp3"></a></p>
 

@@ -82,13 +82,14 @@
             <p>如果本次配置未能成功，请使用conf_base.php覆盖config.php重新配置</p>
             <p>请从以下列表中选取一个快速授权地址，并访问：</p>
             <ol>
-                <li><a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $pageUrl;?>">bp3官方</a></li>
+                <li><a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $pageUrl;?>">bp3官方(国内)</a></li>
+                <li><a href="http://bp3.rbusoft.com/grant/?display=<?php echo $pageUrl;?>">阿布软件网(海外)</a></li>
             </ol>
             <p>任意点击上面在一个地址，进行账户授权，即可自动完成</p>
             <p><b>提示：</b>如果上述地址均不可用，请手动获取授权原始信息，并粘贴到下面：</p>
             <form method="get">
                 <textarea name="param" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
-                <p><input type="submit" value="提交"></p>
+                <p><input class="btn btn-primary" type="submit" value="提交"></p>
             </form>
             <p><b>提示：</b>如果后期需要使用内置app，可在后台填写app信息、修改授权地址、重新点击获取授权即可</p>
             <p><b>提示：</b>如果安装遇到问题，可在github求助，或QQ交流群：1150064636。</p>

@@ -43,25 +43,44 @@
 <!doctype html>
 <html>
     <head>
-        <meta http-equiv="content-type" content="text/html;charset=utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>bp3授权系统</title>
+    <meta charset="utf-8">
+    <title><?php echo '授权系统'.' | '.$config['site']['title'];?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
     </head>
     <body>
-        <h2>这是<a href=".."><?php echo $title;?></a>的简易授权系统</h2>
+        <h2 class="text-center">这是<a href=".."><?php echo $title;?></a>的简易授权系统</h2>
+        <div class="container">
         <?php
             if($_SESSION['result']){
                 echo "<h2>提示：当前已经获取授权，查看最后一次<a href='./display.php'>授权结果</a></h2>";
             }
         
         ?>
-        <h2>获取授权方式：手动获取</h2>
-        <p>手动授权方式，是指手动点击授权，即可获取授权信息</p>
-        <p><b>提示：</b>原始access_token必须通过手动获取</p>
-        <p>点击右边的链接，然后获取授权
-            》》<a id="link" href="<?php echo $conn;?>">授权链接</a></p>
-        <p><b>提示：</b>默认自动检测当前登录的百度账号，
-        如果需要强制登录，请勾选<input id="force" type="checkbox"/><label for="force">强制登录</label></p>
+            <h2>获取授权方式：手动获取</h2>
+            <p>手动授权方式，是指手动点击授权，即可获取授权信息</p>
+            <p><b>提示：</b>原始access_token必须通过手动获取</p>
+            <h3>点击右边的链接，然后获取授权
+                ==><a id="link" href="<?php echo $conn;?>">授权链接</a></h3>
+            <p><b>提示：</b>默认自动检测当前登录的百度账号，
+            如果需要强制登录，请勾选<input id="force" type="checkbox"/><label for="force">强制登录</label></p>
+        </div>
+        <footer class="copyright">
+                <div class="navbar navbar-default navbar-inverse">
+                <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © <?php echo $config['site']['title'];?> <?php echo date('Y')?></p>
+                </div>
+        </footer>
+        <style>
+            .container{
+                font-size: 1.2em;
+            }
+            .copyright,.navbar-inverse{
+                margin-bottom: 0px;
+            }
+        </style>
         <script>
             let auto_login = `<?php echo $conn;?>`
             let force_ligin = `<?php echo $force_conn;?>`
@@ -76,6 +95,14 @@
                     link.href = auto_login
                 }
             }
+            $(function () {
+              if($(window).height()==$(document).height()){
+                $(".copyright").addClass("navbar-fixed-bottom");
+              }
+              else{
+                $(".copyright").removeClass(" navbar-fixed-bottom");
+              }    
+            });
         </script>
     </body>
 </html>

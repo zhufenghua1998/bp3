@@ -65,7 +65,7 @@
 <main>
 <div class="container help">
     <h3>配置相关</h3>
-    <p>①如何配置回调地址？部署根目录下/grant/callback.php，即 <span id="callback"></span></p>
+    <p>①如何配置回调地址？部署根目录下<a id="callback_2" target="_blank">/grant/callback.php</a>，即 <span id="callback"></span></p>
     <p>②如何配置前台开放目录？在后台设置中，写上要省略的前置目录，例如：</p>
     <ul>
         <li>开放根目录：留空</li>
@@ -82,7 +82,7 @@
     <h3>开放app授权接口</h3>
     <p>bp3的授权系统可以为其他程序提供授权，这也是bp3免app配置的原理</p>
     <p>但默认情况下，该功能并不开放给游客（即登录后可用），如果希望开启，请设置open_grant的值为1</p>
-    <p>当前系统内置授权地址是：根目录下的grant/index.php，即 <pre id="grant"></pre></p>
+    <p>当前系统内置授权地址是：根目录下的<a target="_blank" id="grant_2">grant/index.php</a>，即 <pre id="grant"></pre></p>
     <p>当携带display的get参数时，则会在授权后自动携带结果重定向</p>
     <pre><code>// 假设授权地址：https://bp3.52dixiaowo.com/grant/
 // 假设重定向后地址是：https://bp3.52dixiaowo.com/install_fast.php
@@ -131,8 +131,10 @@ print(resp.read().decode())</code></pre>
       loc = loc.substring(0,loc.length-14)
       let callback = loc+"grant/callback.php"
       $("#callback").text(callback);
+      $("#callback_2")[0].href=callback;
       let grant = loc+"grant/index.php"
       $("#grant").text(grant);
+      $("#grant_2")[0].href=grant;
     });
     // 复制代码
     $("pre").mouseenter(function (e) {

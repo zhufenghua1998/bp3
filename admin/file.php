@@ -147,7 +147,7 @@
               <div class='btn-group' role='group' aria-label='...'>
               <a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
               <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
-              <a  target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>
+              <a  target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/dlink.php?fsid=$fsid'>复制</a>
               </div>
           </td>
         </tr>";
@@ -199,7 +199,7 @@
               <div class='btn-group' role='group' aria-label='...'>
               <a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
               <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
-              <a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a>
+              <a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/dlink.php?fsid=$fsid'>复制</a>
               </div>
           </td>
         </tr>";
@@ -262,10 +262,18 @@
     var btns = document.querySelectorAll('.cp');
     var clipboard = new ClipboardJS(btns);
     clipboard.on('success', function(e) {
-        alert("复制成功");
+        alert("下载链接复制成功");
     });
     clipboard.on('error', function(e) {
-        alert("复制失败");
+        alert("下载链接复制失败");
+    });
+    var btns2 = document.querySelectorAll('.cp2');
+    var clipboard2 = new ClipboardJS(btns2);
+    clipboard2.on('success', function(e) {
+        alert("直链复制成功");
+    });
+    clipboard2.on('error', function(e) {
+        alert("直链复制失败");
     });
     $(window).scroll(function(){
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;

@@ -219,7 +219,7 @@
     .copyright{
         margin-bottom: 0px;
     }
-    .br{
+    .br,td{
         word-break: break-all !important;
     }
 </style>

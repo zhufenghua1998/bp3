@@ -193,13 +193,14 @@
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info' colspan='3' ><a href='?dir=$encode_path' style='display:block'>$row->server_filename</a></td></tr>";
                  }else{
                      $fsid = $row->fs_id;
+                     $path = $row->path;
                      $show_size = height_show_size($row->size);
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
               <a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
               <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
-              <a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/dlink.php?fsid=$fsid'>复制</a>
+              <a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/dlink.php?fsid=$fsid'>复制</a><button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>
               </div>
           </td>
         </tr>";
@@ -283,6 +284,57 @@
             $("#back-to-top").css("display","none");
         }
     });
+    function message(text,type){
+        let text_class = "";
+        switch(type){
+            
+        case "default":
+            text_class = "fa fa-comments";
+            break;
+        case "info":
+            text_class = "fa fa-info-circle text-info";
+            break;
+        case "success":
+            text_class = "fa fa-check-square-o text-success";
+            break;
+        case "warning":
+            text_class = "fa fa-warning text-warning";
+            break;
+        case "error":
+            text_class = "fa fa-close text-danger";
+            break;
+        default:
+            throw "消息type错误，请传递default/info/success/warning/error中的任一种";
+            break;
+        }
+        let msgs = $(".message");
+        let len = msgs.length; 
+        let end = 0;
+        let baseHeight = 0;
+        if(len>0){
+            baseHeight =msgs.first().innerHeight()+20;
+            let start = msgs.first().attr('no');
+            end = +start+len;
+        }
+        let height = 100+end*baseHeight+"px";
+        $(`<div no='${end}' id='msg-${end}' class='message ${text_class}' style='top: ${height};position: fixed;left: 50%;border: 1px solid #ddd;
+        background-color:#bbb;transform: translate(-50%, -50%);font-size: 1.2em;padding: 1rem;z-index: 999;border-radius: 0.5rem;'>${text}</div>`).appendTo("body");
+        let rmScript = `$("#msg-${end}").remove();`;
+        setTimeout(rmScript,1500);
+    }
+    // 删除文件
+    function del(e){
+        let check = confirm("短期内可在百度网盘app回收站找回，请确认删除：");
+        if(check){
+            let path = $(e.target).attr("path");
+            $.get("del_file.php",{"path":path},function(data){
+                if(data.errno===0){
+                    message("删除成功","success");
+                    setTimeout("location.reload()",200);
+                }
+            },"json")
+        }
+    }
 </script>
 </body>
 </html>

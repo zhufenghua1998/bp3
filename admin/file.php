@@ -331,6 +331,8 @@
                 if(data.errno===0){
                     message("删除成功","success");
                     setTimeout("location.reload()",200);
+                }else{
+                    message("删除失败","error");
                 }
             },"json")
         }

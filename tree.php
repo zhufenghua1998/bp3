@@ -21,7 +21,10 @@
     $base_dir = urldecode($base_dir);
     // 一次至多查找1000条
     $limit = 1000;
-    $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?method=listall&path=$base_dir&access_token=$access_token&order=name&recursion=1&limit=$limit";
+    // 解码又转码并不矛盾，php和js编码效果并不一致
+    $encode_dir = urlencode($base_dir);
+    
+    $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?method=listall&path=$encode_dir&access_token=$access_token&order=name&recursion=1&limit=$limit";
     
     $opts = array(
         'http' => array(

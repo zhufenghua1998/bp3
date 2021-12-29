@@ -139,7 +139,7 @@
                     // 去掉前缀
                     $path = substr($row->path,strlen($predir));
                     $encode_path = urlencode($path);
-                    $tree = "<td class='br'><a class='btn btn-default' href='$page_url/tree.php?base_dir=$encode_path' target='_blank'>生成资源树</a></td>";
+                    $tree = "<td class='br'><a class='btn btn-default' onclick='checkTree(\"/tree.php?base_dir=$encode_path\")'>生成资源树</a></td>";
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info br' colspan='2' ><a href='?dir=$encode_path' style='display:block'>$path</a></td>$tree</tr>";
                  }else{
                      $fsid = $row->fs_id;
@@ -192,7 +192,7 @@
                     // 去掉前缀
                     $path = substr($row->path,strlen($predir));
                     $encode_path = urlencode($path);
-                    $tree = "<td class='br'><a class='btn btn-default' href='$page_url/tree.php?base_dir=$encode_path' target='_blank'>生成资源树</a></td>";
+                    $tree = "<td class='br'><a class='btn btn-default' onclick='checkTree(\"/tree.php?base_dir=$encode_path\")'>生成资源树</a></td>";
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info' colspan='2' ><a href='?dir=$encode_path' style='display:block'>$row->server_filename</a></td>$tree</tr>";
                  }else{
                      $fsid = $row->fs_id;
@@ -342,6 +342,13 @@
                 }
             },"json")
         }
+    }
+    // 是否生成目录树
+    function checkTree(url){
+        let check = confirm("风险提示：请确认要尝试生成资源树，如果文件数据太多可能出现服务器卡死")
+    	if(check){
+    	    window.open(`${url}`);
+    	}
     }
 </script>
 </body>

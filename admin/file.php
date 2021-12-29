@@ -10,6 +10,7 @@
     require('../functions.php');
     // 获取当前路径
     $page_url = getPageUrl();
+    // 取得网站根目录
     $page_url = str_replace("/admin/file.php","",$page_url);
 ?>
 <!doctype html>
@@ -138,7 +139,8 @@
                     // 去掉前缀
                     $path = substr($row->path,strlen($predir));
                     $encode_path = urlencode($path);
-                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info br' colspan='3' ><a href='?dir=$encode_path' style='display:block'>$path</a></td></tr>";
+                    $tree = "<td class='br'><a class='btn btn-default' href='$page_url/tree.php?base_dir=$encode_path' target='_blank'>生成资源树</a></td>";
+                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info br' colspan='2' ><a href='?dir=$encode_path' style='display:block'>$path</a></td>$tree</tr>";
                  }else{
                      $fsid = $row->fs_id;
                      $show_size = height_show_size($row->size);
@@ -190,7 +192,8 @@
                     // 去掉前缀
                     $path = substr($row->path,strlen($predir));
                     $encode_path = urlencode($path);
-                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info' colspan='3' ><a href='?dir=$encode_path' style='display:block'>$row->server_filename</a></td></tr>";
+                    $tree = "<td class='br'><a class='btn btn-default' href='$page_url/tree.php?base_dir=$encode_path' target='_blank'>生成资源树</a></td>";
+                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info' colspan='2' ><a href='?dir=$encode_path' style='display:block'>$row->server_filename</a></td>$tree</tr>";
                  }else{
                      $fsid = $row->fs_id;
                      $path = $row->path;

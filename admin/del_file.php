@@ -1,13 +1,14 @@
 <?php
 
-    // 删除文件功能，不可直接访问
+    // 删除文件功能，不可直接访问，必须登录
     session_start();
     if(empty($_SESSION['user'])){
         echo '{"error":"user not login"}';
         die;
     }
-    // 获取path
+    // 获取path（不需要urlencode，如果有urlencode会自动解码）
     $path =  $_GET['path'];
+    $path = urldecode($path);
     if(empty($path)){
         echo '{"error":"path is empty"}';
         die;

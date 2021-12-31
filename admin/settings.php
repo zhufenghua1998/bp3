@@ -186,7 +186,7 @@
           <th scope="row">14</th>
           <td>关闭直链</td>
           <td><?php echo $config['control']['pre_link'] ?></td>
-          <td><input name="s14" value="<?php echo $config['control']['close_dload'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
+          <td><input name="s14" value="<?php echo $config['control']['pre_link'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
         </tr>
         <tr class="active">
          <th scope="row">15</th>

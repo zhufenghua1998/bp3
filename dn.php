@@ -1,5 +1,7 @@
 <?php
     session_start();
+    require_once('./config.php');
+    require_once("./functions.php");
 /**
  *  文件下载模块，访客权限可用
  */
@@ -9,8 +11,13 @@
         echo '无效fsid';
         die;
     }
-    require_once('./config.php');
-    require_once("./functions.php");
+    if($config['control']['close_dload']!=0){
+        $user = $_SESSION['user'];
+        if(empty($user)){
+            echo '未登录';
+            die;
+        }
+    }
     // 2.查询下载链接
     $access_token = $config['identify']['access_token'];
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
@@ -23,6 +30,10 @@
     $result = @file_get_contents($url, false, $context);
     $json = json_decode($result);
     $dlink =  $json->list[0]->dlink;
+    if(empty($dlink)){
+        echo '{"error":"invalid fsid"}';
+        die;
+    }
     $file_size = $json->list[0]->size;
     $file_name = $json->list[0]->filename;
 

@@ -101,7 +101,7 @@
     </div>
     <h2>通用下载方式：</h2>
     <p>这是一些通用的解决方案，需要设置user-agent：pan.baidu.com</p>
-    <p>IDM、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS)</p>
+    <p>IDM（<a target="_blank" href="https://wwe.lanzoul.com/ixfgPybr93e">破解版下载，仅windows</a>)、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS）等</p>
     <h2>bp3_client</h2>
     <p>这是bp3提供的客户端</p>
     <p>若首次使用，请下载 <a href="./bp3_client_win_x64.zip">bp3客户端（仅windows x64）</a>，解压后点击bp3_client.exe运行，右键粘贴并回车即可下载</p>

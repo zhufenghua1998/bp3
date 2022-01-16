@@ -161,6 +161,8 @@
                      $show_size = height_show_size($row->size);
                     //是否前台直链
                     $pre_dlink = "";
+                    // 去掉前缀的title
+                    $title = substr($row->path,strlen($predir));
                     if($config['control']['pre_link']==0  || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/admin/dlink.php?fsid=$fsid'>复制</a>";
                     }
@@ -169,7 +171,7 @@
                     if($config['control']['close_dload']==1 && empty($_SESSION['user'])){
                         $dn="";
                     }
-                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename</td><td>$show_size</td>
+                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename <span tip='$title' class='tip fa fa-question-circle-o'></span></td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
               $dn $pre_dlink
@@ -284,6 +286,9 @@
     .copyright,.navbar-inverse{
         margin-bottom: 0px;
     }
+    .tip{
+        cursor: pointer;
+    }
 </style>
 <script src="./js/clipboard.min.js"></script>
 <script>
@@ -318,6 +323,10 @@
         }else{
             $("#back-to-top").css("display","none");
         }
+    });
+    // 提示完整目录
+    $(".tip").click(function(){
+        alert($(this).attr("tip"));
     });
 </script>
 </body>

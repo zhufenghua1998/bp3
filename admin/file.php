@@ -144,7 +144,8 @@
                  }else{
                      $fsid = $row->fs_id;
                      $show_size = height_show_size($row->size);
-                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename</td><td>$show_size</td>
+                     $title = $row->path;
+                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename <span tip='$title' class='tip fa fa-question-circle-o'></span></td><td>$show_size</td>
           <td>
               <div class='btn-group' role='group' aria-label='...'>
               <a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
@@ -246,6 +247,9 @@
     }
     .br{
         word-break: break-all !important;
+    }
+    .tip{
+        cursor: pointer;
     }
 </style>
 <script src="../js/clipboard.min.js"></script>
@@ -350,6 +354,10 @@
     	    window.open(`${url}`);
     	}
     }
+    // 提示完整目录
+    $(".tip").click(function(){
+        alert($(this).attr("tip"));
+    });
 </script>
 </body>
 </html>

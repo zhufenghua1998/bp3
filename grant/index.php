@@ -35,7 +35,7 @@
     $_SESSION['state'] = $state;
     
     // 2.1自动检测链接
-    $conn = "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&redirect_uri=$redrect_uri&scope=basic,netdisk&display=popup&state=$state";
+    $conn = "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&redirect_uri=$redrect_uri&scope=basic,netdisk&display=popup&state=$state&confirm_login=1&login_type=sms";
     // 2.2强制登录链接
     $force_conn = $conn.'&force_login=1';
     // 3. 点击下面的链接以获取token

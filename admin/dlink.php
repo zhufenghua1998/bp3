@@ -102,6 +102,10 @@
     <h2>通用下载方式：</h2>
     <p>这是一些通用的解决方案，需要设置user-agent：pan.baidu.com</p>
     <p>IDM（<a target="_blank" href="https://wwe.lanzoul.com/ixfgPybr93e">破解版下载，仅windows</a>)、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS）等</p>
+    <p>另外，我们提供了curl通用命令</p>
+    <pre class="br">
+curl --connect-timeout 10 -C - -o "<?php echo $file_name;?>" -L -X GET "<?php echo $realLink ?>" -H "User-Agent: pan.baidu.com" 
+</pre>
     <h2>bp3_client</h2>
     <p>这是bp3提供的客户端</p>
     <p>若首次使用，请下载 <a href="./bp3_client_win_x64.zip">bp3客户端（仅windows x64）</a>，解压后点击bp3_client.exe运行，右键粘贴并回车即可下载</p>
@@ -152,6 +156,50 @@
     clipboard1.on('error', function(e) {
         alert("复制失败")
     });
+    // 复制代码
+    $("pre").mouseenter(function (e) {
+        var _that = $(this);
+        _that.css("position", "relative");
+        _that.addClass("activePre");
+        var copyBtn = _that.find('.copyBtn');
+        if (!copyBtn || copyBtn.length <= 0) {
+            var copyBtn = '<span class="copyBtn" style="position:absolute;top:2px;right:2px;z-index:999;padding:2px;font-size:13px;color:black;background-color: blue;cursor: pointer;" onclick="copyCode()">Copy</span>';
+            _that.append(copyBtn);
+        }
+    }).mouseleave(function (e) {
+        var _that = $(this);
+        var copyBtn = _that.find('.copyBtn');
+        var copyBtnHover = _that.find('.copyBtn:hover');
+        if (copyBtnHover.length == 0) {
+            copyBtn.remove();
+            _that.removeClass("activePre");
+        }
+    });
+    function copyCode() {
+        var activePre = $(".activePre");
+        activePre = activePre[0];
+        var code = activePre.firstChild;
+        if(code.nodeName=="CODE"){
+            activePre = code;
+        }
+        var clone = $(activePre).clone();
+        clone.find('.copyBtn').remove();
+        var clipboard = new ClipboardJS('.copyBtn', {
+            text: function () {
+                return clone.text();
+            }
+        });
+        clipboard.on("success", function (e) {
+            $(".copyBtn").html("Copied!");
+            clipboard.destroy();
+            clone.remove();
+        });
+
+        clipboard.on("error", function (e) {
+            clipboard.destroy();
+            clone.remove();
+        });
+    }
 </script>
 </body>
 </html>

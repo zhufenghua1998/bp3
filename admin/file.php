@@ -265,8 +265,10 @@
     function fixMobile(){
         if(document.body.clientWidth<768){
             let href = $('#disk_page').attr("href");
-            href = href.replace('#/all?path=','#/dir/');
-            $("#disk_page").attr("href",href);
+            if(href){
+                href = href.replace('#/all?path=','#/dir/');
+                $("#disk_page").attr("href",href);
+            }
             $(".m-btns").addClass("btn-group-vertical");
         }
     }

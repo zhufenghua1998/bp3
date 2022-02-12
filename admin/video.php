@@ -1,15 +1,13 @@
 <?php
     session_start();
     require_once("../config.php");
-    if(!$_SESSION['user']){
-        echo "请登录";
-        die;
-    }
-    $path = $_GET['path'];
-    if(empty($path)){
-        echo "请输入视频的path路径";
-        die;
-    }
+    require_once("../functions.php");
+    
+    force_login();
+    
+    $path = force_get_param("path");
+    
+    // 不使用js编码，使用php解码后重新编码
     $path = urldecode($path);
     $encode_path = urlencode($path);
     
@@ -30,10 +28,8 @@
             ));
     $context = stream_context_create($opts);
     $result = @file_get_contents($url, false, $context);
-    if(!strstr($http_response_header[0],"200")){
-        echo '{"error":"your path is invalid"}';
-        die;
-    }
+    
+    errmsg_file_get_content();
     
     echo $result;
     // $json = json_decode($result);

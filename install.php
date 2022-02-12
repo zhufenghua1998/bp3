@@ -1,7 +1,6 @@
 <?php
 
-    $config_file = "./config.php";
-    require_once($config_file);
+    require_once("./config.php");
     require_once("./functions.php");
     //仅在config['init']==false时该配置才可生效
     $init = $config['init'];
@@ -24,8 +23,8 @@
         $config['connect']['secret_key']=$secret;
         $config['connect']['redirect_uri']=$redirect;
         $config['identify']['grant_url']=$grant_url;
-        $text='<?php $config='.var_export($config,true).';'; 
-        file_put_contents($config_file,$text);
+
+        save_config('./config.php');
         
         
         echo "<script>alert('提交成功！正在前往登录页面...');window.location.href='./login.php';</script>";

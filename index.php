@@ -12,13 +12,12 @@
     }else{
         $action = '登录';
     }
-    // 获取当前路径
-    $page_url = getPageUrl();
-    $page_url = str_replace("/index.php","",$page_url);
-    $refresh_url = $page_url."/admin/refresh_token.php";
+    // 获取根目录
+    $base_url = get_base_url("/index.php");
+    $refresh_url = $base_url."/admin/refresh_token.php";
     
     //自动刷新token
-    $access_token = get_token_refresh($config,$refresh_url);
+    $access_token = get_token_refresh($refresh_url);
     if(!$access_token){
         require('./config.php'); // 重新加载刷新后的config文件
     }
@@ -164,16 +163,16 @@
                     // 去掉前缀的title
                     $title = substr($row->path,strlen($predir));
                     if($config['control']['pre_link']==0  || isset($_SESSION['user'])){
-                        $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/admin/dlink.php?fsid=$fsid'>复制</a>";
+                        $pre_dlink = "<a target='_blank' href='$base_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$base_url/admin/dlink.php?fsid=$fsid'>复制</a>";
                     }
-                    $dn = "<a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>";
+                    $dn = "<a href='$base_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
+              <button type='button' class='btn btn-default cp' data-clipboard-text='$base_url/dn.php?fsid=$fsid'>复制</button>";
                     if($config['control']['close_dload']==1 && empty($_SESSION['user'])){
                         $dn="";
                     }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename <span tip='$title' class='tip fa fa-question-circle-o'></span></td><td>$show_size</td>
           <td>
-              <div class='btn-group' role='group' aria-label='...'>
+              <div class='m-btns btn-group' role='group' aria-label='...'>
               $dn $pre_dlink
               </div>
           </td>
@@ -223,16 +222,16 @@
                     //是否前台直链
                     $pre_dlink = "";
                     if($config['control']['pre_link']==0 || isset($_SESSION['user'])){
-                        $pre_dlink = "<a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/admin/dlink.php?fsid=$fsid'>复制</a>";
+                        $pre_dlink = "<a target='_blank' href='$base_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$base_url/admin/dlink.php?fsid=$fsid'>复制</a>";
                     }
-                    $dn = "<a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>";
+                    $dn = "<a type='button' class='btn btn-default' href='$base_url/dn.php?fsid=$fsid'>下载</a>
+              <button type='button' class='btn btn-default cp' data-clipboard-text='$base_url/dn.php?fsid=$fsid'>复制</button>";
                     if($config['control']['close_dload']==1 && empty($_SESSION['user'])){
                         $dn = "";
                     }
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>
           <td>
-              <div class='btn-group' role='group' aria-label='...'>
+              <div class='m-btns btn-group' role='group' aria-label='...'>
               $dn $pre_dlink
               </div>
           </td>
@@ -298,7 +297,10 @@
       }
       else{
         $(".copyright").removeClass(" navbar-fixed-bottom");
-      }    
+      }
+    if(document.body.clientWidth<768){
+        $(".m-btns").addClass("btn-group-vertical");
+    }
     });
     var btns = document.querySelectorAll('.cp');
     var clipboard = new ClipboardJS(btns);

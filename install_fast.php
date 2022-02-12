@@ -1,20 +1,19 @@
 <?php
-    // 体验版
-    $config_file = "./config.php";
-    require_once($config_file);
+    // 快速配置
+    require("./config.php");
     require_once("./functions.php");
     //仅在config['init']==false时该配置才可生效
     $init = $config['init'];
     
     $identify = $_GET['param'];
-    $json = null;
+    $arr = null;
     
-    // 如果存在参数param
+    // 如果存在参数param，存入
     if(isset($identify)){
         $identify = urldecode($identify);
-        $json = json_decode($identify,true);
+        $arr = json_decode($identify,true);
         
-        $json['conn_time'] = time();
+        $arr['conn_time'] = time();
     }
     
     $pageUrl = urlencode(getPageUrl());
@@ -23,29 +22,33 @@
     
     $redirect = $dirUrl.'grant/callback.php';
 
-    // 如果存在参数，且还未初始化
+    // 如果请求初始化($identify非空)，且还未初始化（init==0）
     if(!empty($identify) && !$init){
         $init = true;
         $config['user']['name']='bp3';
         $config['user']['pwd']='bp3';
         $config['init']=$init;
         $config['connect']['redirect_uri']=$redirect;
-        $config['identify'] = $json;
+        $config['identify'] = $arr;
+        
+        save_config("./config.php"); // 先存储一次，因为获取basic可能失败
         
         // 2.获取basic
         $token = $config['identify']['access_token'];
         $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$token&method=uinfo";
-        $result = file_get_contents($url,false);
-        $json = json_decode($result);
-        $config['basic']['baidu_name'] = $json->baidu_name;
-        $config['basic']['netdisk_name'] = $json->netdisk_name;
-        $config['basic']['uk'] = $json->uk;
-        $config['basic']['vip_type'] = $json->vip_type;
-        //
-        $text='<?php $config='.var_export($config,true).';'; 
-        file_put_contents($config_file,$text);
+        $result = @file_get_contents($url);
+        
+        errmsg_file_get_content();
+        
+        $arr = json_decode($result,true);
+        
+        $config['basic'] = $arr;
+
+        save_config("./config.php");
+        
         echo "<script>alert('提交成功！正在前往登录页面...');window.location.href='./login.php';</script>";
     }else if(!empty($identify)){
+        // 请求初始化，但已经初始化了
         echo "<script>alert('你已经配置过了，如果需要重新配置，请把conf_base.php文件覆盖config.php文件');window.location.href='./login.php';</script>";
     }
     

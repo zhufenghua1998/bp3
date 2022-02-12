@@ -6,17 +6,10 @@
  *  文件下载模块，访客权限使用时需管理员开启
  */
     // 1.获取fsid
-    $fsid =  $_GET['fsid'];
-    if(empty($fsid)){
-        echo '无效fsid';
-        die;
-    }
+    $fsid = force_get_param("fsid");
+
     if($config['control']['pre_link']!=0){
-        $user = $_SESSION['user'];
-        if(empty($user)){
-            echo '未登录';
-            die;
-        }
+        force_login();//强制登录
     }
 
     $access_token = $config['identify']['access_token'];
@@ -28,6 +21,9 @@
             ));
     $context = stream_context_create($opts);
     $result = @file_get_contents($url, false, $context);
+    
+    errmsg_file_get_content();
+    
     $json = json_decode($result);
     $dlink =  $json->list[0]->dlink;
     $file_size = $json->list[0]->size;

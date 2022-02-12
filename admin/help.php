@@ -1,13 +1,9 @@
 <?php
 // 文件管理
     session_start();
-    $user = $_SESSION['user'];
-    if(!$user){
-        echo '您还未登陆。';
-        die;  // 终止后续解析
-    }
     require('../config.php');
     require_once("../functions.php");
+    force_login();//强制登录
     // 获取open地址
     $page_url = getPageUrl();
     $index_url = str_replace("/admin/help.php","",$page_url); 

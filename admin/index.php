@@ -1,12 +1,10 @@
 <?php
     session_start();
-    $user = $_SESSION['user'];
-    if(!$user){
-        echo '您还未登陆。';
-        die;  // 终止后续解析
-    }
     require('../config.php');
     require_once("../functions.php");
+    
+    force_login();
+
     // 拼接授权地址
     $dirUrl = getDirUrl(basename(__FILE__));
     
@@ -135,6 +133,8 @@
             </table>
           </div><!-- table-example -->
           <p>注意：不要泄露你的access_token，以免带来不必要的麻烦。</p>
+          <p>如有bug，请反馈至github或qq交流群：1150064636</p>
+          <p>退出时，请注销！！！</p>
     </div>
 </main>
 <footer class="navbar navbar-default navbar-inverse copyright">
@@ -143,17 +143,18 @@
 <style>
     .manager{background-color:#e7e7e7;}
     .copyright{
+        margin-top: 100px;
         margin-bottom: 0px;
     }
 </style>
 <script>
     $(function () {
-      if($(window).height()==$(document).height()){
-        $(".copyright").addClass("navbar-fixed-bottom");
-      }
-      else{
-        $(".copyright").removeClass(" navbar-fixed-bottom");
-      }    
+    //   if($(window).height()==$(document).height()){
+    //     $(".copyright").addClass("navbar-fixed-bottom");
+    //   }
+    //   else{
+    //     $(".copyright").removeClass(" navbar-fixed-bottom");
+    //   }    
     });
 </script>
 </body>

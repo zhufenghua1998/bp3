@@ -4,12 +4,9 @@
 
     require_once("../config.php");
     require_once("../functions.php");
-    
-    if(empty($_SESSION['user'])){
-        if($config['control']['open_grant']==0){
-            echo '{"msg":"user not login"}';
-            die;
-        }
+
+    if($config['control']['open_grant']==0){
+        force_login();
     }
     
         

@@ -1,22 +1,17 @@
 <?php
+    /**
+     *  文件下载模块
+     */
     session_start();
     require_once('./config.php');
     require_once("./functions.php");
-/**
- *  文件下载模块，访客权限可用
- */
+
     // 1.获取fsid
-    $fsid =  $_GET['fsid'];
-    if(empty($fsid)){
-        echo '无效fsid';
-        die;
-    }
-    if($config['control']['close_dload']!=0){
-        $user = $_SESSION['user'];
-        if(empty($user)){
-            echo '未登录';
-            die;
-        }
+    $fsid = force_get_param("fsid");
+    // $fsid = $_GET['fsid'];
+    
+    if($config['control']['close_dload']==1){
+        force_login();
     }
     // 2.查询下载链接
     $access_token = $config['identify']['access_token'];
@@ -28,12 +23,13 @@
             ));
     $context = stream_context_create($opts);
     $result = @file_get_contents($url, false, $context);
+    
+    errmsg_file_get_content();
+    
     $json = json_decode($result);
     $dlink =  $json->list[0]->dlink;
-    if(empty($dlink)){
-        echo '{"error":"invalid fsid"}';
-        die;
-    }
+
+
     $file_size = $json->list[0]->size;
     $file_name = $json->list[0]->filename;
 

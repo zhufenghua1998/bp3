@@ -1,13 +1,13 @@
 <?php
-// 文件管理
+    // 设置页面
     session_start();
     $user = $_SESSION['user'];
-    if(!$user){
-        echo '您还未登陆。';
-        die;  // 终止后续解析
-    }
     $config_file = "../config.php";
     require($config_file);
+    require_once("../functions.php");
+    
+    force_login();
+    
     if(!$_POST['s1']){ // 抓取一个必要数据，捕获为空，说明未提交
         // 正常返回页面
     }else{

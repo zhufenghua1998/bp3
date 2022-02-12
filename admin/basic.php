@@ -1,24 +1,24 @@
 <?php
-  // 获取basic，只能被connect.php调用，无法直接访问
-  // 1.判断是否登录
+  // 获取basic信息
+  
   session_start();
-  if(!$_SESSION['user']){
-      echo "您还未登录";
-      die;
-  }
-  $config_file = "../config.php";
-  require_once($config_file);
-  // 2.获取basic
+  require("../config.php");
+  require_once("../functions.php");
+  
+  force_login();
+  
+  // 请求http
   $token = $config['identify']['access_token'];
   $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$token&method=uinfo";
-  $result = @file_get_contents($url,false);
-  $json = json_decode($result);
-  $config['basic']['baidu_name'] = $json->baidu_name;
-  $config['basic']['netdisk_name'] = $json->netdisk_name;
-  $config['basic']['uk'] = $json->uk;
-  $config['basic']['vip_type'] = $json->vip_type;
-  $text='<?php $config='.var_export($config,true).';'; 
-  file_put_contents($config_file,$text);
+  $result = @file_get_contents($url);
+  
+  errmsg_file_get_content();
+  
+  $arr = json_decode($result,true);
+  
+  $config['basic'] = $arr;
+  
+  save_config("../config.php");
   // 完成
 ?>
 

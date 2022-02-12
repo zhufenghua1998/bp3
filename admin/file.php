@@ -1,17 +1,13 @@
 <?php
 // 文件管理
     session_start();
-    $user = $_SESSION['user'];
-    if(!$user){
-        echo '您还未登陆。';
-        die;  // 终止后续解析
-    }
     require('../config.php');
     require('../functions.php');
+    force_login();  // 强制登录
     // 获取当前路径
     $page_url = getPageUrl();
     // 取得网站根目录
-    $page_url = str_replace("/admin/file.php","",$page_url);
+    $base_url = str_replace("/admin/file.php","",$page_url);
 ?>
 <!doctype html>
 <html>
@@ -24,6 +20,8 @@
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <!--<script src="../js/spark-md5.js"></script>-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/qs/6.10.3/qs.js"></script>
 </head>
 <body style="background-color:rgb(231,231,231);">
  
@@ -61,6 +59,13 @@
     </div><div id="myheader" class="container-fluid">
         <div class="container jumbotron">
             <div class="row">
+                <div class="col-xs-12" style="margin-bottom:10px">
+                    <div class="btn-group">
+                        <input id="upload" type="file" class="hidden"/>
+                        <button class="btn btn-default" onclick="$('#upload').trigger('click');">上传文件</button>
+                        <button class="btn btn-default" onclick="mkdir()">新建文件夹</button>
+                    </div>
+                </div>
                 <div class="col-xs-12">
                     <ol class="breadcrumb">
  <?php
@@ -139,18 +144,20 @@
                     // 去掉前缀
                     $path = substr($row->path,strlen($predir));
                     $encode_path = urlencode($path);
-                    $tree = "<td class='br'><div class='btn-group'><a class='btn btn-default' onclick='checkTree(\"/tree.php?base_dir=$encode_path\")'>生成资源树</a><a class='btn btn-default' target='_blank' href='$page_url/admin/imglist.php?path=$encode_path'>提取相册</a></div></td>";
+                    $title = $row->path;
+                    $delete = "<button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>";
+                    if($path=="/apps"){$delete="";}
+                    $tree = "<td class='br'><div class='m-btns btn-group'><a class='btn btn-default' onclick='checkTree(\"/admin/tree.php?base_dir=$encode_path\")'>资源树</a><a class='btn btn-default' target='_blank' href='$base_url/admin/imglist.php?path=$encode_path'>相册</a><button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button>$delete</div></td>";
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info br' colspan='2' ><a href='?dir=$encode_path' style='display:block'>$path</a></td>$tree</tr>";
                  }else{
                      $fsid = $row->fs_id;
                      $show_size = height_show_size($row->size);
                      $title = $row->path;
-                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td>$row->server_filename <span tip='$title' class='tip fa fa-question-circle-o'></span></td><td>$show_size</td>
+                 echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename <span tip='$title' class='tip fa fa-question-circle-o'></span></td><td>$show_size</td>
           <td>
-              <div class='btn-group' role='group' aria-label='...'>
-              <a href='$page_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
-              <a  target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/dlink.php?fsid=$fsid'>复制</a>
+              <div class='m-btns btn-group' role='group' aria-label='...'>
+              <a href='$base_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下&nbsp;&nbsp;&nbsp;载</a>
+              <a  target='_blank' href='$base_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button><button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>
               </div>
           </td>
         </tr>";
@@ -193,7 +200,9 @@
                     // 去掉前缀
                     $path = substr($row->path,strlen($predir));
                     $encode_path = urlencode($path);
-                    $tree = "<td class='br'><div class='btn-group'><a class='btn btn-default' onclick='checkTree(\"/tree.php?base_dir=$encode_path\")'>生成资源树</a><a class='btn btn-default' target='_blank' href='$page_url/admin/imglist.php?path=$encode_path'>提取相册</a></div></td>";
+                    $delete = "<button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>";
+                    if($path=="/apps"){$delete="";}
+                    $tree = "<td class='br'><div class='m-btns btn-group'><a class='btn btn-default' onclick='checkTree(\"/admin/tree.php?base_dir=$encode_path\")'>资源树</a><a class='btn btn-default' target='_blank' href='$base_url/admin/imglist.php?path=$encode_path'>相册</a><button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button>$delete</div></td>";
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info' colspan='2' ><a href='?dir=$encode_path' style='display:block'>$row->server_filename</a></td>$tree</tr>";
                  }else{
                      $fsid = $row->fs_id;
@@ -201,10 +210,9 @@
                      $show_size = height_show_size($row->size);
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>
           <td>
-              <div class='btn-group' role='group' aria-label='...'>
-              <a type='button' class='btn btn-default' href='$page_url/dn.php?fsid=$fsid'>下载</a>
-              <button type='button' class='btn btn-default cp' data-clipboard-text='$page_url/dn.php?fsid=$fsid'>复制</button>
-              <a target='_blank' href='$page_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$page_url/dlink.php?fsid=$fsid'>复制</a><button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>
+              <div class='m-btns btn-group' role='group' aria-label='...'>
+              <a type='button' class='btn btn-default' href='$base_url/dn.php?fsid=$fsid'>下&nbsp;&nbsp;&nbsp;载</a>
+              <a target='_blank' href='$base_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button><button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>
               </div>
           </td>
         </tr>";
@@ -237,7 +245,7 @@
     
 </div>
 </main>
-<footer class="navbar navbar-default navbar-fixed-bottom navbar-inverse copyright">
+<footer class="navbar navbar-default navbar-inverse copyright">
         <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © bp3 <?php echo date('Y')?></p>
 </footer>
 <a href="javascript:(function(){window.scrollTo(0, 0);})();" title="返回顶部" id="back-to-top" style="display:none;position:fixed;right:10px;bottom:10px;background-color:rgb(95,99,104);box-sizing: border-box;cursor:pointer;text-align:center;"><i class="fa fa-angle-up" style="height:40px;width:40px;display:iniline—block;line-height:40px;color:#fff;"></i></a>
@@ -259,32 +267,11 @@
             let href = $('#disk_page').attr("href");
             href = href.replace('#/all?path=','#/dir/');
             $("#disk_page").attr("href",href);
+            $(".m-btns").addClass("btn-group-vertical");
         }
     }
     $(function () {
       fixMobile();
-      if($(window).height()==$(document).height()){
-        $(".copyright").addClass("navbar-fixed-bottom");
-      }
-      else{
-        $(".copyright").removeClass(" navbar-fixed-bottom");
-      }    
-    });
-    var btns = document.querySelectorAll('.cp');
-    var clipboard = new ClipboardJS(btns);
-    clipboard.on('success', function(e) {
-        alert("下载链接复制成功");
-    });
-    clipboard.on('error', function(e) {
-        alert("下载链接复制失败");
-    });
-    var btns2 = document.querySelectorAll('.cp2');
-    var clipboard2 = new ClipboardJS(btns2);
-    clipboard2.on('success', function(e) {
-        alert("直链生成地址复制成功");
-    });
-    clipboard2.on('error', function(e) {
-        alert("直链生成地址复制失败");
     });
     $(window).scroll(function(){
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -337,7 +324,7 @@
         let check = confirm("短期内可在百度网盘app回收站找回，请确认删除：");
         if(check){
             let path = $(e.target).attr("path");
-            $.get("del_file.php",{"path":path},function(data){
+            $.get("../controller/del_file.php",{"path":path},function(data){
                 if(data.errno===0){
                     message("删除成功","success");
                     setTimeout("location.reload()",200);
@@ -346,6 +333,35 @@
                 }
             },"json")
         }
+    }
+    // 文件重命名
+    function rename(e){
+        alert("正在做了...请尝试其他功能");
+        return;
+        let name = prompt("请输入文件新名称");
+        if(!name){
+            message("未输入名称","error");
+            return;
+        }
+        name = name.trim();  // 前后不可有空格
+        if(name==""){
+            message("未输入名称","error");
+            return;
+        }
+        if(name.length>255){
+            message("名称不可大于255字符","error");
+            return;
+        }
+        
+        let path = $(e.target).attr("path");
+        $.get("../controller/rename.php",{"path":path,"name":name},function(data){
+            if(data.errno===0){
+                message("重命名成功","success");
+                setTimeout("location.reload()",200);
+            }else{
+                message("重命名失败","error");
+            }
+        },"json")
     }
     // 是否生成目录树
     function checkTree(url){
@@ -358,6 +374,163 @@
     $(".tip").click(function(){
         alert($(this).attr("tip"));
     });
+    // 创建文件夹
+    function mkdir(){
+        let name = prompt("请输入文件夹名称");
+        if(!name){
+            message("未输入文件夹名称","error");
+            return;
+        }
+        name = name.trim();  // 前后不可有空格
+        if(name==""){
+            message("未输入文件夹名称","error");
+            return;
+        }
+        if(name.length>255){
+            message("文件夹名称不可大于255字符","error");
+            return;
+        }
+        for(let i=0;i<name.length;i++){
+            let char = name.charAt(i);
+            
+            if(char ==':' || char== '<' || char=='>' || char=='|' || char=='*' || char=='?' || char=='/'){
+                message("不能包含字符:<>|*?/","error");
+                return;
+            }
+        }
+        $.post("../controller/mkdir.php",{"name":name,"path":"<?php echo $dir;?>"},function(data){
+            if(data.errno!=0){
+                message("文件夹创建失败","error");
+            }else{
+                message("文件夹创建成功","success");
+                setTimeout("location.reload()",200);
+            }
+        },"json");
+    }
+    $(function(){
+    	let image = document.getElementById('upload');
+    	image.onchange = function(){
+    	    
+    	    alert("正在做了...请尝试其他功能");
+    	    this.value = "";
+    	    return;
+    	    
+    		let files = this.files[0];//获取file组件中的文件
+    		let name = files.name;//文件名
+    		let size = files.size;//文件大小
+    		let dir = <?php $decode_dir=urldecode($dir); echo "'$decode_dir'"; ?>;
+    		if(dir!='/'){
+    		    dir = dir+"/";
+    		}
+    		dir = dir+name;
+    		dir = encodeURIComponent(dir); // 转码后的绝对地址（网盘中的地址）
+    // 		alert(dir)
+    		$.ajaxSettings.async = false;
+    		// 预上传
+    		let slice = 4194304;  // 分片大小为4MB
+    		
+    		let uploadid = "";
+    		let md5_list = get_md5_list(files,size,slice);//取得各个分片md5
+    		let res_md5_list = "";
+    		let access_token = "";
+    		$.post("./upload.php?method=precreate",{"path":dir,"size":size,"block_list":md5_list},function(data){
+    		    if(data.errno==0){
+    		        uploadid = data.uploadid;
+    		        res_md5_list = data.block_list;
+    		        access_token = data.access_token;
+    		    }else{
+    		        message("上传失败","error");
+    		        return;
+    		    }
+    		},"json");
+    // 		alert(uploadid)
+    // 		alert(res_md5_list)
+    // 		alert(access_token)
+            // 处理预上传的特殊数据: teres_block_md5 ( array )
+            if(res_md5_list.length==0){
+                res_md5_list.push(0);
+            }
+    		// 上传文件
+    		let upload_number = res_md5_list.length;
+    // 		alert("共需上传分片个数: "+upload_number);
+            let server_md5 = "["  // 拼接server_md5
+            for(let i=0;i<upload_number;i++){
+                let currentUrl = `https://d.pcs.baidu.com/rest/2.0/pcs/superfile2?method=upload&access_token=${access_token}&path=${dir}&type=tmpfile&uploadid=${uploadid}&partseq=${i}`
+                let endSize = size<slice?size:slice
+                let endIndex = i*slice+endSize
+                let currentFile = files.slice(i*slice,endIndex);
+                
+                let formData = new FormData();
+                
+                formData.append('file', currentFile);
+                formData.append('fastUrl', currentUrl);
+                $.ajax({
+                type: "POST",
+                url: "./upload.php?method=upload",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(resdata){
+                    // console.log(resdata)
+                    resdata = $.parseJSON(resdata)
+                    server_md5 += '"'
+                    server_md5 += resdata.md5
+                    server_md5 += '"'
+                    
+                    if(i<upload_number-1){
+                        server_md5 += ","
+                    }
+                }
+                 })
+            }
+            server_md5 += "]"
+            // alert(server_md5);
+    		// 创建文件
+    		$.post("./upload.php?method=create",{"path":dir,"size":size,"block_list":server_md5,"$":uploadid},function(data){
+    		    alert(data);
+    		});
+            this.value = "";  // 清空input缓存
+    	}
+    })
+    
+    // 获取分片的md5
+    function get_md5_list(files,size,slice){
+        let number = Math.ceil(size/slice);
+        let md5List = "["
+        for(let i=0;i<number;i++){
+            md5List += '"'
+            md5List += guid()
+            md5List += '"'
+            if(i<number-1){
+                md5List += ","
+            }
+        }
+        md5List += "]"
+        return md5List;
+    }
+    
+    function slice_md5(file,slice){  // 真实md5，可支持秒传，由于一些问题弃用
+        var spark = new SparkMD5.ArrayBuffer(),
+            fileReader = new FileReader();
+        var hash = '';
+
+        fileReader.onload = function (e) {
+            spark.append(e.target.result);                   
+            hash = spark.end();
+            console.log(hash);
+            return hash;
+        };
+        fileReader.readAsArrayBuffer(file);
+    };
+    
+    //用于生成uuid，伪造文件分片md5，不支持秒传
+    function S4() {
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+    function guid() {
+        return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
+    }
+
 </script>
 </body>
 </html>

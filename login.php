@@ -1,7 +1,7 @@
 <?php 
     session_start();
-    $config_file = "./config.php";
-    require($config_file);
+    require("./config.php");
+    require_once("./functions.php");
     $url = './admin';
     // 已登陆，重定向
     if($_SESSION['user']){
@@ -22,15 +22,13 @@
         $_SESSION['expiretime'] = time() + 3600;
         // 重置机会
         $config['user']['chance']=$lock;
-        $text='<?php $config='.var_export($config,true).';'; 
-        file_put_contents($config_file,$text);
+        save_config("./config.php");
         header("Location: $url");
     }else{
         // 次数减少
         $chance--;
         $config['user']['chance'] = $chance;
-        $text='<?php $config='.var_export($config,true).';'; 
-        file_put_contents($config_file,$text);
+        save_config("./config.php");
         if($chance<=0){echo "<script>alert('账户已经锁定！')</script>";}
         else{echo "<script>alert('用户名或密码错误！')</script>";}
     }

@@ -14,13 +14,12 @@
     $app_id = $config['connect']['app_id'];
     $secrect_key = $config['connect']['secret_key'];
     $redirect_uri = $config['connect']['redirect_uri'];
+    
     // 3.callback请求
     $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=authorization_code&code=$code&client_id=$app_id&client_secret=$secrect_key&redirect_uri=$redirect_uri&state=$state";
     $result = @file_get_contents($url, false);
-    if(!strstr($http_response_header[0],"200")){
-        echo '{"error":"invalid refresh_token"}';
-        die;
-    }
+    
+    errmsg_file_get_content();
     
     // 4.结果处理，存入session并重定向
     // 动态增加授权地址grant_url和刷新地址refresh_url

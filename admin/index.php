@@ -137,25 +137,27 @@
           <p>退出时，请注销！！！</p>
     </div>
 </main>
-<footer class="navbar navbar-default navbar-inverse copyright">
-        <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © bp3 <?php echo date('Y')?></p>
+<footer class="footer" style="background-color:black">
+      <div class="container">
+            <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © bp3 <?php echo date('Y')?></p>
+      </div>
 </footer>
 <style>
     .manager{background-color:#e7e7e7;}
-    .copyright{
-        margin-top: 100px;
-        margin-bottom: 0px;
+    html {
+      position: relative;
+      min-height: 100%;
+    }
+    body {
+      margin-bottom: 50px; /* Margin bottom by footer height */
+    }
+    .footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 50px; /* Set the fixed height of the footer here */
+      background-color: #f5f5f5;
     }
 </style>
-<script>
-    $(function () {
-    //   if($(window).height()==$(document).height()){
-    //     $(".copyright").addClass("navbar-fixed-bottom");
-    //   }
-    //   else{
-    //     $(".copyright").removeClass(" navbar-fixed-bottom");
-    //   }    
-    });
-</script>
 </body>
 </html>

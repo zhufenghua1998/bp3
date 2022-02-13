@@ -223,5 +223,18 @@
         word-break: break-all !important;
     }
 </style>
+<script>
+    $(function () {
+      if($(window).height()==$(document).height()){
+        $(".copyright").addClass("navbar-fixed-bottom");
+      }
+      else{
+        $(".copyright").removeClass(" navbar-fixed-bottom");
+      }
+    if(document.body.clientWidth<768){
+        $(".m-btns").addClass("btn-group-vertical");
+    }
+    });
+</script>
 </body>
 </html>

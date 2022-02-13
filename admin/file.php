@@ -274,6 +274,15 @@
     }
     $(function () {
       fixMobile();
+      if($(window).height()==$(document).height()){
+        $(".copyright").addClass("navbar-fixed-bottom");
+      }
+      else{
+        $(".copyright").removeClass(" navbar-fixed-bottom");
+      }
+      if(document.body.clientWidth<768){
+        $(".m-btns").addClass("btn-group-vertical");
+      }
     });
     $(window).scroll(function(){
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;

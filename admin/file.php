@@ -347,8 +347,6 @@
     }
     // 文件重命名
     function rename(e){
-        alert("正在做了...请尝试其他功能");
-        return;
         let name = prompt("请输入文件新名称");
         if(!name){
             message("未输入名称","error");

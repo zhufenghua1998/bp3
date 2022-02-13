@@ -21,7 +21,7 @@
         'http' => array(
             'method' => 'POST', 
             'header' => 'User-Agent: pan.baidu.com',
-            'content' => 'async=0&filelist=[{path":"'.$path.'","newname":"'.$name.'"}]'
+            'content' => 'async=0&filelist=[{"path":"'.$path.'","newname":"'.$name.'"}]'
             ));
     $context = stream_context_create($opts);
     echo @file_get_contents($url, false, $context);

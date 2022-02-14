@@ -11,8 +11,12 @@
     if($config['control']['pre_link']!=0){
         force_login();//强制登录
     }
-
+    
     $access_token = $config['identify']['access_token'];
+    if($_GET['access_token']){
+        $access_token = $_GET['access_token'];
+    }
+    
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
     $opts = array(
         'http' => array(

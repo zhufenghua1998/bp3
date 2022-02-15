@@ -66,7 +66,7 @@
             <li><a href="./login.php"><?php echo $action;?><i class="fa fa-user-circle-o" aria-hidden="true"></i></a></li>
             <li><a href="<?php echo $config['site']['blog'];?>">官博<i class="fa fa-rss"></i></a></li>
             <li><a href="<?php echo $config['site']['github'];?>">github<i class="fa fa-github" aria-hidden="true"></i></a></li>
-            <li><a href="./about.php">关于<i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
+            <li><a href="./user/login.php">免部署版<i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
          </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->

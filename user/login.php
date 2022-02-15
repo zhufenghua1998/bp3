@@ -2,6 +2,8 @@
     session_start();
 
     require_once("../functions.php");
+    require("../config.php");
+    
     $url = './index.php';
     // 已登陆，重定向
     if($_SESSION['access_token']){
@@ -24,7 +26,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>登录 | bp3解析版</title>
+    <title>登录 | bp3免部署版</title>
     <link href="../favicon.ico" rel="shortcut icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -32,7 +34,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 </head>
-<body style="background-image: url(../img/bg.png);">
+<body>
  
     <nav class="navbar navbar-default">
       <div class="container-fluid">
@@ -44,12 +46,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="./"><?php echo $config['site']['title'];?></a>
         </div>
     
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
+            <li><a href="../index.php">首页<i class="fa fa-home"></i></a></li>
             <li><a href="<?php echo $config['site']['blog'];?>">官博<i class="fa fa-rss"></i></a></li>
             <li><a href="<?php echo $config['site']['github'];?>">github<i class="fa fa-github" aria-hidden="true"></i></a></li>
           </ul>
@@ -59,7 +61,7 @@
     </nav>
 
 <div class="container-fluid">
-    <p class="h2">请点击<a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $enc_page_url; ?>">链接</a>进行登录</p>
+    <h2>登录方式：网页登录，请点击 =》<a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $enc_page_url; ?>">跳转授权系统</a></h2>
 </div>
 
 <footer class="copyright">

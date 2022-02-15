@@ -15,7 +15,7 @@
         header("Location: ./login.php");
     }
     
-    echo "<p>本次token ".$_SESSION['access_token']."，点击<a href='./index.php?logout=1'>注销</a></p>";
+    echo "<p>您已登录，本次token为 ".$_SESSION['access_token']."，退出时请 <a href='./index.php?logout=1'>注销</a></p>";
 
     echo "<p>功能列表：<a href='file.php'>文件管理</a></p>";
 ?>

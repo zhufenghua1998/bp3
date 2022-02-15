@@ -49,21 +49,26 @@
     <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
     </head>
     <body>
-        <h2 class="text-center">这是<a href=".."><?php echo $title;?></a>的简易授权系统</h2>
+        <h2 class="text-center">这是<a href=".."><?php echo $title;?></a>的专用授权系统</h2>
         <div class="container">
         <?php
-            if($_SESSION['result']){
-                echo "<h2>提示：当前已经获取授权，查看最后一次<a href='./display.php'>授权结果</a></h2>";
-            }
+            // if($_SESSION['result']){
+            //     echo "<h2>提示：当前已经获取授权，查看最后一次<a href='./display.php'>授权结果</a></h2>";
+            // }
         
         ?>
-            <h2>获取授权方式：手动获取</h2>
-            <p>手动授权方式，是指手动点击授权，即可获取授权信息</p>
-            <p><b>提示：</b>原始access_token必须通过手动获取</p>
-            <h3>点击右边的链接，然后获取授权
-                ==><a id="link" href="<?php echo $conn;?>">授权链接</a></h3>
+            <h2>授权方式一：网页登录</h2>
+            <p>通过在网页中快速检测已登录账户，或者使用短信登录、或者账户密码登录</p>
+            <p>点击右边的链接，然后获取授权
+                ==><a id="link" href="<?php echo $conn;?>">授权链接</a></p>
             <p><b>提示：</b>默认自动检测当前登录的百度账号，
-            如果需要强制登录，请勾选<input id="force" type="checkbox"/><label for="force">强制登录</label></p>
+            如果不希望检测，请勾选<input id="force" type="checkbox"/><label for="force">强制登录</label></p>
+            <br>
+            <h2>授权方式二：扫码登录</h2>
+            <p>通过百度网盘app或者百度app扫描网页中的二维码，然后快速登录</p>
+            <p>点击右边的链接，然后生成二维码
+                ==><a href="<?php echo "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&redirect_uri=$redrect_uri&scope=basic,netdisk&display=tv&qrcode=1&force_login=1";?>">授权链接</a></p>
+            <p><b>提示：</b>手机打开时，请缩放网页以获取大小合适的二维码</p>
         </div>
         <footer class="copyright">
                 <div class="navbar navbar-default navbar-inverse">

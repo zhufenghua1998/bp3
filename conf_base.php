@@ -1,5 +1,4 @@
-<?php $config=array (
-  'init' => false,
+<?php $config_base =array (
   'user' => 
   array (
     'name' => 'bp3',
@@ -23,9 +22,9 @@
   ),
   'connect' => 
   array (
-    'app_id' => '',
-    'secret_key' => '',
-    'redirect_uri' => '',
+    'app_id' => 'NtcmMLFqq4Vf0IKBlVIDFGXAqjuYpvWN',
+    'secret_key' => 'K0Y8zrTmHX98APHRlSqSAQl5N8rtS2kz',
+    'redirect_uri' => 'oob',
   ),
   'identify' => 
   array (

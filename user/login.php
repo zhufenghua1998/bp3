@@ -61,7 +61,7 @@
     </nav>
 
 <div class="container-fluid">
-    <h2>登录方式：网页登录，请点击 =》<a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $enc_page_url; ?>">跳转授权系统</a></h2>
+    <h2>登录方式：网页登录，请点击 =》<a href="<?php echo $config['identify']['grant_url']; ?>?display=<?php echo $enc_page_url; ?>">跳转授权系统</a></h2>
 </div>
 
 <footer class="copyright">

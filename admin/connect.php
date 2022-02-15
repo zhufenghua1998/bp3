@@ -17,10 +17,20 @@
     save_config("../config.php");
 
     // 获取basic
-    require('./basic.php');
-    // 返回首页
-    $dirUrl =getDirUrl(basename(__FILE__));
-    header("Location: $dirUrl");
+    $token = $config['identify']['access_token'];
+    $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$token&method=uinfo";
+    $result = @file_get_contents($url);
+    
+    errmsg_file_get_content();
+    
+    $arr = json_decode($result,true);
+    
+    $config['basic'] = $arr;
+    
+    save_config("../config.php");
+
+    // 获取basic
+    header("Location: ./index.php");
 ?>
     
     

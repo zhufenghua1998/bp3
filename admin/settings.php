@@ -17,9 +17,6 @@
         $config['user']['name'] = $_POST['s3'];
         $config['user']['pwd'] = $_POST['s4'];
         $config['user']['lock'] = $_POST['s5'];
-        $config['connect']['app_id'] = $_POST['s6'];
-        $config['connect']['secret_key'] = $_POST['s7'];
-        $config['connect']['redirect_uri'] = $_POST['s8'];
         $config['control']['pre_dir'] = $_POST['s9'];
         $config['site']['blog'] = $_POST['s10'];
         $config['site']['github'] = $_POST['s11'];
@@ -27,8 +24,6 @@
         $config['baidu']['baidu_pwd'] = $_POST['s13'];
         $config['control']['pre_link'] = $_POST['s14'];
         $config['control']['close_dload'] = $_POST['s15'];
-        $config['control']['open_grant'] = $_POST['s16'];
-        $config['identify']['grant_url'] = $_POST['s17'];
         $text='<?php $config='.var_export($config,true).';'; 
         file_put_contents($config_file,$text);
         echo "<script>alert('保存成功')</script>";
@@ -135,76 +130,46 @@
           <td><input name="s5" value="<?php echo $config['user']['lock'];?>" class="form-control"/></td>
         </tr>
         <tr>
-          <th scope="row">6</th>
-          <td>app_id</td>
-          <td class="br"><?php echo $config['connect']['app_id'];?></td>
-          <td><input name="s6" value="<?php echo $config['connect']['app_id'];?>" class="form-control"/></td>
-        </tr>
-        <tr class="active">
-          <th scope="row">7</th>
-          <td>secret_key</td>
-          <td class="br"><?php echo $config['connect']['secret_key'];?></td>
-          <td><input name="s7" value="<?php echo $config['connect']['secret_key'];?>" class="form-control"/></td>
-        </tr>
-        <tr>
-          <th scope="row">8</th>
-          <td>redirect_uri</td>
-          <td class="br"><?php echo $config['connect']['redirect_uri'];?></td>
-          <td><input name="s8" value="<?php echo $config['connect']['redirect_uri'];?>" class="form-control"  placeholder="admin/connect.php"/></td>
-        </tr>
-        <tr class="active">
           <th scope="row">9</th>
           <td>前台路径</td>
           <td class="br"><?php echo $config['control']['pre_dir'];?></td>
           <td><input name="s9" value="<?php echo $config['control']['pre_dir'];?>" class="form-control" placeholder="根目录留空即可"/></td>
         </tr>
-        <tr>
+        <tr class="active">
           <th scope="row">10</th>
           <td>官博地址</td>
           <td class="br"><?php echo $config['site']['blog'];?></td>
           <td><input name="s10" value="<?php echo $config['site']['blog'];?>" class="form-control"/></td>
         </tr>
-        <tr class="active">
+        <tr>
           <th scope="row">11</th>
           <td>github地址</td>
           <td class="br"><?php echo $config['site']['github'];?></td>
           <td><input name="s11" value="<?php echo $config['site']['github'];?>" class="form-control"/></td>
         </tr>
-        <tr>
+        <tr class="active">
           <th scope="row">12</th>
           <td>baidu账号</td>
           <td class="br"><?php echo $config['baidu']['baidu_account'];?></td>
           <td><input name="s12" value="<?php echo $config['baidu']['baidu_account'];?>" class="form-control" /></td>
         </tr>
-        <tr class="active">
+        <tr>
           <th scope="row">13</th>
           <td>baidu密码</td>
           <td><?php echo $config['baidu']['baidu_pwd'];?></td>
           <td><input name="s13" value="<?php echo $config['baidu']['baidu_pwd'];?>" class="form-control" /></td>
         </tr>
-        <tr>
+        <tr class="active">
           <th scope="row">14</th>
           <td>关闭直链</td>
           <td><?php echo $config['control']['pre_link'] ?></td>
           <td><input name="s14" value="<?php echo $config['control']['pre_link'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
         </tr>
-        <tr class="active">
+        <tr>
          <th scope="row">15</th>
           <td>关闭下载</td>
           <td><?php echo $config['control']['close_dload'] ?></td>
           <td><input name="s15" value="<?php echo $config['control']['close_dload'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td> 
-        </tr>
-        <tr>
-            <th scope="row">16</th>
-            <td>open_grant</td>
-            <td><?php echo $config['control']['open_grant'] ?></td>
-            <td><input name="s16" value="<?php echo $config['control']['open_grant'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
-        </tr>
-        <tr class="active">
-         <th scope="row">17</th>
-          <td>授权地址</td>
-          <td><?php echo $config['identify']['grant_url'] ?></td>
-          <td><input name="s17" value="<?php echo $config['identify']['grant_url'] ?>" class="form-control" placeholder="修改后请重新授权" /></td> 
         </tr>
       </tbody>
     </table>

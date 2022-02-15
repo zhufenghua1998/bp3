@@ -1,12 +1,14 @@
 <?php
     session_start();
-    require('./config.php');
-    require('./functions.php');
     
-    if($config['init']==false){
-        header("Location: install.php");
+    // 如果未安装
+    if(!file_exists("./config.php"))
+    {
+      header("Location: install.php");
     }
     
+    require('./config.php');
+    require('./functions.php');
     if($_SESSION['user']){
         $action = '管理';
     }else{

@@ -2,15 +2,11 @@
     session_start();
     $config = require('../config.php');
     require_once('../functions.php');
-/**
- *  文件下载模块，访客权限使用时需管理员开启
- */
+    
     // 1.获取fsid
     $fsid = force_get_param("fsid");
-
-    if($config['control']['pre_link']!=0){
-        force_login();//强制登录
-    }
+    
+    $access_token = force_get_param("access_token");
     
     $access_token = $config['identify']['access_token'];
     
@@ -66,20 +62,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand <?php if(empty($_SESSION['user'])) echo "hidden" ?>" href="./">管理系统</a>
+          <a class="navbar-brand <?php if(empty($_SESSION['user'])) echo "hidden" ?>" href="./">首页<i class="fa fa-home"></i></a>
         </div>
     
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
          <ul class="nav navbar-nav">
           </ul>
-          <ul class="nav navbar-nav <?php if(empty($_SESSION['user'])) echo "hidden" ?>">
-            <li><a href="./file.php">文件管理<i class="fa fa-th-large" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
-            <li><a href="./settings.php">修改设置<i class="fa fa-cog"></i></a></li>
-            <li><a href="./help.php">帮助与支持<i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
-          </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="../">前台<i class="fa fa-home"></i></a></li>
             <li class="<?php if(empty($_SESSION['user'])) echo "hidden" ?>"><a href="./logout.php">注销<i class="fa fa-sign-out" aria-hidden="true"></i></i></a></li>
           </ul>
         </div><!-- /.navbar-collapse -->

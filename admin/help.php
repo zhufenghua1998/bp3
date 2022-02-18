@@ -6,7 +6,7 @@
     force_login();//强制登录
     // 获取open地址
     $index_url = get_base_url("/admin/help.php");
-    $open_url = $index_url."/open.php"; // 
+    $open_url = $index_url."/open.php";
 ?>
 <!doctype html>
 <html>
@@ -59,33 +59,27 @@
     </header>
 <main>
 <div class="container help">
-    <h3>配置相关</h3>
-    <p>①如何配置回调地址？部署根目录下<a id="callback_2" target="_blank">/grant/callback.php</a>，即 <span id="callback"></span></p>
-    <p>②如何配置前台开放目录？在后台设置中，写上要省略的前置目录，例如：</p>
+    
+    <h3>当前版本</h3>
+    <p>您当前使用的版本号是：<?php echo $config['version'];?> </p>
+    <p>由于github网络问题，暂无法为您提供在线更新，请自助更新</p>
+    
+    <h3>如何配置前台开放目录？</h3>
+    <p>在设置中，写上要省略的前置目录，例如：</p>
     <ul>
         <li>开放根目录：留空</li>
         <li>开放/apps目录：填写/apps，注意结尾不要/</li>
     </ul>
-    <p>③更换网站图标？替换网站根目录的favicon.ico文件</p>
-    <p>④需要重新配置？请把根目录下config.php文件删除，会重置本系统</p>
-    <p>⑤账户密码修改？账户锁定？请查看并编辑config.php，该文件包含所有配置。</p>
-    <h3>其他功能描述</h3>
-    <p>bp3在某些功能的实现上，比如<b>大文件上传</b>，是困难的。</p>
-    <p>如果只是想上传文件，直接转到<a href="https://pan.baidu.com">百度网盘网页版</a>，bp3后台中可以快速定位到<b>百度网盘网页版相同目录</b></p>
-    <p>我们在设置中添加了2个位置以便在bp3中存放您的百度账户信息（防遗忘），以便从bp3无缝跳转百度网盘网页版</p>
-    <p>对于文件的其他管理，我们也推荐在百度网盘网页版，在bp3中仅提供了少量的文件管理功能。</p>
-    <p>直接上传大文件的解决方案，还有待进一步研究，您也可以向我们提供建议，或加入我们一起做出贡献。</p>
-    <h3>开放app授权接口</h3>
-    <p>bp3的授权系统可以为其他程序提供授权，这也是bp3免app配置的原理</p>
-    <p>但默认情况下，该功能并不开放给游客（即登录后可用），如果希望开启，请设置open_grant的值为1</p>
-    <p>当前系统内置授权地址是：根目录下的<a target="_blank" id="grant_2">grant/index.php</a>，即 <pre id="grant"></pre></p>
-    <p>当携带display的get参数时，则会在授权后自动携带结果重定向</p>
-    <pre><code>// 假设授权地址：https://bp3.52dixiaowo.com/grant/
-// 假设重定向后地址是：https://bp3.52dixiaowo.com/install_fast.php
-
-// 那么携带display参数(需要urlencode)时应该这样授权：
-
-https://bp3.52dixiaowo.com/grant/?display=https%3A%2F%2Fbp3.52dixiaowo.com%2Finstall_fast.php</code></pre>
+    
+    <h3>如何重置系统？</h3>
+    <p>请把根目录下config.php文件删除，会重置本系统</p>
+    <h3>账户已经锁定？</h3>
+    <p>为防止暴力破解，一旦账户密码连续错误3次，将会锁定，暂需手动恢复</p>
+    <p>请ftp后，编辑根目录下的config.php文件，把 user => chance 选项设置为3</p>
+    
+    <h3>忘记账户密码？</h3>
+    <p>请ftp后，编辑根目录下的config.php文件，其中user=>name为账户名，user=>pwd为密码。</p>
+    
     <h3>开发者获取token接口</h3>
     <p>bp3当前使用的access_token可以被其他程序获取，为了安全起见仅本机程序(同IP地址)可以获取，地址如下：</p>
     <pre><?php echo $open_url; ?></pre>
@@ -95,9 +89,9 @@ https://bp3.52dixiaowo.com/grant/?display=https%3A%2F%2Fbp3.52dixiaowo.com%2Fins
 resp = request.urlopen('<?php echo $open_url;?>')
 print(resp.read().decode())</code></pre>
     <p>如果你希望直接取得token用于测试，请<a href="../open.php" target="_blank">点击查看</a>。</p>
-    <h3>bp3二次开发</h3>
-    <p>百度网盘开发者官方文档为：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者文档</a>，但它可能有所欠缺，可参阅<b>52的小窝</b>维护的<a href="https://www.52dixiaowo.com/post-3245.html" target="_blank">php版百度网盘开发者文档</a></p>
-    <p>基于bp3进行二次开发，或对bp3进行修改，需要掌握一定的php与前端开发技术，QQ交流群：1150064636</p>
+    <h3>其他问题</h3>
+    <p>参阅百度网盘开发者官方文档：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者文档</a></p>
+    <p>如需帮助，请在github发布issure，或者QQ交流群：1150064636</p>
 </div>
 
 </main>
@@ -123,14 +117,6 @@ print(resp.read().decode())</code></pre>
       else{
         $(".copyright").removeClass(" navbar-fixed-bottom");
       }
-      let loc = location.toString();
-      loc = loc.substring(0,loc.length-14)
-      let callback = loc+"grant/callback.php"
-      $("#callback").text(callback);
-      $("#callback_2")[0].href=callback;
-      let grant = loc+"grant/index.php"
-      $("#grant").text(grant);
-      $("#grant_2")[0].href=grant;
     });
     // 复制代码
     $("pre").mouseenter(function (e) {

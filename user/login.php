@@ -14,7 +14,22 @@
     $param = $_GET['param'];
     if(isset($param)){
         $obj = json_decode($param);
-        $_SESSION['access_token'] = $obj->access_token;
+        
+        $access_token = $obj-> access_token;
+        
+        $url2 = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$access_token&method=uinfo";
+        $basic = @file_get_contents($url2);
+        
+        if(isset($basic)){
+            $_SESSION['access_token'] = $obj->access_token;
+            
+            $arr = json_decode($basic,true);
+            
+            $_SESSION['baidu_name'] = $arr['baidu_name'];
+            $_SESSION['netdisk_name'] = $arr['netdisk_name'];
+            
+        }
+        
         header("Location: $url");
     }
     
@@ -76,7 +91,7 @@
     <p>bp3免部署版，可以无需部署任何代码，访问网页即可授予bp3全部功能</p>
     <p>但是，过多的访客来执行处理复杂的功能，需要服务器硬件的支持，所以实际上仅开放了少量功能</p>
     <p>您能够访问本页面，也是站点管理员开放的结果，请按下面的步骤登录并使用吧</p>
-    <h2>怎么登录使用？</h2>
+    <h2>怎么进行登录？</h2>
     <p>登录依赖于bp3的授权系统，但是强调：<b>必须从本页面跳转授权系统</b></p>
     <p>bp3有2个授权系统，功能是一致的，只是操作稍微有些区别。</p>
     <p>免app授权系统，请点击 => <a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $enc_page_url; ?>">跳转免app授权系统</a></p>

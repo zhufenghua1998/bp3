@@ -1,11 +1,11 @@
 <?php
 // 文件管理
     session_start();
-    $config = require('../config.php');
     require('../functions.php');
     if(empty($_SESSION['access_token'])){
         header("Location: ./login.php");
     }
+    $access_token = $_SESSION['access_token'];
     // 获取当前路径
     $page_url = get_page_url();
     // 取得网站根目录
@@ -15,7 +15,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>文件管理 | bp3</title>
+    <title>文件管理 | bp3免部署版</title>
     <link href="../favicon.ico" rel="shortcut icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -38,7 +38,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="./">管理系统</a>
+          <a class="navbar-brand" href="./">首页<i class='fa fa-home'></i></a>
         </div>
     
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -106,7 +106,6 @@
 <?php
     // 获取查询方式，调用查询方法，优先query，参数s
     $predir = '';
-    $access_token = $_SESSION['access_token'];
     $has_more = false; // 全局共享变量，是否有下一页
     $page;  // 当前页数
     if($_GET['s']){ // 取得query参数
@@ -145,7 +144,7 @@
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename <span tip='$title' class='tip fa fa-question-circle-o'></span></td><td>$show_size</td>
           <td>
               <div class='m-btns btn-group' role='group' aria-label='...'>
-              <a  target='_blank' href='$base_url/admin/dlink.php?fsid=$fsid&access_token=$access_token' type='button' class='btn btn-default'>直链</a>
+              <a  target='_blank' href='$base_url/user/dlink.php?fsid=$fsid&access_token=$access_token' type='button' class='btn btn-default'>直链</a>
               </div>
           </td>
         </tr>";
@@ -199,7 +198,7 @@
                  echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$row->server_filename</td><td>$show_size</td>
           <td>
               <div class='m-btns btn-group' role='group' aria-label='...'>
-              <a target='_blank' href='$base_url/admin/dlink.php?fsid=$fsid&access_token=$access_token' type='button' class='btn btn-default'>直链</a>
+              <a target='_blank' href='$base_url/user/dlink.php?fsid=$fsid&access_token=$access_token' type='button' class='btn btn-default'>直链</a>
               </div>
           </td>
         </tr>";

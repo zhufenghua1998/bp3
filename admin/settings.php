@@ -1,39 +1,11 @@
 <?php
     // 设置页面
     session_start();
-    $user = $_SESSION['user'];
-    $config_file = "../config.php";
-    require($config_file);
+    $config = require('../config.php');
     require_once("../functions.php");
     
     force_login();
     
-    if(!$_POST['s1']){ // 抓取一个必要数据，捕获为空，说明未提交
-        // 正常返回页面
-    }else{
-        // 保存数据
-        $config['site']['title'] = $_POST['s1'];
-        $config['site']['subtitle'] = $_POST['s2'];
-        $config['user']['name'] = $_POST['s3'];
-        $config['user']['pwd'] = $_POST['s4'];
-        $config['user']['lock'] = $_POST['s5'];
-        $config['connect']['app_id'] = $_POST['s6'];
-        $config['connect']['secret_key'] = $_POST['s7'];
-        $config['connect']['redirect_uri'] = $_POST['s8'];
-        $config['control']['pre_dir'] = $_POST['s9'];
-        $config['site']['blog'] = $_POST['s10'];
-        $config['site']['github'] = $_POST['s11'];
-        $config['baidu']['baidu_account'] = $_POST['s12'];
-        $config['baidu']['baidu_pwd'] = $_POST['s13'];
-        $config['control']['pre_link'] = $_POST['s14'];
-        $config['control']['close_dload'] = $_POST['s15'];
-        $config['control']['open_grant'] = $_POST['s16'];
-        $config['identify']['grant_url'] = $_POST['s17'];
-        $text='<?php $config='.var_export($config,true).';'; 
-        file_put_contents($config_file,$text);
-        echo "<script>alert('保存成功')</script>";
-    }
-
 ?>
 <!doctype html>
 <html>
@@ -84,7 +56,7 @@
     </header>
 <main>
 <div class="container">
-<form method="post">
+<form id="main_form" method="post">
 <div class="bs-example" data-example-id="contextual-table">
     <div class="row">
         <div class="col-xs-6">
@@ -234,6 +206,20 @@
     if(document.body.clientWidth<768){
         $(".m-btns").addClass("btn-group-vertical");
     }
+    });
+    
+    $("#main_form").submit(function(){
+        
+        $.post("../controller/save_settings.php",$(this).serialize(),function(data){
+            if(data.errno==0){
+                alert("保存成功");
+                location.reload();
+            }else{
+                alert("保存失败");
+            }
+        },"json");
+        
+        return false;
     });
 </script>
 </body>

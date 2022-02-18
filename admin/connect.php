@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require("../config.php");
+    $config = require('../config.php');
     require_once("../functions.php");
     
     force_login();  // 强制登录
@@ -19,7 +19,7 @@
     // 获取basic
     require('./basic.php');
     // 返回首页
-    $dirUrl =getDirUrl(basename(__FILE__));
+    $dirUrl =get_dir_url(basename(__FILE__));
     header("Location: $dirUrl");
 ?>
     

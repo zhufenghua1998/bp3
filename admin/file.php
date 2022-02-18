@@ -1,13 +1,11 @@
 <?php
 // 文件管理
     session_start();
-    require('../config.php');
+    $config = require('../config.php');
     require('../functions.php');
     force_login();  // 强制登录
-    // 获取当前路径
-    $page_url = getPageUrl();
     // 取得网站根目录
-    $base_url = str_replace("/admin/file.php","",$page_url);
+    $base_url = get_base_url("/admin/file.php");
 ?>
 <!doctype html>
 <html>

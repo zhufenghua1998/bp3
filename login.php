@@ -1,7 +1,8 @@
 <?php 
     session_start();
-    require("./config.php");
+    $config = require('./config.php');
     require_once("./functions.php");
+    
     $url = './admin';
     // 已登陆，重定向
     if($_SESSION['user']){

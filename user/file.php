@@ -1,13 +1,13 @@
 <?php
 // 文件管理
     session_start();
-    require('../config.php');
+    $config = require('../config.php');
     require('../functions.php');
     if(empty($_SESSION['access_token'])){
         header("Location: ./login.php");
     }
     // 获取当前路径
-    $page_url = getPageUrl();
+    $page_url = get_page_url();
     // 取得网站根目录
     $base_url = str_replace("/user/file.php","",$page_url);
 ?>

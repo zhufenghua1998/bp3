@@ -25,7 +25,7 @@
     /**
      * 获取当前页面的Url绝对地址
      */ 
-    function getPageUrl(){
+    function get_page_url(){
         $page_url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
         return $page_url;
     }
@@ -62,10 +62,10 @@
      }
     /**
      * 获取当前页面的目录的url地址
-     * 获取方式：getDirUrl(basename(__FILE__));
+     * 获取方式：get_dir_url(basename(__FILE__));
      */ 
-     function getDirUrl($fileName){
-         $pageUrl = getPageUrl();
+     function get_dir_url($fileName){
+         $pageUrl = get_page_url();
          $dirUrl = substr($pageUrl,0,-strlen($fileName));
          return $dirUrl;
      }
@@ -73,7 +73,7 @@
      * 获取网站根目录，但需要手写当前目录与根目录的前缀
      */ 
     function get_base_url($endstr){
-        $pageUrl = getPageUrl();
+        $pageUrl = get_page_url();
         $base_url = str_cut_end($pageUrl,$endstr);
         
         return $base_url;
@@ -160,48 +160,76 @@
         }
         
       }
-      
-        /**
-         * 解码后重新进行url编码，以消除js编码带来的诡异错误
-         * 非必要不使用js进行urlencode，而使用php进行urlencode
-         * @param $param 使用js编码后的变量
-         * @return $encode 使用php解码后重新编码的变量
-         */ 
-        function re_urlencode($param){
-            
-            $decode = urldecode($param);
-            $encode = urlencode($decode);
-            
-            return $encode;
-        }
+  
+    /**
+     * 解码后重新进行url编码，以消除js编码带来的诡异错误
+     * 非必要不使用js进行urlencode，而使用php进行urlencode
+     * @param $param 使用js编码后的变量
+     * @return $encode 使用php解码后重新编码的变量
+     */ 
+    function re_urlencode($param){
         
-        /**
-         * 消除一个str的部分str，从后往前开始
-         * 比如当前文件地址 xx文件前置目录xx/apps/abc.php 
-         * 这里的xx文件前置目录xx，表示在服务器中的前置目录
-         * 从后往前消掉，可在任意php文件中取得bp3根目录所在服务器目录
-         * @param $srcstr 原字符串
-         * @param $endstr 去掉的字符串
-         * @return $newstr 新字符串
-         */ 
-        function str_cut_end($srcstr,$endstr){
-            
-            $endlength = strlen($endstr);
-            $newstr = substr($srcstr,0,-$endlength);
-            
-            return $newstr;
-        }
+        $decode = urldecode($param);
+        $encode = urlencode($decode);
         
-        /**
-         * 快速保存全局config变量到config.php文件中
-         * @param $config_file 调用函数的页面相对config.php的地址
-         * 例如，config.php在父目录中，则 "../config.php"
-         * 注意！！！请确保全局config变量不为空，否则将清空config.php
-         */ 
-        function save_config($config_file){
-            global $config;        
-            $text='<?php $config='.var_export($config,true).';'; 
-            file_put_contents($config_file,$text);
-        }
+        return $encode;
+    }
+        
+    /**
+     * 消除一个str的部分str，从后往前开始
+     * 比如当前文件地址 xx文件前置目录xx/apps/abc.php 
+     * 这里的xx文件前置目录xx，表示在服务器中的前置目录
+     * 从后往前消掉，可在任意php文件中取得bp3根目录所在服务器目录
+     * @param $srcstr 原字符串
+     * @param $endstr 去掉的字符串
+     * @return $newstr 新字符串
+     */ 
+    function str_cut_end($srcstr,$endstr){
+        
+        $endlength = strlen($endstr);
+        $newstr = substr($srcstr,0,-$endlength);
+        
+        return $newstr;
+    }
+    
+    /**
+     * 快速保存全局config变量到config.php文件中
+     * @param $config_file 调用函数的页面相对config.php的地址
+     * 例如，config.php在父目录中，则 "../config.php"
+     * 注意！！！请确保全局config变量不为空，否则将清空config.php
+     */ 
+    function save_config($config_file){
+        global $config;        
+        $text='<?php return '.var_export($config,true).';'; 
+        file_put_contents($config_file,$text);
+    }
+    
+    /**
+     * 快速重载本页面
+     * 单位毫秒，如果未传值则200毫秒
+     */ 
+    function easy_reload($lazy_time=200){
+        echo("<script>setTimeout('location.reload()', $lazy_time )</script>");
+    }
 
+
+    /**
+     * 快速重定向到指定地址
+     * @param $url 需要重定向的地址 (完整的http，或者相对地址如../)
+     * @param lazy_time 指定的延迟加载时间，默认200毫秒
+     */ 
+    function easy_location($url,$lazy_time=200){
+        echo("<script>setTimeout('window.location=\'$url\'', $lazy_time )</script>");
+    }
+    
+    /**
+     * php延迟指定毫秒
+     * @lazy_time  默认200毫秒
+     * 注释：sleep(time), usleep(time)，分别为秒（1）和微秒（-6），而毫秒（-3）
+     */ 
+    function lazy($lazy_time=200){
+     $lazy_time = $lazy_time*1000;
+     
+     usleep($lazy_time);
+    }
 ?>

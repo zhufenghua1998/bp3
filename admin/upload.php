@@ -1,6 +1,9 @@
 <?php
     // 不可直接访问，必须登录
     session_start();
+    $config = require('../config.php');
+    require_once('../functions.php');
+    
     if(empty($_SESSION['user'])){
         echo '{"error":"user not login"}';
         die;
@@ -10,8 +13,7 @@
     $log_file = "./upload_php_log.txt";
     
     // 预上传
-    require_once('../config.php');
-    require_once('../functions.php');
+
     
     $access_token = $config['identify']['access_token'];
     

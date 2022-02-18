@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once("../config.php");
+    $config = require("../config.php");
     require_once("../functions.php");
 
     $access_token = $config['identify']['access_token'];

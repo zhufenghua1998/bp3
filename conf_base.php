@@ -1,5 +1,4 @@
-<?php $config=array (
-  'init' => false,
+<?php return array (
   'user' => 
   array (
     'name' => 'bp3',
@@ -21,30 +20,9 @@
     'close_dload' => 0,
     'open_grant' => 0,
   ),
-  'connect' => 
-  array (
-    'app_id' => '',
-    'secret_key' => '',
-    'redirect_uri' => '',
-  ),
-  'identify' => 
-  array (
-    'expires_in' => 0,
-    'conn_time' => 0,
-    'refresh_token' => '',
-    'access_token' => '',
-    'scope' => 'basic netdisk',
-  ),
-  'basic' => 
-  array (
-    'baidu_name' => '',
-    'netdisk_name' => '',
-    'uk' => '',
-    'vip_type' =>'',
-  ),
-    'baidu' =>
-  array (
-      'baidu_account' => '',
-      'baidu_pwd' => '',
-  ),
+  'inner'=>array(
+    'app_id' => 'NtcmMLFqq4Vf0IKBlVIDFGXAqjuYpvWN',
+    'secret_key' => 'K0Y8zrTmHX98APHRlSqSAQl5N8rtS2kz',
+    'redirect_uri' => 'oob',
+   ),
 );

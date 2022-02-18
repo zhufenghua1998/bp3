@@ -1,12 +1,11 @@
 <?php
 // 文件管理
     session_start();
-    require('../config.php');
+    $config = require('../config.php');
     require_once("../functions.php");
     force_login();//强制登录
     // 获取open地址
-    $page_url = getPageUrl();
-    $index_url = str_replace("/admin/help.php","",$page_url); 
+    $index_url = get_base_url("/admin/help.php");
     $open_url = $index_url."/open.php"; // 
 ?>
 <!doctype html>
@@ -68,7 +67,7 @@
         <li>开放/apps目录：填写/apps，注意结尾不要/</li>
     </ul>
     <p>③更换网站图标？替换网站根目录的favicon.ico文件</p>
-    <p>④需要重新配置？请把根目录下conf_base.php文件内容覆盖config.php文件，会重置本系统</p>
+    <p>④需要重新配置？请把根目录下config.php文件删除，会重置本系统</p>
     <p>⑤账户密码修改？账户锁定？请查看并编辑config.php，该文件包含所有配置。</p>
     <h3>其他功能描述</h3>
     <p>bp3在某些功能的实现上，比如<b>大文件上传</b>，是困难的。</p>

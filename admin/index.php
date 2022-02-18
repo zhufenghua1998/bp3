@@ -1,12 +1,12 @@
 <?php
     session_start();
-    require('../config.php');
+    $config = require('../config.php');
     require_once("../functions.php");
     
     force_login();
 
     // 拼接授权地址
-    $dirUrl = getDirUrl(basename(__FILE__));
+    $dirUrl = get_dir_url(basename(__FILE__));
     
     $conn = urlencode($dirUrl.'connect.php');
     

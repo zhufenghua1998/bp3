@@ -2,7 +2,7 @@
   // 获取basic信息
   
   session_start();
-  require("../config.php");
+  $config = require('../config.php');
   require_once("../functions.php");
   
   force_login();

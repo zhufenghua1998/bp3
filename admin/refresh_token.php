@@ -1,7 +1,7 @@
 <?php
     // 刷新token
-    $config_file = "../config.php";
-    require_once($config_file);
+    $config = require('../config.php');
+    require_once("../functions.php");
     
     $refresh_token = $config['identify']['refresh_token'];
     $refresh_url = $config['identify']['refresh_url'];
@@ -23,7 +23,6 @@
     $config['identify']['refresh_token'] = $json->refresh_token;
     $config['identify']['access_token'] = $json->access_token;
     $config['identify']['scope'] = $json->scope;
-    $text='<?php $config='.var_export($config,true).';'; 
-    file_put_contents($config_file,$text);
+    save_config("../config.php");
 
 ?>

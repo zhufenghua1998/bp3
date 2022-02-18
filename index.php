@@ -1,11 +1,13 @@
 <?php
     session_start();
-    require('./config.php');
     require('./functions.php');
-    
-    if($config['init']==false){
+    if(!file_exists("./config.php"))
+    {
         header("Location: install.php");
     }
+    // 先检测config是否存在，再加载
+    $config = require('./config.php');
+    
     
     if($_SESSION['user']){
         $action = '管理';
@@ -19,7 +21,7 @@
     //自动刷新token
     $access_token = get_token_refresh($refresh_url);
     if(!$access_token){
-        require('./config.php'); // 重新加载刷新后的config文件
+        $config = require('./config.php'); // 重新加载刷新后的config文件
     }
 
 ?>

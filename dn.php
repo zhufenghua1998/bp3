@@ -3,7 +3,7 @@
      *  文件下载模块
      */
     session_start();
-    require_once('./config.php');
+    $config = require('./config.php');
     require_once("./functions.php");
 
     // 1.获取fsid

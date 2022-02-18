@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require("./config.php");
+    $config = require('./config.php');
     require_once("functions.php");
     
     function getip()
@@ -32,17 +32,15 @@
     $server_ip=gethostbyname($server_hostname);
     
     if($remote_ip == $server_ip){
-        // 获取当前路径
-        $page_url = getPageUrl();
         
-        $base_url = str_cut_end("/index.php");
+        $base_url = get_base_url("/open.php");
         
         $refresh_url = $base_url."/admin/refresh_token.php";
         
         //自动刷新token
         $access_token = get_token_refresh($refresh_url);
         if(!$access_token){
-            require("./config.php");
+            $config = require('./config.php');
             echo $config['identify']['access_token'];
         }else{
             echo $access_token;
@@ -53,6 +51,4 @@
     }
 
 
-
-    
 ?>

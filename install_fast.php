@@ -1,9 +1,13 @@
 <?php
     // 快速配置
-    require("./config.php");
+    $config = require('./conf_base.php');
     require_once("./functions.php");
-    //仅在config['init']==false时该配置才可生效
-    $init = $config['init'];
+    
+    $init = false;
+    if(file_exists("./config.php"))
+    {
+        $init = true;
+    }
     
     $identify = $_GET['param'];
     $arr = null;
@@ -16,18 +20,17 @@
         $arr['conn_time'] = time();
     }
     
-    $pageUrl = urlencode(getPageUrl());
+    $pageUrl = urlencode(get_page_url());
     
-    $dirUrl = getDirUrl(basename(__FILE__));
+    $dirUrl = get_dir_url(basename(__FILE__));
     
     $redirect = $dirUrl.'grant/callback.php';
 
     // 如果请求初始化($identify非空)，且还未初始化（init==0）
     if(!empty($identify) && !$init){
-        $init = true;
+        
         $config['user']['name']='bp3';
         $config['user']['pwd']='bp3';
-        $config['init']=$init;
         $config['connect']['redirect_uri']=$redirect;
         $config['identify'] = $arr;
         
@@ -49,7 +52,7 @@
         echo "<script>alert('提交成功！正在前往登录页面...');window.location.href='./login.php';</script>";
     }else if(!empty($identify)){
         // 请求初始化，但已经初始化了
-        echo "<script>alert('你已经配置过了，如果需要重新配置，请把conf_base.php文件覆盖config.php文件');window.location.href='./login.php';</script>";
+        echo "<script>alert('你已经配置过了，如果需要重新配置，请把config.php文件删掉');window.location.href='./login.php';</script>";
     }
     
 ?>
@@ -82,7 +85,7 @@
         <div class="container">
             <h3 class="text-center">欢迎使用bp3，正在体验免app配置</h3>
             <p>免app配置时，默认<span class="text-danger">账户密码均为bp3</span></p>
-            <p>如果本次配置未能成功，请使用conf_base.php覆盖config.php重新配置</p>
+            <p>如果本次配置未能成功，请把config.php删掉并重新访问本页面</p>
             <form class="form-inline">
             <div class="form-group">
                 <input class="form-control" id="customGrant" placeholder="自定义授权系统地址"/>
@@ -101,9 +104,9 @@
                 <textarea name="param" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
                 <p><input class="btn btn-primary" type="submit" value="提交"></p>
             </form>
-            <p><b>提示：</b>如果后期需要使用内置app，可在后台填写app信息、修改授权地址、重新点击获取授权即可</p>
+            <p><b>提示：</b>安装完毕后，可在后台调整配置app，或者免app授权，以及内置app三种授权方式。</p>
             <p><b>提示：</b>如果安装遇到问题，可在github求助，或QQ交流群：1150064636。</p>
-            <p><a href="./install.php">返回配置app授权</a></p>
+            <p><a href="./install.php">返回配置app授权</a> 或 <a href="./install_inner.php">初始化内置app授权</a></p>
         </div>
         <script>
             function customGrantFun(){

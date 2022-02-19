@@ -232,4 +232,81 @@
      
      usleep($lazy_time);
     }
+    
+    /**
+     * 格式化调试变量
+     * @param @name 要调试的变量
+     */ 
+    function easy_dump($name){
+        echo "<pre>";
+        print_r($name);
+        echo "</pre>";
+    }
+    
+    /**
+     * 递归遍历列出文件
+     * @param $dir 要列出的文件夹，可使用相对路径或绝对路径
+     */ 
+    function ls_deep($dir){
+        $files = array();
+        if(@$handle = opendir($dir)) { //注意这里要加一个@，不然会有warning错误提示：）
+            while(($file = readdir($handle)) !== false) {
+                if($file != ".." && $file != ".") { //排除根目录
+                    if(is_dir($dir."/".$file)) { //如果是子文件夹，就进行递归
+                        $arr = ["is_dir"=>1,"name"=>$file,"son"=>ls_deep($dir."/".$file)];
+                        $files[] = $arr;
+                    } else { //文件
+                        $arr = ["is_dir"=>0,"name"=>$file];
+                        $files[] = $arr;
+                    }
+                }
+            }
+            closedir($handle);
+            return $files;
+        }
+    }
+    
+    /**
+     * 递归复制文件夹
+     */ 
+    function recurse_copy($src,$dst){ 
+      $dir = opendir($src); 
+      @mkdir($dst); 
+      while(false !== ( $file = readdir($dir)) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+          if ( is_dir($src . '/' . $file) ) { 
+            recurse_copy($src.'/'.$file,$dst.'/'.$file); 
+          } 
+          else { 
+            copy($src.'/'.$file,$dst.'/'.$file); 
+          } 
+        } 
+      } 
+      closedir($dir); 
+    } 
+    /**
+     * 递归删除文件夹及其文件
+     */ 
+    function deldir($dir) {
+      //先删除目录下的文件：
+      $dh=opendir($dir);
+      while ($file=readdir($dh)) {
+        if($file!="." && $file!="..") {
+          $fullpath=$dir."/".$file;
+          if(!is_dir($fullpath)) {
+              unlink($fullpath);
+          } else {
+              deldir($fullpath);
+          }
+        }
+      }
+     
+      closedir($dh);
+      //删除当前文件夹：
+      if(rmdir($dir)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
 ?>

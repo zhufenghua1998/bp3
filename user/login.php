@@ -4,6 +4,10 @@
     require_once("../functions.php");
     $config = require('../config.php');
     
+    if($config['control']['open_session']==0){
+        force_login();//强制登录
+    }
+    
     $url = './index.php';
     // 已登陆，重定向
     if($_SESSION['access_token']){
@@ -18,7 +22,9 @@
         $access_token = $obj-> access_token;
         
         $url2 = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$access_token&method=uinfo";
+        
         $basic = @file_get_contents($url2);
+        errmsg_file_get_content();
         
         if(isset($basic)){
             $_SESSION['access_token'] = $obj->access_token;

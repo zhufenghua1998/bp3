@@ -19,7 +19,8 @@
     
     // 3.callback请求
     $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=authorization_code&code=$code&client_id=$app_id&client_secret=$secrect_key&redirect_uri=$redirect_uri&state=$state";
-    $result = @file_get_contents($url, false);
+    
+    $result = @file_get_contents($url);
     
     errmsg_file_get_content();
     

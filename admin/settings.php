@@ -78,105 +78,117 @@
       <tbody>
         <tr class="active">
           <th scope="row">1</th>
-          <td>网站名称</td>
+          <td>网站名称 <span class="tip fa fa-question-circle-o"  tip="用于网站主标题"></span></td>
           <td class="br"><?php echo $config['site']['title'];?></td>
           <td><input name="s1" value="<?php echo $config['site']['title'];?>" class="form-control"/></td>
         </tr>
         <tr scope="row">
           <th scope="row">2</th>
-          <td>网站副标题</td>
+          <td>网站副标题 <span class="tip fa fa-question-circle-o"  tip="用于网站副标题"></span></td>
           <td class="br"><?php echo $config['site']['subtitle'];?></td>
           <td><input name="s2" value="<?php echo $config['site']['subtitle'];?>" class="form-control"/></td>
         </tr>
         <tr class="active">
           <th scope="row">3</th>
-          <td>用户名</td>
+          <td>用户名 <span class="tip fa fa-question-circle-o"  tip="用于登录bp3的用户名"></span></td>
           <td class="br"><?php echo $config['user']['name'];?></td>
           <td><input name="s3" value="<?php echo $config['user']['name'];?>" class="form-control"/></td>
         </tr>
         <tr>
           <th scope="row">4</th>
-          <td>用户密码</td>
+          <td>用户密码 <span class="tip fa fa-question-circle-o"  tip="用于登录bp3的密码"></span></td>
           <td class="br"><?php echo $config['user']['pwd'];?></td>
           <td><input name="s4" value="<?php echo $config['user']['pwd'];?>" class="form-control"/></td>
         </tr>
         <tr class="active">
           <th scope="row">5</th>
-          <td>账户锁定</td>
+          <td>账户锁定 <span class="tip fa fa-question-circle-o"  tip="连续登录错误账户锁定次数"></span></td>
           <td class="br"><?php echo $config['user']['lock'];?></td>
           <td><input name="s5" value="<?php echo $config['user']['lock'];?>" class="form-control"/></td>
         </tr>
         <tr>
           <th scope="row">6</th>
-          <td>app_id</td>
+          <td>app_id <span class="tip fa fa-question-circle-o"  tip="配置百度app的appKey"></span></td>
           <td class="br"><?php echo $config['connect']['app_id'];?></td>
           <td><input name="s6" value="<?php echo $config['connect']['app_id'];?>" class="form-control"/></td>
         </tr>
         <tr class="active">
           <th scope="row">7</th>
-          <td>secret_key</td>
+          <td>secret_key <span class="tip fa fa-question-circle-o"  tip="用于配置百度app的secretKey"></span></td>
           <td class="br"><?php echo $config['connect']['secret_key'];?></td>
           <td><input name="s7" value="<?php echo $config['connect']['secret_key'];?>" class="form-control"/></td>
         </tr>
         <tr>
           <th scope="row">8</th>
-          <td>redirect_uri</td>
+          <td>redirect_uri <span class="tip fa fa-question-circle-o"  tip="用于配置百度app的回调地址"></span></td>
           <td class="br"><?php echo $config['connect']['redirect_uri'];?></td>
           <td><input name="s8" value="<?php echo $config['connect']['redirect_uri'];?>" class="form-control"  placeholder="admin/connect.php"/></td>
         </tr>
         <tr class="active">
           <th scope="row">9</th>
-          <td>前台路径</td>
+          <td>前台路径 <span class="tip fa fa-question-circle-o"  tip="开放给访客的目录"></span></td>
           <td class="br"><?php echo $config['control']['pre_dir'];?></td>
           <td><input name="s9" value="<?php echo $config['control']['pre_dir'];?>" class="form-control" placeholder="根目录留空即可"/></td>
         </tr>
         <tr>
           <th scope="row">10</th>
-          <td>官博地址</td>
+          <td>官博地址 <span class="tip fa fa-question-circle-o"  tip="可忽略，链接到你的博客网站"></span></td>
           <td class="br"><?php echo $config['site']['blog'];?></td>
           <td><input name="s10" value="<?php echo $config['site']['blog'];?>" class="form-control"/></td>
         </tr>
         <tr class="active">
           <th scope="row">11</th>
-          <td>github地址</td>
+          <td>github地址 <span class="tip fa fa-question-circle-o"  tip="可忽略，链接到你的github"></span></td>
           <td class="br"><?php echo $config['site']['github'];?></td>
           <td><input name="s11" value="<?php echo $config['site']['github'];?>" class="form-control"/></td>
         </tr>
         <tr>
           <th scope="row">12</th>
-          <td>baidu账号</td>
+          <td>baidu账号 <span class="tip fa fa-question-circle-o"  tip="可忽略，用于记录你的百度账号"></span></td>
           <td class="br"><?php echo $config['baidu']['baidu_account'];?></td>
           <td><input name="s12" value="<?php echo $config['baidu']['baidu_account'];?>" class="form-control" /></td>
         </tr>
         <tr class="active">
           <th scope="row">13</th>
-          <td>baidu密码</td>
+          <td>baidu密码 <span class="tip fa fa-question-circle-o"  tip="可忽略，用于记录你的百度密码"></span></td>
           <td><?php echo $config['baidu']['baidu_pwd'];?></td>
           <td><input name="s13" value="<?php echo $config['baidu']['baidu_pwd'];?>" class="form-control" /></td>
         </tr>
         <tr>
           <th scope="row">14</th>
-          <td>关闭直链</td>
-          <td><?php echo $config['control']['pre_link'] ?></td>
-          <td><input name="s14" value="<?php echo $config['control']['pre_link'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
+          <td>关闭直链 <span class="tip fa fa-question-circle-o"  tip="关闭后，访客不可使用直链功能"></span></td>
+          <td><?php echo $config['control']['close_dlink'] ?></td>
+          <td><input name="s14" value="<?php echo $config['control']['close_dlink'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
         </tr>
         <tr class="active">
          <th scope="row">15</th>
-          <td>关闭下载</td>
+          <td>关闭下载 <span class="tip fa fa-question-circle-o"  tip="关闭后，访客不可直接下载"></span></td>
           <td><?php echo $config['control']['close_dload'] ?></td>
           <td><input name="s15" value="<?php echo $config['control']['close_dload'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td> 
         </tr>
         <tr>
             <th scope="row">16</th>
-            <td>open_grant</td>
+            <td>open_grant <span class="tip fa fa-question-circle-o"  tip="打开后，本系统的免app授权地址可被访客使用"></span></td>
             <td><?php echo $config['control']['open_grant'] ?></td>
             <td><input name="s16" value="<?php echo $config['control']['open_grant'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
         </tr>
         <tr class="active">
          <th scope="row">17</th>
-          <td>授权地址</td>
+          <td>授权地址 <span class="tip fa fa-question-circle-o"  tip="设置本站点使用的授权地址"></span></td>
           <td><?php echo $config['identify']['grant_url'] ?></td>
           <td><input name="s17" value="<?php echo $config['identify']['grant_url'] ?>" class="form-control" placeholder="修改后请重新授权" /></td> 
+        </tr>
+        <tr>
+            <th scope="row">18</th>
+            <td>open_grant2 <span class="tip fa fa-question-circle-o"  tip="打开后，访客可使用本系统的内置app授权系统"></span></td>
+            <td><?php echo $config['control']['open_grant2'] ?></td>
+            <td><input name="s18" value="<?php echo $config['control']['open_grant2'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
+        </tr>
+        <tr class="active">
+         <th scope="row">19</th>
+          <td>open_session <span class="tip fa fa-question-circle-o"  tip="打开后，访客可使用bp3免部署版"></span></td>
+          <td><?php echo $config['control']['open_session'] ?></td>
+          <td><input name="s19" value="<?php echo $config['control']['open_session'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td> 
         </tr>
       </tbody>
     </table>
@@ -220,6 +232,10 @@
         },"json");
         
         return false;
+    });
+    // 提示完整目录
+    $(".tip").click(function(){
+        alert($(this).attr("tip"));
     });
 </script>
 </body>

@@ -39,6 +39,7 @@
         // 2.获取basic
         $token = $config['identify']['access_token'];
         $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$token&method=uinfo";
+        
         $result = @file_get_contents($url);
         
         errmsg_file_get_content();

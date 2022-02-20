@@ -8,7 +8,7 @@
     // 1.获取fsid
     $fsid = force_get_param("fsid");
 
-    if($config['control']['pre_link']!=0){
+    if($config['control']['close_dlink']!=0){
         force_login();//强制登录
     }
     
@@ -23,7 +23,7 @@
     $context = stream_context_create($opts);
     $result = @file_get_contents($url, false, $context);
     
-    errmsg_file_get_content();
+    errmsg_file_get_content($opts);
     
     $json = json_decode($result);
     $dlink =  $json->list[0]->dlink;

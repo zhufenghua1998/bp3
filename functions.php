@@ -48,6 +48,7 @@
             $pass_time = time()-$config['identify']['conn_time'];
             $express_time = $config['identify']['expires_in']-$pass_time;
             if($express_time<1728000){ //有效期小于20天，自动刷新token
+            
                 $arrContextOptions = [
                     'ssl' => [
                         'verify_peer' => false,
@@ -55,6 +56,9 @@
                     ]
                 ];
                 @file_get_contents($refresh_php,false,stream_context_create($arrContextOptions));
+                
+                errmsg_file_get_content($arrContextOptions);
+                
                 return false;
             }
         }
@@ -140,27 +144,82 @@
      }
      
      /**
+      * 默认http请求设置，可用于file_get_content参数
+      * 
+      * @param $method 指定请求方法
+      * @param $header 指定请求头键值对
+      * @param $content 指定请求参数键值对
+      */ 
+     function easy_build_http($method, array $header=[], array $content=[]){
+         
+         $content = http_build_query($content);
+         
+         $opt = [
+             'http'=>[
+                        'method'=>$method,
+                        'header'=>$header,
+                        'content'=>$content,
+                    ],
+             'ssl'=>[
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                    ],
+             ];
+        return $opt;
+     }
+      
+    /**
+     * 注意，暂时有莫名bug
+     * 快速 file_get_content()
+     */ 
+    function easy_file_get_content($url,array $opt=null){
+        $result = null;
+        if($opt){
+            $result = @file_get_contents($url,false,stream_context_create($opt));
+            errmsg_file_get_content($opt,$http_response_header);
+        }else{
+            $result = @file_get_contents($url);
+            errmsg_file_get_content(null,$http_response_header);
+        }
+        return $result;
+    }
+    
+     /**
       * 如果file_get_content失败，则输出提示
       * 无需参数，无返回值，需要首行开启session，否则不输出错误提示
       */ 
-      function errmsg_file_get_content(){
-        global $http_response_header;
+      function errmsg_file_get_content(array $opts=null,$response=null){
+        
+        // 如果未传递$http_response_header，尝试获取global
+        if(isset($response)){
+            $http_response_header = $response;
+        }else{
+            global  $http_response_header;
+        }
+        
         if(empty($_SESSION['user'])){
             // 请求失败且未登录
             if(!strstr($http_response_header[0],"200")){
-                echo '{"error":"http request error!"}';
+                echo '{"errmsg":"http request error!"}';
                 die;
             }
         }else if(!strstr($http_response_header[0],"200")){
             // 请求失败，但已登录
-            echo '{"error":"http request error!"}';
+            echo '{"errmsg":"http request error!"}';
+            easy_dump(error_get_last());
+            if($opts){
+                echo '{"msg":"The following is the HTTP request header information!"}';
+                echo '<br>';  
+                easy_dump($opts);
+            }
+            echo '{"msg":"The following is the HTTP response header information!"}';
             echo '<br>';
-            var_dump($http_response_header);
+            easy_dump($http_response_header);
             die;
         }
         
       }
-  
+
     /**
      * 解码后重新进行url编码，以消除js编码带来的诡异错误
      * 非必要不使用js进行urlencode，而使用php进行urlencode
@@ -309,4 +368,5 @@
         return false;
       }
     }
+    
 ?>

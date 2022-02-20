@@ -16,15 +16,15 @@
     // 2.查询下载链接
     $access_token = $config['identify']['access_token'];
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
+
     $opts = array(
         'http' => array(
             'method' => 'GET', 
-            'header' => 'User-Agent: pan.baidu.com'
+            'header' => 'USER-AGENT: pan.baidu.com'
             ));
     $context = stream_context_create($opts);
     $result = @file_get_contents($url, false, $context);
-    
-    errmsg_file_get_content();
+    errmsg_file_get_content($opts);
     
     $json = json_decode($result);
     $dlink =  $json->list[0]->dlink;

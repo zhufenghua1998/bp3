@@ -1,5 +1,5 @@
 <?php return array (
-  'version'=>"v1.2.2",
+  'version'=>"v1.2.3",
   'user' => 
   array (
     'name' => 'bp3',
@@ -17,9 +17,11 @@
   'control' => 
   array (
     'pre_dir' => '',
-    'pre_link' => 0,
-    'close_dload' => 0,
+    'close_dlink' => 0,
+    'close_dload' => 1,
     'open_grant' => 0,
+    'open_grant2' => 0,
+    'open_session' => 0,
   ),
   'inner'=>array(
     'app_id' => 'NtcmMLFqq4Vf0IKBlVIDFGXAqjuYpvWN',

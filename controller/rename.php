@@ -26,5 +26,5 @@
     $context = stream_context_create($opts);
     echo @file_get_contents($url, false, $context);
     
-    errmsg_file_get_content();
+    errmsg_file_get_content($opts);
 ?>

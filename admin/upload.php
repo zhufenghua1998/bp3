@@ -37,6 +37,7 @@
                 ));
         $context = stream_context_create($opts);
         $result = @file_get_contents($url, false, $context);
+        errmsg_file_get_content($opts);
         if(isset($result)){
             $json_obj = json_decode($result);
             $json_obj->access_token = $access_token;
@@ -94,6 +95,7 @@
                 ));
         $context = stream_context_create($opts);
         $result = @file_get_contents($url, false, $context);
+        errmsg_file_get_content($opts);
         echo $result;
     }
 

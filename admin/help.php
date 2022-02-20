@@ -7,6 +7,9 @@
     // 获取open地址
     $index_url = get_base_url("/admin/help.php");
     $open_url = $index_url."/open.php";
+    // 授权地址
+    $grant = $index_url."/grant/";
+    $grant2 = $index_url."/grant2/";
 ?>
 <!doctype html>
 <html>
@@ -92,7 +95,13 @@
     <p>请ftp后，编辑根目录下的config.php文件，把 user => chance 选项设置为3</p>
     
     <h3>忘记账户密码？</h3>
-    <p>请ftp后，编辑根目录下的config.php文件，其中user=>name为账户名，user=>pwd为密码。</p>
+    <p>请ftp后，打开根目录下的config.php文件，其中user=>name为账户名，user=>pwd为密码。</p>
+    
+    <h3>本系统授权服务器地址？</h3>
+    <p>免app授权地址</p>
+    <pre><code><?php echo $grant;?></code></pre>
+    <p>内置app授权地址</p>
+    <pre><code><?php echo $grant2;?></code></pre>
     
     <h3>开发者获取token接口</h3>
     <p>bp3当前使用的access_token可以被其他程序获取，为了安全起见仅本机程序(同IP地址)可以获取，地址如下：</p>
@@ -276,8 +285,13 @@ print(resp.read().decode())</code></pre>
         $.post("../controller/check_update.php",function(data){
             
             if(!data.tag_name){
+                
                 $("#latest_tip").empty();
-                let str = `<p>${new Date().toLocaleString()},本次github网络链接失败，最新下载地址<a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></p>`;
+                let str = `<table class="table table-bordered table-responsive">`;
+                
+                str += `<tr><td>错误描述：</td><td>${new Date().toLocaleString()},本次github网络链接失败</td></tr>`
+                str += `        <tr><td>最新下载地址</td><td><a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></td></tr>  `
+                str += `</table>`;
                 $("#latest_tip").append(str);
                 return;  // 网络连接失败
             }
@@ -288,11 +302,11 @@ print(resp.read().decode())</code></pre>
             str += `<tr><td>版本类型</td><td>${data.prerelease?"测试版":"稳定版"}</td></tr>`;
             
             let version_body = data.body;
-            version_body = version_body.replaceAll("\r\n","<br>");
+            version_body = version_body.replace(/\r\n/g,"<br>");
             
             str += `<tr><td>版本描述：</td><td>${version_body}</td></tr>`
             str += `<tr><td>更新时间</td><td>${data.published_at}</td></tr>`
-            str += `        <tr><td>最新下载地址</td><td><a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></td></tr>  `
+            str += `<tr><td>最新下载地址</td><td><a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></td></tr>  `
             str += `</table>`;
             $("#latest_tip").append(str);
         },"json");

@@ -6,6 +6,8 @@
     force_login();  // 强制登录
     // 取得网站根目录
     $base_url = get_base_url("/admin/file.php");
+    
+    $search = $_GET['s'];
 ?>
 <!doctype html>
 <html>
@@ -57,6 +59,8 @@
     </div><div id="myheader" class="container-fluid">
         <div class="container jumbotron">
             <div class="row">
+            <?php // 说明为dir查询
+                if(empty($search)){ ?>
                 <div class="col-xs-12" style="margin-bottom:10px">
                     <div class="btn-group">
                         <input id="upload" type="file" class="hidden"/>
@@ -64,6 +68,7 @@
                         <button class="btn btn-default" onclick="mkdir()">新建文件夹</button>
                     </div>
                 </div>
+            <?php } ?>
                 <div class="col-xs-12">
                     <ol class="breadcrumb">
  <?php
@@ -118,7 +123,7 @@
     $access_token = $config['identify']['access_token'];
     $has_more = false; // 全局共享变量，是否有下一页
     $page;  // 当前页数
-    if($_GET['s']){ // 取得query参数
+    if($search){ // 取得query参数
         $key = $_GET['s'];
         $page = $_GET['page']; // 捕获分页参数
         if(empty($page)){$page=1;}
@@ -129,7 +134,9 @@
                 'header' => 'USER-AGENT: pan.baidu.com'
                 ));
         $context = stream_context_create($opts);
-        $result = file_get_contents($url, false, $context);
+        $result = @file_get_contents($url, false, $context);
+        errmsg_file_get_content($opts);
+        
         $json = json_decode($result);
         $has_more = $json->has_more;
         if(!$json->list){
@@ -182,7 +189,8 @@
                 'header' => 'USER-AGENT: pan.baidu.com'
                 ));
         $context = stream_context_create($opts);
-        $result = file_get_contents($url, false, $context);
+        $result = @file_get_contents($url, false, $context);
+        errmsg_file_get_content($opts);
         // var_dump($result);
         $json = json_decode($result);
         $baidu_icon = '<svg t="1635907111308" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2224" width="20" height="20"><path d="M513.12 523.2m-464 0a464 464 0 1 0 928 0 464 464 0 1 0-928 0Z" p-id="2225"></path><path d="M752 631.2a33.76 33.76 0 0 0 33.28-36.96 130.24 130.24 0 0 0-24-76 128 128 0 0 0-78.4-53.44c-12.16-2.72-24.64-3.84-37.44-5.76a132 132 0 0 0-42.4-106.24 128 128 0 0 0-109.6-34.56 133.6 133.6 0 0 0-113.28 142.4 134.08 134.08 0 0 0-138.08 119.52 128 128 0 0 0 36.64 106.24 128 128 0 0 0 112 39.52 119.52 119.52 0 0 0 68.8-29.92c19.2-17.76 36.8-37.12 55.2-55.84 30.72-32 61.12-63.2 92-94.56a66.56 66.56 0 0 1 112.8 49.12A33.76 33.76 0 0 0 752 631.2z m-376.32 29.28a66.72 66.72 0 1 1 64.96-66.08 66.08 66.08 0 0 1-64.96 66.08z m136.8-144a66.72 66.72 0 1 1 66.4-65.76 66.08 66.08 0 0 1-66.88 65.6zM744.8 663.52a32 32 0 0 0-33.92 32 33.44 33.44 0 0 0 32.96 33.76 33.92 33.92 0 0 0 33.28-32 32.96 32.96 0 0 0-32.32-33.76z" fill="#FFFFFF" p-id="2226"></path></svg>';

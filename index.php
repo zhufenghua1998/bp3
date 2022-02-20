@@ -137,6 +137,7 @@
         $page = $_GET['page']; // 捕获分页参数
         if(empty($page)){$page=1;}
         $url = "http://pan.baidu.com/rest/2.0/xpan/file?dir=$predir&access_token=$access_token&web=1&recursion=1&page=$page&num=20&method=search&key=$key";
+
         $opts = array(
             'http' => array(
                 'method' => 'GET', 
@@ -144,6 +145,8 @@
                 ));
         $context = stream_context_create($opts);
         $result = @file_get_contents($url, false, $context);
+        errmsg_file_get_content($opts);
+        
         $json = json_decode($result);
         $has_more = $json->has_more;
         if(!$json->list){
@@ -164,7 +167,7 @@
                     $pre_dlink = "";
                     // 去掉前缀的title
                     $title = substr($row->path,strlen($predir));
-                    if($config['control']['pre_link']==0  || isset($_SESSION['user'])){
+                    if($config['control']['close_dlink']==0  || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$base_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$base_url/admin/dlink.php?fsid=$fsid'>复制</a>";
                     }
                     $dn = "<a href='$base_url/dn.php?fsid=$fsid' type='button' class='btn btn-default'>下载</a>
@@ -198,6 +201,7 @@
         }
         $dir = urlencode($dir);
         $url = "https://pan.baidu.com/rest/2.0/xpan/file?method=list&dir=$dir&order=name&start=0&limit=100&web=web&folder=0&access_token=$access_token&desc=0";
+
         $opts = array(
             'http' => array(
                 'method' => 'GET', 
@@ -205,6 +209,8 @@
                 ));
         $context = stream_context_create($opts);
         $result = @file_get_contents($url, false, $context);
+        errmsg_file_get_content($opts);
+        
         // var_dump($result);
         $json = json_decode($result);
         if(!$json->list){
@@ -223,7 +229,7 @@
                      $show_size = height_show_size($row->size);
                     //是否前台直链
                     $pre_dlink = "";
-                    if($config['control']['pre_link']==0 || isset($_SESSION['user'])){
+                    if($config['control']['close_dlink']==0 || isset($_SESSION['user'])){
                         $pre_dlink = "<a target='_blank' href='$base_url/admin/dlink.php?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$base_url/admin/dlink.php?fsid=$fsid'>复制</a>";
                     }
                     $dn = "<a type='button' class='btn btn-default' href='$base_url/dn.php?fsid=$fsid'>下载</a>

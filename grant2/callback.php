@@ -20,7 +20,8 @@
     // 3.callback请求
     $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=authorization_code&code=$code&client_id=$app_id&client_secret=$secrect_key&redirect_uri=$redirect_uri&state=$state";
     
-    $result = @file_get_contents($url);
+    $opt = easy_build_http("GET");
+    $result = easy_file_get_content($url,$opt);
     
     
     // 4.结果处理，存入session并重定向

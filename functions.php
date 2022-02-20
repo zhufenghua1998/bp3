@@ -49,15 +49,8 @@
             $express_time = $config['identify']['expires_in']-$pass_time;
             if($express_time<1728000){ //有效期小于20天，自动刷新token
             
-                $arrContextOptions = [
-                    'ssl' => [
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
-                    ]
-                ];
-                @file_get_contents($refresh_php,false,stream_context_create($arrContextOptions));
-                
-                errmsg_file_get_content($arrContextOptions);
+                $opt = easy_build_http("GET");
+                easy_file_get_content($url,$opt);
                 
                 return false;
             }
@@ -147,11 +140,13 @@
       * 默认http请求设置，可用于file_get_content参数
       * 
       * @param $method 指定请求方法
-      * @param $header 指定请求头键值对
+      * @param $header 指定请求头数组（注意只能是一维字符串数组，每个一条）
+      * 例如  ['User-Agent:pan.baidu.com','Coookie:age=12'])
       * @param $content 指定请求参数键值对
       */ 
      function easy_build_http($method, array $header=[], array $content=[]){
          
+         // 使用内置函数生成content
          $content = http_build_query($content);
          
          $opt = [
@@ -169,7 +164,6 @@
      }
       
     /**
-     * 注意，暂时有莫名bug
      * 快速 file_get_content()
      */ 
     function easy_file_get_content($url,array $opt=null){

@@ -114,14 +114,8 @@
         if(empty($page)){$page=1;}
         $url = "http://pan.baidu.com/rest/2.0/xpan/file?dir=$predir&access_token=$access_token&web=1&recursion=1&page=$page&num=20&method=search&key=$key";
         
-        $opts = array(
-            'http' => array(
-                'method' => 'GET', 
-                'header' => 'USER-AGENT: pan.baidu.com'
-                ));
-        $context = stream_context_create($opts);
-        $result = @file_get_contents($url, false, $context);
-        errmsg_file_get_content($opts);
+        $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
+        $result = easy_file_get_content($url,$opt);
         
         $json = json_decode($result);
         $has_more = $json->has_more;
@@ -169,14 +163,8 @@
         $dir = urlencode($dir);
         $url = "https://pan.baidu.com/rest/2.0/xpan/file?method=list&dir=$dir&order=name&start=0&limit=100&web=web&folder=0&access_token=$access_token&desc=0";
         
-        $opts = array(
-            'http' => array(
-                'method' => 'GET', 
-                'header' => 'USER-AGENT: pan.baidu.com'
-                ));
-        $context = stream_context_create($opts);
-        $result = @file_get_contents($url, false, $context);
-        errmsg_file_get_content($opts);
+        $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
+        $result = easy_file_get_content($url,$opt);
         
         // var_dump($result);
         $json = json_decode($result);

@@ -16,7 +16,6 @@
     $secret = $config['inner']['secret_key'];
     $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=refresh_token&refresh_token=$refresh_token&client_id=$app_id&client_secret=$secret";
     
-    echo @file_get_contents($url);
-    
-    errmsg_file_get_content();
+    $opt = easy_build_http("GET");
+    echo easy_file_get_content($url,$opt);
 ?>

@@ -7,8 +7,6 @@
     
     force_login();
     
-
-    
     $config['site']['title'] = $_POST['s1'];
     $config['site']['subtitle'] = $_POST['s2'];
     $config['user']['name'] = $_POST['s3'];
@@ -28,7 +26,6 @@
     $config['identify']['grant_url'] = $_POST['s17'];
     $config['control']['open_grant2'] = $_POST['s18'];
     $config['control']['open_session'] = $_POST['s19'];
-    
     
     save_config("../config.php");
     

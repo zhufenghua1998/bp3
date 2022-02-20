@@ -65,6 +65,8 @@
                         $config['version'] = $base['version'];
                         // 存储合并后的新配置文件
                         save_config("../config.php");
+                        // 覆盖旧conf_base.php
+                        copy("bp3-main/conf_base.php","../conf_base.php");    
                     }else{
                         // 全部覆盖
                         $src_name = "bp3-main".'/'.$value['name'];

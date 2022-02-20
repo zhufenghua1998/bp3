@@ -12,23 +12,15 @@
         echo "不支持根目录";
         die;
     }
-    $base_dir = urldecode($base_dir);
     // 一次至多查找1000条
     $limit = 1000;
-    // 解码又转码并不矛盾，php和js编码效果并不一致
-    $encode_dir = urlencode($base_dir);
+    
+    $encode_dir = re_urlencode($base_dir);
     
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?method=listall&path=$encode_dir&access_token=$access_token&order=name&recursion=1&limit=$limit";
     
-    $opts = array(
-        'http' => array(
-            'method' => 'GET', 
-            'header' => 'USER-AGENT: pan.baidu.com'
-            ));
-    $context = stream_context_create($opts);
-    $result = @file_get_contents($url, false, $context);
-    
-    errmsg_file_get_content($opts);
+    $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
+    $result = easy_file_get_content($url,$opt);
 
     $json = json_decode($result);
     

@@ -23,8 +23,8 @@
         
         $url2 = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$access_token&method=uinfo";
         
-        $basic = @file_get_contents($url2);
-        errmsg_file_get_content();
+        $opt = easy_build_http("GET");
+        $basic = easy_file_get_content($url2,$opt);
         
         if(isset($basic)){
             $_SESSION['access_token'] = $obj->access_token;

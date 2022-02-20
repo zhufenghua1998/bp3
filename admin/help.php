@@ -182,6 +182,7 @@ print(resp.read().decode())</code></pre>
         function uploadSuccess(event) {
           if (xhr.readyState === 4 && xhr.status === 200) {
             alert(xhr.responseText);
+            setTimeout("location.reload()", 2000 );
           }
         }
         // 进度条

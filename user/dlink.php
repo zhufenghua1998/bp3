@@ -90,12 +90,12 @@ curl --connect-timeout 10 -C - -o "<?php echo $file_name;?>" -L -X GET "<?php ec
 </pre>
     <h2>bp3_client</h2>
     <p>这是bp3提供的客户端</p>
-    <p>若首次使用，请下载 <a href="./bp3_client_win_x64.zip">bp3客户端（仅windows x64）</a>，解压后点击bp3_client.exe运行，右键粘贴并回车即可下载</p>
+    <p>若首次使用，请下载 <a href="../admin/bp3_client_win_x64.zip">bp3客户端（仅windows x64）</a>，解压后点击bp3_client.exe运行，右键粘贴并回车即可下载</p>
     <p><b>提示：</b>若无法右键粘贴，请右键点击窗口顶部=》编辑=》粘贴</p>
     <p><b>提示：</b>下载后的文件，存放在download目录</p>
     <p><b>提示：</b>如果发现下载失效，可能是版本更新所致，请点击上述链接下载新版客户端</p>
     <h2>bp3_ua</h2>
-    <p><b>提示：</b>chrome系列可下载<a href="./bp3_ua.zip" target="_blank">bp3_ua</a>扩展，安装后选中52dixiaowo下的bp3-default选项即可</p>
+    <p><b>提示：</b>chrome系列可下载<a href="../admin/bp3_ua.zip" target="_blank">bp3_ua</a>扩展，安装后选中52dixiaowo下的bp3-default选项即可</p>
     <p><b>提示：</b>需要User-Agent是：pan.baidu.com，您当前：<?php echo "<span class='$check_ua'>".$_SERVER['HTTP_USER_AGENT']."</span>"; ?></p>
     <p><b>提示：</b>请粘贴链接到chrome地址栏上即可下载</p>
     <p><b>提示</b>：由于下载地址多次重定向且最终由http协议连接加载而导致chrome对下载地址的不信任，手动点击保存文件即可</p>

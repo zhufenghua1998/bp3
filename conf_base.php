@@ -1,5 +1,5 @@
 <?php return array (
-  'version'=>"v1.2.3",
+  'version'=>"v1.2.4",
   'user' => 
   array (
     'name' => 'bp3',

@@ -156,21 +156,42 @@
         </tr>
         <tr>
           <th scope="row">14</th>
-          <td>关闭直链 <span class="tip fa fa-question-circle-o"  tip="关闭后，访客不可使用直链功能"></span></td>
-          <td><?php echo $config['control']['close_dlink'] ?></td>
-          <td><input name="s14" value="<?php echo $config['control']['close_dlink'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
+          <td>访客直链 <span class="tip fa fa-question-circle-o"  tip="关闭后，访客不可使用直链功能"></span>
+          <td></td>
+          <td>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['close_dlink']==0?"checked":"" ?> type="radio" name="s14" value="0"> 打开
+                </label>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['close_dlink']==1?"checked":"" ?> type="radio" name="s14" value="1"> 关闭
+                </label>
+          </td>
         </tr>
         <tr class="active">
          <th scope="row">15</th>
-          <td>关闭下载 <span class="tip fa fa-question-circle-o"  tip="关闭后，访客不可直接下载"></span></td>
-          <td><?php echo $config['control']['close_dload'] ?></td>
-          <td><input name="s15" value="<?php echo $config['control']['close_dload'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td> 
+          <td>访客下载 <span class="tip fa fa-question-circle-o"  tip="关闭后，访客不可直接下载"></span></td>
+          <td></td>
+          <td>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['close_dload']==0?"checked":"" ?> type="radio" name="s15" value="0"> 打开
+                </label>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['close_dload']==1?"checked":"" ?> type="radio" name="s15" value="1"> 关闭
+                </label>              
+          </td>
         </tr>
         <tr>
             <th scope="row">16</th>
-            <td>open_grant <span class="tip fa fa-question-circle-o"  tip="打开后，本系统的免app授权地址可被访客使用"></span></td>
-            <td><?php echo $config['control']['open_grant'] ?></td>
-            <td><input name="s16" value="<?php echo $config['control']['open_grant'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
+            <td>免app授权系统 <span class="tip fa fa-question-circle-o"  tip="打开后，本系统的免app授权地址可被访客使用"></span></td>
+            <td></td>
+            <td>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['open_grant']==1?"checked":"" ?> type="radio" name="s16" value="1"> 打开
+                </label>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['open_grant']==0?"checked":"" ?> type="radio" name="s16" value="0"> 关闭
+                </label>              
+            </td>
         </tr>
         <tr class="active">
          <th scope="row">17</th>
@@ -180,15 +201,29 @@
         </tr>
         <tr>
             <th scope="row">18</th>
-            <td>open_grant2 <span class="tip fa fa-question-circle-o"  tip="打开后，访客可使用本系统的内置app授权系统"></span></td>
-            <td><?php echo $config['control']['open_grant2'] ?></td>
-            <td><input name="s18" value="<?php echo $config['control']['open_grant2'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td>
+            <td>内置app授权系统 <span class="tip fa fa-question-circle-o"  tip="打开后，访客可使用本系统的内置app授权系统"></span></td>
+            <td></td>
+            <td>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['open_grant2']==1?"checked":"" ?> type="radio" name="s18" value="1"> 打开
+                </label>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['open_grant2']==0?"checked":"" ?> type="radio" name="s18" value="0"> 关闭
+                </label>              
+            </td>        
         </tr>
         <tr class="active">
          <th scope="row">19</th>
-          <td>open_session <span class="tip fa fa-question-circle-o"  tip="打开后，访客可使用bp3免部署版"></span></td>
-          <td><?php echo $config['control']['open_session'] ?></td>
-          <td><input name="s19" value="<?php echo $config['control']['open_session'] ?>" class="form-control" placeholder="填写1或0(默认)" /></td> 
+          <td>免部署解析 <span class="tip fa fa-question-circle-o"  tip="打开后，访客可使用bp3免部署版"></span></td>
+            <td></td>
+            <td>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['open_session']==1?"checked":"" ?> type="radio" name="s19" value="1"> 打开
+                </label>
+                <label class="radio-inline">
+                  <input <?php echo $config['control']['open_session']==0?"checked":"" ?> type="radio" name="s19" value="0"> 关闭
+                </label>              
+            </td>        
         </tr>
       </tbody>
     </table>
@@ -205,6 +240,10 @@
     }
     .br,td{
         word-break: break-all !important;
+    }
+    .checkbox-inline+.checkbox-inline, .radio-inline+.radio-inline{
+        margin: 0px;
+        padding-right: 10px;
     }
 </style>
 <script>
@@ -233,7 +272,7 @@
         
         return false;
     });
-    // 提示完整目录
+    // 提示设置详情
     $(".tip").click(function(){
         alert($(this).attr("tip"));
     });

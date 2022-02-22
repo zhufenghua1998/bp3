@@ -24,6 +24,7 @@
     $file_size = $json->list[0]->size;
     $file_name = $json->list[0]->filename;
     $dlink = $dlink.'&access_token='.$access_token;
+    
     $show_size = height_show_size($file_size);
     $check_ua = $_SERVER['HTTP_USER_AGENT']=="pan.baidu.com"?"text-success":"text-danger";
     $headerArray = array('User-Agent: pan.baidu.com');
@@ -90,6 +91,12 @@
     <div class="text-info">
         点击==><button id="cbtn1">复制链接</button>
     </div>
+    <?php
+        if(isset($_SESSION['user'])){
+            echo "<p>以下短链接仅管理员可见，如果你需要，我们提供了较短的链接：</p>";
+            echo "<pre class='br'>".$dlink."</pre>";
+        }
+    ?>
     <h2>通用下载方式：</h2>
     <p>这是一些通用的解决方案，需要设置user-agent：pan.baidu.com</p>
     <p>IDM（<a target="_blank" href="https://wwe.lanzoul.com/ixfgPybr93e">破解版下载，仅windows</a>)、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS）等</p>

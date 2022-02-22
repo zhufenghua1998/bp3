@@ -9,6 +9,25 @@
         header("Location: $url");
     }
     // 未登陆
+    $base_url = get_base_url("/login.php");
+    
+    $login_url = "";
+    
+    $bind_baidu = false;
+    if(isset($config) && isset($config['identify']) && isset($config['account'])){
+        
+        $bind_baidu = true;
+        
+    }
+    if($bind_baidu){
+        $grant_url = $config['identify']['grant_url'];
+        
+        $login_controller = urlencode("$base_url/login_baidu.php");
+        
+        $login_url = "$grant_url?display=$login_controller";
+    }
+    
+    
     $name = $_POST['user'];
     $pwd = $_POST['pwd'];
     $lock = $config['user']['lock'];
@@ -30,7 +49,7 @@
         $chance--;
         $config['user']['chance'] = $chance;
         save_config("./config.php");
-        if($chance<=0){echo "<script>alert('账户已经锁定！')</script>";}
+        if($chance<=0){echo "<script>alert('账户已经锁定！请ftp编辑配置文件 或使用百度登录')</script>";}
         else{echo "<script>alert('用户名或密码错误！')</script>";}
     }
 ?>
@@ -100,7 +119,12 @@
             </div>
             <div class="modal-footer">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary form-control">登录</button>
+                    <div class="col-xs-6">
+                        <button type="submit" class="btn btn-primary form-control">登录</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-primary form-control" onclick="baidu_login()">百度登录</button>
+                    </div>
                 </div>
             </div>
         </div><!-- /.modal-content -->
@@ -117,5 +141,16 @@
         margin-bottom: 0px;
     }
 </style>
+<script>
+    function baidu_login(){
+        
+        let login_url = "<?php echo $login_url; ?>";
+        if(login_url){
+            location.href = login_url;
+        }else{
+            alert("管理员，您还未配置百度账户，无法使用此功能");
+        }
+    }
+</script>
 </body>
 </html>

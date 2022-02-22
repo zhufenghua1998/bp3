@@ -363,4 +363,27 @@
       }
     }
     
+    /**
+     * 检测百度账户类型
+     * @param $vip_type 账户vip的数字标识
+     * @return $vip_str 账户vip的字符串标识
+    */ 
+    function str_vip($vip_type){
+        
+        $vip_str = "";
+        if(isset($vip_type)){
+            if($vip_type==2){
+                $vip_str = '超级会员';
+            }
+            elseif($vip_type==1){
+                $vip_str = '普通会员';
+            }
+            elseif($vip_type==0){
+                $vip_str = '普通用户';
+            }
+        }else{
+            $vip_str = "用户不存在";
+        }
+        return $vip_str;
+    }
 ?>

@@ -6,27 +6,18 @@
     force_login();
 
     // 拼接授权地址
-    $dirUrl = get_dir_url(basename(__FILE__));
     
-    $conn = urlencode($dirUrl.'connect.php');
+    $base_url = get_base_url("/admin/index.php");
+    
+    $conn = urlencode($base_url.'/admin/connect.php');
     
     $guant_url = $config['identify']['grant_url'];
     
-    $guant_url = "$guant_url?display=$conn";
+    $conn_url = "$guant_url?display=$conn";
     
-    // 判断网盘会员类型
-    $vip_type = $config['basic']['vip_type'];
-    if(isset($vip_type)){
-        if($vip_type==2){
-            $vip_type = '超级会员';
-        }
-        elseif($vip_type==1){
-            $vip_type = '普通会员';
-        }
-        elseif($vip_type==0){
-            $vip_type = '普通用户';
-        }
-    }
+    $bind_controller = urlencode($base_url."/controller/bind_account.php");
+    
+    $bind_account_url = "$guant_url?display=$bind_controller";
 ?>
 <!doctype html>
 <html>
@@ -39,6 +30,7 @@
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <script src="../js/functions.js"></script>
 </head>
 <body style="background-color:rgb(231,231,231);">
  
@@ -82,7 +74,7 @@
                 <h2>连接说明</h2>
             </div>
             <div class="col-xs-6">
-                <h2><a id="link"  href="<?php echo $guant_url;?>">获取授权</a></h2>
+                <h2><a id="link"  href="<?php echo $conn_url;?>">获取授权</a></h2>
             </div>
         </div>
         <div>
@@ -96,6 +88,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <h2>百度信息</h2>
+                <p>以下，是当前正在使用的百度账户信息</p>
             </div>
         </div>
         
@@ -112,22 +105,62 @@
                 <tr>
                   <th scope="row">1</th>
                   <td>百度名称</td>
-                  <td><?php echo $config['basic']['baidu_name'];?></td>
+                  <td id="basic_baidu_name"><?php echo $config['basic']['baidu_name'];?></td>
                 </tr>
                 <tr>
                   <th scope="row">2</th>
                   <td>网盘昵称</td>
-                  <td><?php echo $config['basic']['netdisk_name'];?></td>
+                  <td id="basic_netdisk_name"><?php echo $config['basic']['netdisk_name'];?></td>
                 </tr>
                 <tr>
                   <th scope="row">3</th>
                   <td>百度id</td>
-                  <td><?php echo $config['basic']['uk'];?></td>
+                  <td id="basic_uk"><?php echo $config['basic']['uk'];?></td>
                 </tr>
                 <tr>
                   <th scope="row">4</th>
                   <td>网盘会员</td>
-                  <td><?php echo $vip_type;?></td>
+                  <td id="basic_vip_type"><?php echo str_vip($config['basic']['vip_type']);?></td>
+                </tr>
+              </tbody>
+            </table>
+          </div><!-- table-example -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>绑定登录账户 <a class="pointer" onclick="copy_basic()">复制上面</a> <a href="<?php echo $bind_account_url;?>">快速绑定</a></h2>
+                <p>为了系统安全，bp3账户如果连续错误3次将会被锁定，此时只能ftp编辑配置信息恢复</p>
+                <p>推荐您绑定一个百度登录账户，bp3账户被封禁时可使用此账户解锁，也可用于直接登录</p>
+            </div>
+        </div>
+        <div class="bs-example" data-example-id="bordered-table">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>项目</th>
+                  <th>数据</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>百度名称</td>
+                  <td><?php echo $config['account']['baidu_name'];?></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>网盘昵称</td>
+                  <td><?php echo $config['account']['netdisk_name'];?></td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>百度id</td>
+                  <td><?php echo $config['account']['uk'];?></td>
+                </tr>
+                <tr>
+                  <th scope="row">4</th>
+                  <td>网盘会员</td>
+                  <td><?php echo str_vip($config['account']['vip_type']);?></td>
                 </tr>
               </tbody>
             </table>
@@ -158,6 +191,25 @@
       height: 50px; /* Set the fixed height of the footer here */
       background-color: #f5f5f5;
     }
+    .pointer{
+        cursor: pointer;
+    }
 </style>
+<script>
+    function copy_basic(){
+        let check = confirm("你将使用上面的信息作为登录信息");
+        if(check){
+            // 直接发送请求，后台自动实现更新
+            $.post("../controller/copy_basic.php",{"copy":"1"},function(data){
+                if(data.errno==0){
+                    message("已复制成功","success");
+                    lazy_reload();
+                }else{
+                    message("复制失败","error");
+                }
+            },"json");
+        }
+    }
+</script>
 </body>
 </html>

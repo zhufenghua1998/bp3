@@ -20,8 +20,6 @@
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <!--<script src="../js/spark-md5.js"></script>-->
-    <script src="https://cdn.bootcdn.net/ajax/libs/qs/6.10.3/qs.js"></script>
 </head>
 <body style="background-color:rgb(231,231,231);">
  

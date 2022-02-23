@@ -61,6 +61,8 @@ bp3是长期维护项目，会不定期更新。
 
 为了提高成功率，我们需要你先点击从github下载，再点击上传，感谢理解。
 
+我们将尝试自动更新版本，以及资源优化等，特别感谢“火鸟门户”以及其他赞助商。
+
 ## ❤️帮助与支持
 
 你的建议对bp3的发展至关重要，感谢提交bug或建议
@@ -74,3 +76,6 @@ bp3是长期维护项目，会不定期更新。
 - [dylanbai8/start_chrome_with_useragent ](https://github.com/dylanbai8/start_chrome_with_useragent)
 
 最后，感谢各位开发者对本项目给予的建议、帮助与支持
+
+<div>特别赞助：<a href="https://github.com/zhufenghua1998/bp3/blob/main/LICENSE"><img alt="huoniao" src="https://user-images.githubusercontent.com/66166878/155361171-be2a7b63-b065-4257-807c-a54a98e6c069.png"></a></div>
+

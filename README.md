@@ -79,7 +79,7 @@ bp3是长期维护项目，会不定期更新。
 
 特别赞助：
 
-<div><a href="https://www.kumanyun.com/"><img alt="huoniao" src="https://user-images.githubusercontent.com/66166878/155361171-be2a7b63-b065-4257-807c-a54a98e6c069.png"></a></div>
+<div align="center"><a href="https://www.kumanyun.com/"><img alt="huoniao" src="https://user-images.githubusercontent.com/66166878/155361171-be2a7b63-b065-4257-807c-a54a98e6c069.png"></a></div>
 
 其他赞助：
 

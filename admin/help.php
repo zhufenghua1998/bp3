@@ -5,11 +5,14 @@
     require_once("../functions.php");
     force_login();//强制登录
     // 获取open地址
-    $index_url = get_base_url("/admin/help.php");
-    $open_url = $index_url."/open.php";
+    $base_url = get_base_url("/admin/help.php");
+    $open_url = $base_url."/open.php";
     // 授权地址
-    $grant = $index_url."/grant/";
-    $grant2 = $index_url."/grant2/";
+    $grant = $base_url."/grant/";
+    $grant2 = $base_url."/grant2/";
+    
+    // 获取版本号
+    $version = $config['version']; 
 ?>
 <!doctype html>
 <html>
@@ -23,6 +26,7 @@
     <script src="../js/clipboard.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <script src="../js/functions.js"></script>
 
 </head>
 <body style="background-color:rgb(231,231,231);">
@@ -64,14 +68,16 @@
 <div class="container help">
     
     <h3>当前版本</h3>
-    <p>您当前使用的版本号是：<?php echo $config['version'];?>,可点击 <button onclick="check_update()" class="btn btn-primary">检测更新</button></p>
+    <p>当前版本号：<?php echo $version;?>可点击 <button onclick="check_update()" class="btn btn-primary">检测更新</button></p>
     <div id="latest_tip">
-        <table class="table table-bordered table-responsive">
-        <tr><td>最新下载地址</td><td><a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></td></tr>            
-        </table>
+        <p>除此之外，您也可以在github查看我们的最新版本。</p>
     </div>
-    <p>如需更新，请 <input id="upload" type="file" class="hidden"/><input type="button" class="btn btn-primary" value="点击上传" onclick="$('#upload').trigger('click');"/> 下载好的最新版代码，后台会自动完成更新</p>
-      <div id="show_progress" class="progress-area" class="hidden">
+
+    <h2>导入与导出</h2>
+    <p>如果你希望导入最新版代码，可 <input type="button" class="btn btn-primary" value="导入压缩包" onclick="$('#upload').trigger('click');"/>，程序会自动更新</p>
+    <p><b>导入格式：</b>导入代码时，该压缩包仅包含bp3-main文件夹，所有代码放在该文件夹下，github下载时默认该格式</p>
+    <p class="hidden"><input id="upload" type="file" class="hidden"/></p>
+      <div id="show_progress" class="progress-area hidden">
         进度
         <div class="progress">
           <div class="progress-bar" id="progress" role="progressbar"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
@@ -80,7 +86,8 @@
           <p id="time"></p>
         </div>
       </div>
-      
+    <p>如果需要下载站点中所有内容，可 <a class="btn btn-primary" style="text-indent:0px"  href="../controller/backup.php">导出压缩包</a></p>
+    <p><b>导出格式：</b>导出的压缩包中，压缩包文件没有多余的子目录。</p>
     <h3>如何配置前台开放目录？</h3>
     <p>在设置中，写上要省略的前置目录，例如：</p>
     <ul>
@@ -88,15 +95,17 @@
         <li>开放/apps目录：填写/apps，注意结尾不要/</li>
     </ul>
     
+    <h3>关于权限设置？</h3>
+    <p>bp3有许多开放给访客的功能，但默认都处于关闭状态</p>
+    <p>因为我们不希望给服务器带来负担，如果你确定需要，请在设置中打开。</p>
+    
     <h3>如何重置系统？</h3>
     <p>请把根目录下config.php文件删除，会重置本系统</p>
+    
     <h3>账户已经锁定？</h3>
     <p>为防止暴力破解，一旦账户密码连续错误3次，将会锁定，暂需手动恢复</p>
     <p>请ftp后，编辑根目录下的config.php文件，把 user => chance 选项设置为3</p>
     <p>新：可绑定百度账户，该用户可直接登录，或解锁bp3账户</p>
-    
-    <h3>忘记账户密码？</h3>
-    <p>请ftp后，打开根目录下的config.php文件，其中user=>name为账户名，user=>pwd为密码。</p>
     
     <h3>本系统授权服务器地址？</h3>
     <p>免app授权地址</p>
@@ -176,14 +185,14 @@ print(resp.read().decode())</code></pre>
         formData.append('file', file.files[0]);
         xhr.onload = uploadSuccess;
         xhr.upload.onprogress = setProgress;
-        xhr.open('post', '../update/up_core.php', true);
+        xhr.open('post', '../update/up_upload.php', true);
         xhr.send(formData);
 	}
         // 成功上传
         function uploadSuccess(event) {
           if (xhr.readyState === 4 && xhr.status === 200) {
             alert(xhr.responseText);
-            setTimeout("location.reload()", 2000 );
+            lazy_reload(2000);
           }
         }
         // 进度条
@@ -283,19 +292,25 @@ print(resp.read().decode())</code></pre>
             clone.remove();
         });
     }
+    
+    /**
+     * 检测更新
+     */ 
     function check_update(){
-        $.post("../controller/check_update.php",function(data){
+        
+        // 不可重复点击
+        $(event.target).prop('disabled', true);
+        // 发送ajax请求
+        $.post("../update/up_check.php",function(data){
             
-            if(!data.tag_name){
+            let version = '<?php echo $version;?>';
+            if(version >= data.tag_name){
                 
                 $("#latest_tip").empty();
-                let str = `<table class="table table-bordered table-responsive">`;
-                
-                str += `<tr><td>错误描述：</td><td>${new Date().toLocaleString()},本次github网络链接失败</td></tr>`
-                str += `        <tr><td>最新下载地址</td><td><a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></td></tr>  `
-                str += `</table>`;
+                let str = "<p>恭喜，您当前已经是最新版啦！</p>";
                 $("#latest_tip").append(str);
-                return;  // 网络连接失败
+                return;
+                
             }
             
             $("#latest_tip").empty();
@@ -308,12 +323,28 @@ print(resp.read().decode())</code></pre>
             
             str += `<tr><td>版本描述：</td><td>${version_body}</td></tr>`
             str += `<tr><td>更新时间</td><td>${data.published_at}</td></tr>`
-            str += `<tr><td>最新下载地址</td><td><a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></td></tr>  `
+            str += `<tr><td>github下载地址</td><td><a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></td></tr>  `
+            str += `<tr><td>更新方式</td><td><button class="btn btn-primary" onclick="auto_update()">自动更新</button></td></tr>`;
+            str += `<tr><td>更新说明</td><td>使用自动更新时，后台全程自动进行更新(特别感谢<a href="https://www.kumanyun.com/" target="_blank">@火鸟门户</a>)<br>如需手动上传，请使用下方的导入压缩包</td></tr>`;
             str += `</table>`;
             $("#latest_tip").append(str);
         },"json");
     }
     
+    /**
+     * 自动更新
+     */ 
+    function auto_update(){
+        let check = confirm("后台更新时不要乱动");
+        if(check){
+            $.post("../update/up_fast.php",{},function(data){
+                alert(data);
+                lazy_reload(2000);
+            });
+        }else{
+            message("取消自动更新","info");
+        }
+    }
 </script>
 </body>
 </html>

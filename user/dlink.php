@@ -8,13 +8,10 @@
     
     $access_token = force_get_param("access_token");
     
-    $access_token = $config['identify']['access_token'];
-    
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
     
     $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
     $result = easy_file_get_content($url,$opt);
-    
     
     $json = json_decode($result);
     $dlink =  $json->list[0]->dlink;
@@ -81,6 +78,8 @@
     <div class="text-info">
         点击==><button id="cbtn1">复制链接</button>
     </div>
+    <p>如果你需要，我们提供了较短的链接：</p>
+    <pre class='br'><?php echo $dlink;?></pre>
     <h2>通用下载方式：</h2>
     <p>这是一些通用的解决方案，需要设置user-agent：pan.baidu.com</p>
     <p>IDM（<a target="_blank" href="https://wwe.lanzoul.com/ixfgPybr93e">破解版下载，仅windows</a>)、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS）等</p>

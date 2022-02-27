@@ -26,6 +26,8 @@
     $config['identify']['grant_url'] = $_POST['s17'];
     $config['control']['open_grant2'] = $_POST['s18'];
     $config['control']['open_session'] = $_POST['s19'];
+    $config['site']['description'] = $_POST['s20'];
+    $config['site']['keywords'] = $_POST['s21'];
     
     save_config("../config.php");
     

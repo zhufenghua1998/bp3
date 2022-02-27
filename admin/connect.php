@@ -7,7 +7,7 @@
     
     $identify = force_get_param("param");
     
-    // 填写identify信息
+    // 取得identify信息
     $identify = urldecode($identify);
     
     $arr = json_decode($identify,true);
@@ -17,8 +17,12 @@
     save_config("../config.php");
 
     // 获取basic
-    require('./basic.php');
-    // 返回首页
+    get_m_basic();
+    
+    // 保存config
+    save_config("../config.php");
+
+    //返回首页
     $dirUrl =get_dir_url(basename(__FILE__));
     header("Location: $dirUrl");
 ?>

@@ -122,7 +122,7 @@
           <th scope="row">8</th>
           <td>redirect_uri <span class="tip fa fa-question-circle-o"  tip="用于配置百度app的回调地址"></span></td>
           <td class="br"><?php echo $config['connect']['redirect_uri'];?></td>
-          <td><input name="s8" value="<?php echo $config['connect']['redirect_uri'];?>" class="form-control"  placeholder="admin/connect.php"/></td>
+          <td><input name="s8" value="<?php echo $config['connect']['redirect_uri'];?>" class="form-control"  placeholder="grant/callback.php"/></td>
         </tr>
         <tr class="active">
           <th scope="row">9</th>
@@ -223,6 +223,20 @@
                 <label class="radio-inline">
                   <input <?php echo $config['control']['open_session']==0?"checked":"" ?> type="radio" name="s19" value="0"> 关闭
                 </label>              
+            </td>        
+        </tr>
+        <tr>
+         <th scope="row">20</th>
+          <td>seo描述 <span class="tip fa fa-question-circle-o"  tip="对应于seo优化的description"></span></td>
+            <td colspan="2">
+                <input name="s20" class="form-control" value="<?php echo $config['site']['description'];?>"/>       
+            </td>        
+        </tr>
+        <tr class="active">
+         <th scope="row">21</th>
+          <td>seo关键字 <span class="tip fa fa-question-circle-o"  tip="对应于seo优化的keywords"></span></td>
+            <td colspan="2">
+                <input name="s21" class="form-control" value="<?php echo $config['site']['keywords'];?>"/>       
             </td>        
         </tr>
       </tbody>

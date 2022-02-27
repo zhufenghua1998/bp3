@@ -34,19 +34,13 @@
         $config['connect']['redirect_uri']=$redirect;
         $config['identify'] = $arr;
         
-        save_config("./config.php"); // 先存储一次，因为获取basic可能失败
         
-        // 2.获取basic
-        $token = $config['identify']['access_token'];
-        $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$token&method=uinfo";
+        save_config("./config.php");
+    
+        // 获取basic
+        get_m_basic();
         
-        $opt = easy_build_http("GET");
-        $result = easy_file_get_content($url,$opt);
-        
-        $arr = json_decode($result,true);
-        
-        $config['basic'] = $arr;
-
+        // 保存config
         save_config("./config.php");
         
         echo "<script>alert('提交成功！正在前往登录页面...');window.location.href='./login.php';</script>";

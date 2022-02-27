@@ -30,6 +30,11 @@
 <head>
     <meta charset="utf-8">
     <title><?php echo $config['site']['title'].' | '.$config['site']['subtitle'];?></title>
+    <meta name="description"
+      content="<?php echo $config['site']['description'];?>" />
+    <meta name="keywords"
+      content="<?php echo $config['site']['keywords']; ?>" />
+ 
     <link href="./favicon.ico" rel="shortcut icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/bootstrap.min.css" rel="stylesheet">

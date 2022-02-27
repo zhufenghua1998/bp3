@@ -12,7 +12,15 @@
         force_login();//强制登录
     }
     
-    $access_token = $config['identify']['access_token'];
+    // 获取根目录
+    $base_url = get_base_url("/admin/dlink.php");
+    $refresh_url = $base_url."/admin/refresh_token.php";
+    
+    //自动刷新token
+    $access_token = get_token_refresh($refresh_url);
+    if(!$access_token){
+        $config = require('./config.php'); // 重新加载刷新后的config文件
+    }
     
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
     

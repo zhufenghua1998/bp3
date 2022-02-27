@@ -438,4 +438,25 @@
             $zip->close();
         }
     }
+    
+    /**
+     * 业务模型，获取basic
+     */ 
+    
+    function get_m_basic($config = null){
+        if(empty($config)){
+            global $config;
+        }
+        $token = $config['identify']['access_token'];
+        $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$token&method=uinfo";
+        
+        $opt = easy_build_http("GET");
+        $result = easy_file_get_content($url,$opt);
+        
+        $arr = json_decode($result,true);
+        
+        $config['basic'] = $arr;
+        
+        return $config;
+    }
 ?>

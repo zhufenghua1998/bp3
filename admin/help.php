@@ -100,7 +100,7 @@
     <p>因为我们不希望给服务器带来负担，如果你确定需要，请在设置中打开。</p>
     
     <h3>如何重置系统？</h3>
-    <p>请把根目录下config.php文件删除，会重置本系统</p>
+    <p>请把根目录下config.php文件删除，会重置本系统，也可以点击 <button class="btn btn-primary" onclick="reset_sys()">立即重置</button></p>
     
     <h3>账户已经锁定？</h3>
     <p>为防止暴力破解，一旦账户密码连续错误3次，将会锁定，暂需手动恢复</p>
@@ -343,6 +343,23 @@ print(resp.read().decode())</code></pre>
             });
         }else{
             message("取消自动更新","info");
+        }
+    }
+    
+    /**
+     * 重置系统
+     */ 
+    function reset_sys(){
+        let check = confirm("确定要重置系统吗？");
+        if(check){
+            $.post("../controller/reset_sys.php",{"reset":1},function(data){
+                if(data.errno==0){
+                    alert("重置成功，即将重新配置！");
+                    location.href = "..";
+                }
+            },"json")
+        }else{
+            message("重置系统取消","info");
         }
     }
 </script>

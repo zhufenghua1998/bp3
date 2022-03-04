@@ -24,10 +24,13 @@
     $config['control']['close_dload'] = $_POST['s15'];
     $config['control']['open_grant'] = $_POST['s16'];
     $config['identify']['grant_url'] = $_POST['s17'];
+    $config['control']['grant_type'] = $_POST['s17s'];
     $config['control']['open_grant2'] = $_POST['s18'];
     $config['control']['open_session'] = $_POST['s19'];
     $config['site']['description'] = $_POST['s20'];
     $config['site']['keywords'] = $_POST['s21'];
+    $config['inner']['app_id'] = $_POST['s22'];
+    $config['inner']['secret_key'] = $_POST['s23'];
     
     save_config("../config.php");
     

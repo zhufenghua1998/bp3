@@ -6,6 +6,11 @@
     
     force_login();
     
+    $base_url = get_base_url("/admin/settings.php");
+    // 授权地址
+    $grant = $base_url."/grant/";
+    $grant2 = $base_url."/grant2/";
+    
 ?>
 <!doctype html>
 <html>
@@ -71,7 +76,7 @@
         <tr>
           <th></th>
           <th>属性名</th>
-          <th>旧数据</th>
+          <th>数据</th>
           <th>新数据</th>
         </tr>
       </thead>
@@ -108,19 +113,19 @@
         </tr>
         <tr>
           <th scope="row">6</th>
-          <td>app_id <span class="tip fa fa-question-circle-o"  tip="配置百度app的appKey"></span></td>
+          <td>app_id <span class="tip fa fa-question-circle-o"  tip="（免app授权系统）配置百度app的appKey"></span></td>
           <td class="br"><?php echo $config['connect']['app_id'];?></td>
           <td><input name="s6" value="<?php echo $config['connect']['app_id'];?>" class="form-control"/></td>
         </tr>
         <tr class="active">
           <th scope="row">7</th>
-          <td>secret_key <span class="tip fa fa-question-circle-o"  tip="用于配置百度app的secretKey"></span></td>
+          <td>secret_key <span class="tip fa fa-question-circle-o"  tip="（免app授权系统）用于配置百度app的secretKey"></span></td>
           <td class="br"><?php echo $config['connect']['secret_key'];?></td>
           <td><input name="s7" value="<?php echo $config['connect']['secret_key'];?>" class="form-control"/></td>
         </tr>
         <tr>
           <th scope="row">8</th>
-          <td>redirect_uri <span class="tip fa fa-question-circle-o"  tip="用于配置百度app的回调地址"></span></td>
+          <td>redirect_uri <span class="tip fa fa-question-circle-o"  tip="（免app授权系统）用于配置百度app的回调地址"></span></td>
           <td class="br"><?php echo $config['connect']['redirect_uri'];?></td>
           <td><input name="s8" value="<?php echo $config['connect']['redirect_uri'];?>" class="form-control"  placeholder="grant/callback.php"/></td>
         </tr>
@@ -195,9 +200,19 @@
         </tr>
         <tr class="active">
          <th scope="row">17</th>
-          <td>授权地址 <span class="tip fa fa-question-circle-o"  tip="设置本站点使用的授权地址"></span></td>
-          <td><?php echo $config['identify']['grant_url'] ?></td>
-          <td><input name="s17" value="<?php echo $config['identify']['grant_url'] ?>" class="form-control" placeholder="修改后请重新授权" /></td> 
+          <td>授权地址 <span class="tip fa fa-question-circle-o"  tip="本站使用的授权地址，自定义时可编辑，修改后请重新授权"></span></td>
+            <td><input id="show_grant_url" name="s17" class="form-control"/></td> 
+            <td>
+                <label class="radio-inline">
+                  <input id="s17s_fast"  type="radio" name="s17s" value="fast"> 免app
+                </label>
+                <label class="radio-inline">
+                  <input id="s17s_inner" type="radio" name="s17s" value="inner"> 内置app
+                </label>
+                <label class="radio-inline">
+                  <input id="s17s_url" type="radio" name="s17s" value="url"> 自定义
+                </label>
+            </td>
         </tr>
         <tr>
             <th scope="row">18</th>
@@ -239,6 +254,18 @@
                 <input name="s21" class="form-control" value="<?php echo $config['site']['keywords'];?>"/>       
             </td>        
         </tr>
+        <tr>
+            <th scope="row">22</th>
+          <td>内置appKey <span class="tip fa fa-question-circle-o"  tip="如果需要，可更换内置授权系统appKey"></span></td>
+          <td class="br"><?php echo $config['inner']['app_id'];?></td>
+          <td><input name="s22" value="<?php echo $config['inner']['app_id'];?>" class="form-control"/></td>
+        </tr>
+        <tr class="active">
+          <th scope="row">23</th>
+          <td>内置appSecret <span class="tip fa fa-question-circle-o"  tip="内置授权系统的secretKey"></span></td>
+          <td class="br"><?php echo $config['inner']['secret_key'];?></td>
+          <td><input name="s23" value="<?php echo $config['inner']['secret_key'];?>" class="form-control"/></td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -262,15 +289,57 @@
 </style>
 <script>
     $(function () {
-      if($(window).height()==$(document).height()){
-        $(".copyright").addClass("navbar-fixed-bottom");
-      }
-      else{
-        $(".copyright").removeClass(" navbar-fixed-bottom");
-      }
-    if(document.body.clientWidth<768){
-        $(".m-btns").addClass("btn-group-vertical");
+        if($(window).height()==$(document).height()){
+            $(".copyright").addClass("navbar-fixed-bottom");
+        }
+        else{
+            $(".copyright").removeClass(" navbar-fixed-bottom");
+        }
+        if(document.body.clientWidth<768){
+            $(".m-btns").addClass("btn-group-vertical");
+        }
+        show_grant_url();
+    });
+    
+    /**
+     * 选择与展示grant_url
+     */
+    function show_grant_url(){
+        let grant_type = '<?php echo $config['control']['grant_type'];?>';
+        let grant_url = '<?php echo $config['identify']['grant_url'];?>';
+        let fast_url = '<?php echo $grant;?>';
+        let inner_url = '<?php echo $grant2;?>';
+        if(grant_type == 'url'){
+            $("#show_grant_url").val(grant_url);
+            $("#s17s_url").trigger("click");
+        }
+        else if(grant_type == 'fast'){
+            $("#show_grant_url").val(fast_url);
+            $("#s17s_fast").trigger("click");
+        }
+        else if(grant_type == 'inner'){
+            $("#show_grant_url").val(inner_url);
+            $("#s17s_inner").trigger("click");
+        }
     }
+    
+    $("input[name=s17s]").change(function(){
+        let checked = $(event.target).val();
+        let grant_url = '<?php echo $config['identify']['grant_url'];?>';
+        let fast_url = '<?php echo $grant;?>';
+        let inner_url = '<?php echo $grant2;?>';
+        if(checked == 'url'){
+            $("#show_grant_url").val(grant_url);
+            $("#show_grant_url").prop("readonly",false);
+        }
+        else if(checked == 'fast'){
+            $("#show_grant_url").val(fast_url);
+            $("#show_grant_url").prop("readonly",true);
+        }
+        else if(checked == 'inner'){
+            $("#show_grant_url").val(inner_url);
+            $("#show_grant_url").prop("readonly",true);
+        }
     });
     
     $("#main_form").submit(function(){

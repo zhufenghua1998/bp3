@@ -24,6 +24,7 @@
     'open_grant' => 0,
     'open_grant2' => 0,
     'open_session' => 0,
+    'grant_type' =>'url',
   ),
   'inner'=>array(
     'app_id' => 'NtcmMLFqq4Vf0IKBlVIDFGXAqjuYpvWN',

@@ -20,8 +20,8 @@
     // 如果请求初始化($username非空)，且还未初始化（init==0）
     if(!empty($username) && !$init){
         
-        $config['user']['name']='bp3';
-        $config['user']['pwd']='bp3';
+        $config['user']['name']= $_POST['username'];
+        $config['user']['pwd']= $_POST['password'];
         
         
         $config['identify']['grant_url'] = $grant_url;

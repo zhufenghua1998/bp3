@@ -62,7 +62,7 @@
             <h2>授权方式二：扫码登录</h2>
             <p>通过百度网盘app或者百度app扫描网页中的二维码，然后快速登录</p>
             <p>点击右边的链接，然后生成二维码
-                ==><a href="<?php echo "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&redirect_uri=$redrect_uri&scope=basic,netdisk&display=tv&qrcode=1&force_login=1";?>">授权链接</a></p>
+                ==><a href="<?php echo "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&state=$state&redirect_uri=$redrect_uri&scope=basic,netdisk&display=tv&qrcode=1&force_login=1";?>">授权链接</a></p>
             <p><b>提示：</b>手机打开时，请缩放网页以获取大小合适的二维码</p>
         <?php
             if(isset($display)){

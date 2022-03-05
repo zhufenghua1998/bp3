@@ -70,8 +70,9 @@
     <h3>当前版本</h3>
     <p>当前版本号：<?php echo $version;?>可点击 <button onclick="check_update()" class="btn btn-primary">检测更新</button></p>
     <div id="latest_tip">
-        <p>除此之外，您也可以点击直接从<a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip" target="_blank">github</a>下载最新代码，并导入。</p>
         <p><b>提示：</b>请保持更新，或向我们提供新功能需求、建议，有概率采纳。</p>
+        <p>值得一提的是：修复一个或几个bug，或许不会发布新版本，所以您仍可能需要从github下载代码</p>
+        <p>鉴于以上几点，我们提供一个链接，==》 <a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip" target="_blank">点击这里</a> 从github下载最新代码，并在下方点击上传</p>
     </div>
 
     <h2>导入与导出</h2>
@@ -131,7 +132,7 @@ print(resp.read().decode())</code></pre>
     <p>如果你希望直接取得token用于测试，请<a href="../open.php" target="_blank">点击查看</a>。</p>
     <h3>其他问题</h3>
     <p>参阅百度网盘开发者官方文档：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者文档</a></p>
-    <p>如需帮助，请在github发布issure，或者QQ交流群：1150064636，了解我们最新动态</p>
+    <p>如需帮助，请在github发布 <a href="https://github.com/zhufenghua1998/bp3/issues" target="_blank">issure</a>，或者QQ交流群：1150064636，了解我们最新动态</p>
     <p>当然，你也可以对bp3进行二次开发，或者申请定制服务？（群内咨询）</p>
 </div>
 

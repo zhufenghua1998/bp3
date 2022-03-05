@@ -70,7 +70,8 @@
     <h3>当前版本</h3>
     <p>当前版本号：<?php echo $version;?>可点击 <button onclick="check_update()" class="btn btn-primary">检测更新</button></p>
     <div id="latest_tip">
-        <p>除此之外，您也可以在github查看我们的最新版本。</p>
+        <p>除此之外，您也可以点击直接从<a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip" target="_blank">github</a>下载最新代码，并导入。</p>
+        <p><b>提示：</b>请保持更新，或向我们提供新功能需求、建议，有概率采纳。</p>
     </div>
 
     <h2>导入与导出</h2>
@@ -88,6 +89,7 @@
       </div>
     <p>如果需要下载站点中所有内容，可 <a class="btn btn-primary" style="text-indent:0px"  href="../controller/backup.php">导出压缩包</a></p>
     <p><b>导出格式：</b>导出的压缩包中，压缩包文件没有多余的子目录。</p>
+    <p>如果只是想导出配置文件，当然也是可以的，你可以选择<input id="upload_config" type="file" class="hidden"/><button class="btn btn-primary" onclick="$('#upload_config').trigger('click');">导入配置文件</button> 或 <button class="btn btn-primary" onclick="get_config()">导出配置文件</button></p>
     <h3>如何配置前台开放目录？</h3>
     <p>在设置中，写上要省略的前置目录，例如：</p>
     <ul>
@@ -96,11 +98,14 @@
     </ul>
     
     <h3>关于权限设置？</h3>
-    <p>bp3有许多开放给访客的功能，但默认都处于关闭状态</p>
-    <p>因为我们不希望给服务器带来负担，如果你确定需要，请在设置中打开。</p>
+    <p>鉴于用户往往难以正确设置，我们最终决定开放大部分权限</p>
+    <p>除了文件下载（严重浪费服务器、还可能花钱）等，其余功能默认全部开放</p>
+    <p>此外，如你所愿，可以设置一个错误的前台路径，这样前台就是空的</p>
     
     <h3>如何重置系统？</h3>
+    <p>一般来说，我们不推荐您这么做，除非真的坏掉了，或者在做测试。</p>
     <p>请把根目录下config.php文件删除，会重置本系统，也可以点击 <button class="btn btn-primary" onclick="reset_sys()">立即重置</button></p>
+
     
     <h3>账户已经锁定？</h3>
     <p>为防止暴力破解，一旦账户密码连续错误3次，将会锁定，暂需手动恢复</p>
@@ -112,6 +117,8 @@
     <pre><code><?php echo $grant;?></code></pre>
     <p>内置app授权地址</p>
     <pre><code><?php echo $grant2;?></code></pre>
+    <p><b>提示：</b>免app是默认配置系统，操作更简单，但需要配置回调信息，鉴于许多用户无法配置回调，最终内置了app授权系统</p>
+    <p><b>提示：</b>内置app信息可以修改为您申请的app（推荐）</p>
     
     <h3>开发者获取token接口</h3>
     <p>bp3当前使用的access_token可以被其他程序获取，为了安全起见仅本机程序(同IP地址)可以获取，地址如下：</p>
@@ -124,7 +131,8 @@ print(resp.read().decode())</code></pre>
     <p>如果你希望直接取得token用于测试，请<a href="../open.php" target="_blank">点击查看</a>。</p>
     <h3>其他问题</h3>
     <p>参阅百度网盘开发者官方文档：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者文档</a></p>
-    <p>如需帮助，请在github发布issure，或者QQ交流群：1150064636</p>
+    <p>如需帮助，请在github发布issure，或者QQ交流群：1150064636，了解我们最新动态</p>
+    <p>当然，你也可以对bp3进行二次开发，或者申请定制服务？（群内咨询）</p>
 </div>
 
 </main>
@@ -362,6 +370,68 @@ print(resp.read().decode())</code></pre>
             message("重置系统取消","info");
         }
     }
+    
+    /**
+     * 导出config文件
+    */
+    function get_config(){
+        location.href = "../controller/get_config.php";
+    }
+    
+    /**
+     * 导入配置文件
+     */
+    $("#upload_config").change(function(){
+        
+        let check = confirm("这会覆盖配置文件，已再次确认？");
+        if(!check){
+            this.value = "";
+            return;
+        }
+        if(!this.files[0]) {
+            this.value = "";
+            return;
+        }
+        let ext,idx;   
+        let imgName = this.value;
+        idx = imgName.lastIndexOf(".");   
+        if (idx != -1){   
+        ext = imgName.substr(idx+1).toUpperCase();   
+        ext = ext.toLowerCase(); 
+        // alert("ext="+ext);
+        if (ext != 'php'){
+            alert("只能上传.php 类型的文件!"); 
+            this.value="";
+            return;  
+        }
+        }
+        if(this.files[0].size>20971520) {
+            alert('文件不得超过20M')
+            this.value = "";
+            return
+        }
+        let formData = new FormData();
+        formData.append('file', this.files[0]);
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState == 4 && xhr.status == 200)
+            {
+                if(this.responseText){
+                    let jsonObj = JSON.parse(this.responseText);
+                    if(jsonObj.errno==0){
+                        message("导入成功","success");
+                    }else{
+                        message("导入失败","error");
+                    }
+                }else{
+                    message("导入失败","error");
+                }
+            }
+        }
+        xhr.open('post', '../controller/set_config.php', true);
+        xhr.send(formData);
+	})
+	
 </script>
 </body>
 </html>

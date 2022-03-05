@@ -1,5 +1,5 @@
 <?php return array (
-  'version'=>"v1.2.8",
+  'version'=>"v1.2.9",
   'user' => 
   array (
     'name' => 'bp3',
@@ -21,9 +21,9 @@
     'pre_dir' => '',
     'close_dlink' => 0,
     'close_dload' => 1,
-    'open_grant' => 0,
-    'open_grant2' => 0,
-    'open_session' => 0,
+    'open_grant' => 1,
+    'open_grant2' => 1,
+    'open_session' => 1,
     'grant_type' =>'url',
   ),
   'inner'=>array(

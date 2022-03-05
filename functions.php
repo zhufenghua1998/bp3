@@ -101,10 +101,16 @@
     /**
      * 强制登录，其中开启session必须在第一行填写：  session_start();
      * 在强制登录页面，填写：    force_login();  // 强制登录
+     * 新：可以指定一个重定向登录页面
      */ 
-     function force_login(){
+     function force_login($login_url=null){
         if(empty($_SESSION['user'])){
-            echo '{"error":"user not login"}';
+            if(isset($login_url)){
+                echo '{"error":"user not login", "zh-CN":"您必须登录系统，才可访问本页面！3秒后自动返回登录页面"}';
+                easy_location($login_url,3000);
+            }else{
+                echo '{"error":"user not login", "zh-CN":"您必须登录系统，才可访问本页面！"}';
+            }
             die;
         }
      }

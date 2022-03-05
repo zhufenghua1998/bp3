@@ -1,12 +1,17 @@
 <?php 
     session_start();
-
+    
     require_once("../functions.php");
     $config = require('../config.php');
     
+    $base_url = get_base_url("/user/login.php");
+    $con_login_url = $base_url."/login.php";
+    
     if($config['control']['open_session']==0){
-        force_login();//强制登录
+        force_login($con_login_url);//强制登录
     }
+    
+    $grant_url = $config['identify']['grant_url'];
     
     $url = './index.php';
     // 已登陆，重定向
@@ -44,6 +49,8 @@
     }else{
         $action = '登录';
     }
+    // 检测系统是否初始化
+    
     
     // 未登陆，给出登录方法
     $page_url = get_page_url();
@@ -98,11 +105,8 @@
     <p>但是，过多的访客来执行处理复杂的功能，需要服务器硬件的支持，所以实际上仅开放了少量功能</p>
     <p>您能够访问本页面，也是站点管理员开放的结果，请按下面的步骤登录并使用吧</p>
     <h2>怎么进行登录？</h2>
-    <p>登录依赖于bp3的授权系统，但是强调：<b>必须从本页面跳转授权系统</b></p>
-    <p>bp3有2个授权系统，功能是一致的，只是操作稍微有些区别。</p>
-    <p>免app授权系统，请点击 => <a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $enc_page_url; ?>">跳转免app授权系统</a></p>
-    <p>上述系统需要站点管理员配置，如果当前站点管理员比较懒，可尝试：</p>
-    <p>内置app授权系统，请点击 => <a href="https://bp3.52dixiaowo.com/grant2/?display=<?php echo $enc_page_url; ?>">跳转内置app授权系统</a></p>
+    <p>登录依赖于bp3的授权系统，但是注意：<b>必须从本页面跳转授权系统</b></p>
+    <p>免app授权系统，请点击 => <a href="<?php echo "$grant_url?display=$enc_page_url"; ?>">跳转bp3授权系统</a></p>
 </div>
 <footer class="copyright">
     <div class="navbar navbar-default navbar-fixed-bottom navbar-inverse">

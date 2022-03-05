@@ -5,8 +5,11 @@
     $config = require_once("../config.php");
     require_once("../functions.php");
 
+    $base_url = get_base_url("/grant2/index.php");
+    $login_url = $base_url."/login.php";
+    
     if($config['control']['open_grant2']==0){
-        force_login();//强制登录
+        force_login($login_url);//强制登录
     }
     
     // 允许携带重定向参数，参数为get，参数名display

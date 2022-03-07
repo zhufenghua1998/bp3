@@ -73,7 +73,8 @@ bp3是长期维护项目，会不定期更新。
 
 延伸或相关项目推荐：
 
-- [dylanbai8/start_chrome_with_useragent ](https://github.com/dylanbai8/start_chrome_with_useragent)
+- python版多账户网盘管理助手（新项目大家看看）：https://github.com/LengGeng/NetDiskManage
+- 浏览器ua命令： [dylanbai8/start_chrome_with_useragent ](https://github.com/dylanbai8/start_chrome_with_useragent)
 
 最后，感谢各位用户、开发者、赞助商对本项目给予的建议、帮助与支持
 

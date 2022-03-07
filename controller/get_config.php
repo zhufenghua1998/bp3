@@ -4,7 +4,7 @@
     session_start();
     $config = require('../config.php');
     require_once("../functions.php");
-    force_login();//强制登录
+    force_login("/controller/get_config.php");//强制登录
 
 // 开始下载
 $filename = "../config.php";

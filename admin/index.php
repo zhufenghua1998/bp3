@@ -3,7 +3,7 @@
     $config = require('../config.php');
     require_once("../functions.php");
     
-    force_login();
+    force_login("/admin/index.php");
 
     // 拼接授权地址
     

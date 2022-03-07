@@ -5,7 +5,7 @@
     
     $config = require("../config.php");
     
-    force_login();
+    force_login("/controller/copy_basic.php");
     
     $copy = force_post_param("copy");
 

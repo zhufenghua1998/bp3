@@ -6,7 +6,7 @@
     
     require_once("../functions.php");
     
-    force_login();
+    force_login("/update/up_core.php");
     
     
     $lock_file = "up_lock.php";  // 版本更新锁定文件
@@ -57,7 +57,7 @@
                             // 基础配置文件，单独处理
                             $base = require("bp3-main/conf_base.php");
                              // 新增base中独立项，但不会覆盖config原有项
-                            $config = $config + $base; 
+                            $config = arr2_merge($config,$base);
                             // 手动指定更新版本号
                             $config['version'] = $base['version'];
                             // 存储合并后的新配置文件

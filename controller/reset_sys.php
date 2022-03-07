@@ -5,7 +5,7 @@
     
     require_once("../functions.php");
     
-    force_login();
+    force_login("/controller/reset_sys.php");
     
     $reset = force_post_param("reset");
     

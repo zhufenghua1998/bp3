@@ -3,7 +3,7 @@
     $config = require('../config.php');
     require_once("../functions.php");
     
-    force_login();  // 强制登录
+    force_login("/admin/connect.php");  // 强制登录
     
     $identify = force_get_param("param");
     

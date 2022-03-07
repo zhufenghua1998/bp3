@@ -3,7 +3,7 @@
 session_start();
 require_once("../functions.php");
 
-force_login();
+force_login("/controller/backup.php");
 
 // 备份缓存文件
 $filename = "bp3-main-back.zip";

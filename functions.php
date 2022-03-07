@@ -101,13 +101,16 @@
     /**
      * 强制登录，其中开启session必须在第一行填写：  session_start();
      * 在强制登录页面，填写：    force_login();  // 强制登录
-     * 新：可以指定一个重定向登录页面
+     * 新：可以指定一个重定向登录页面，第二参数为true时，仅需指定base路径
      */ 
-     function force_login($login_url=null){
+     function force_login($login_url=null,$auto_base=false){
         if(empty($_SESSION['user'])){
             if(isset($login_url)){
                 echo '{"error":"user not login", "zh-CN":"您必须登录系统，才可访问本页面！3秒后自动返回登录页面"}';
-                easy_location($login_url,3000);
+                    // 仅需指定base路径
+                    $base_url = get_base_url($login_url);
+                    $login_url = $base_url."/login.php";
+                    easy_location($login_url,3000);   
             }else{
                 echo '{"error":"user not login", "zh-CN":"您必须登录系统，才可访问本页面！"}';
             }
@@ -464,5 +467,35 @@
         $config['basic'] = $arr;
         
         return $config;
+    }
+    /**
+     * 合并两个2维的关联数组，用于合并config与conf_base
+     * @param $old 旧数组
+     * @param $append 待添加数组
+     * @return 合并后的数组
+     */
+    function arr2_merge(array $old,array $append){
+        
+        foreach ($append as $key=>$value){
+            
+            // 如果第一层不存在，直接添加
+            if(empty($old[$key])){
+                $old[$key] = $value;
+            }
+            // 第一层已存在这个键
+            else{
+                // 判断它是一个数组，不是数组不用管
+                if(is_array($append[$key])){
+                    foreach($append[$key] as $k=>$v){
+                        // 第二层不存在这个键
+                        if(empty($old[$key][$k])){
+                            $old[$key][$k] = $v;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $old;
     }
 ?>

@@ -6,7 +6,7 @@
     
     $config = require("../config.php");
     
-    force_login();
+    force_login("/controller/bind_account.php");
     
     $param = force_get_param("param"); 
 

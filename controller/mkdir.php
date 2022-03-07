@@ -5,7 +5,7 @@
     $config = require('../config.php');
     require_once('../functions.php');
     
-    force_login();
+    force_login("/controller/mkdir.php");
 
     // 获取name参数
     $name = force_post_param("name");

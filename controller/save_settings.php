@@ -5,7 +5,7 @@
     require_once("../functions.php");
     $config = require("../config.php");
     
-    force_login();
+    force_login("/controller/save_settings.php");
     
     $config['site']['title'] = $_POST['s1'];
     $config['site']['subtitle'] = $_POST['s2'];
@@ -31,6 +31,7 @@
     $config['site']['keywords'] = $_POST['s21'];
     $config['inner']['app_id'] = $_POST['s22'];
     $config['inner']['secret_key'] = $_POST['s23'];
+    $config['control']['update_type'] = $_POST['s24'];
     
     save_config("../config.php");
     

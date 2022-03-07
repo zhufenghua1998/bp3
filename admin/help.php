@@ -3,7 +3,7 @@
     session_start();
     $config = require('../config.php');
     require_once("../functions.php");
-    force_login();//强制登录
+    force_login("/admin/help.php");//强制登录
     // 获取open地址
     $base_url = get_base_url("/admin/help.php");
     $open_url = $base_url."/open.php";
@@ -13,6 +13,12 @@
     
     // 获取版本号
     $version = $config['version']; 
+    
+    // 更新地址
+    $update_url = $config['control']['update_url'];
+    if(empty($update_url)){
+        $update_url = "https://gh.1344694396.workers.dev/https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip";
+    }
 ?>
 <!doctype html>
 <html>
@@ -68,11 +74,11 @@
 <div class="container help">
     
     <h3>当前版本</h3>
-    <p>当前版本号：<?php echo $version;?>可点击 <button onclick="check_update()" class="btn btn-primary">检测更新</button></p>
+    <p>当前版本号：<?php echo $version;?> 可点击 <button onclick="check_update()" class="btn btn-primary">检测更新</button></p>
+    <p><b>提示：</b>请保持更新，或向我们提供新功能需求、建议，有概率采纳。</p>
+    <p>值得一提的是：修复一个或几个bug，或许不会发布新版本。</p>
+    <p><b>提示：</b>可以在设置页面中复制（设置项24）最新下载地址并下载最新版代码</p>
     <div id="latest_tip">
-        <p><b>提示：</b>请保持更新，或向我们提供新功能需求、建议，有概率采纳。</p>
-        <p>值得一提的是：修复一个或几个bug，或许不会发布新版本，所以您仍可能需要从github下载代码</p>
-        <p>鉴于以上几点，我们提供一个链接，==》 <a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip" target="_blank">点击这里</a> 从github下载最新代码，并在下方点击上传</p>
     </div>
 
     <h2>导入与导出</h2>
@@ -106,7 +112,7 @@
     <h3>如何重置系统？</h3>
     <p>一般来说，我们不推荐您这么做，除非真的坏掉了，或者在做测试。</p>
     <p>请把根目录下config.php文件删除，会重置本系统，也可以点击 <button class="btn btn-primary" onclick="reset_sys()">立即重置</button></p>
-
+    <p>如果系统中缺少基础信息或需还原，可点击 <button class="btn btn-primary" onclick="reset_basic()">还原设置</button> ，可以恢复基础设置</p>
     
     <h3>账户已经锁定？</h3>
     <p>为防止暴力破解，一旦账户密码连续错误3次，将会锁定，暂需手动恢复</p>
@@ -131,7 +137,7 @@ resp = request.urlopen('<?php echo $open_url;?>')
 print(resp.read().decode())</code></pre>
     <p>如果你希望直接取得token用于测试，请<a href="../open.php" target="_blank">点击查看</a>。</p>
     <h3>其他问题</h3>
-    <p>参阅百度网盘开发者官方文档：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者文档</a></p>
+    <p>可参阅文档：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者官方文档</a>，或 <a href="https://www.52dixiaowo.com/post-3261.html" target="_blank">bp3简易使用手册</a></p>
     <p>如需帮助，请在github发布 <a href="https://github.com/zhufenghua1998/bp3/issues" target="_blank">issure</a>，或者QQ交流群：1150064636，了解我们最新动态</p>
     <p>当然，你也可以对bp3进行二次开发，或者申请定制服务？（群内咨询）</p>
 </div>
@@ -316,7 +322,7 @@ print(resp.read().decode())</code></pre>
             if(version >= data.tag_name){
                 
                 $("#latest_tip").empty();
-                let str = "<p>恭喜，您当前已经是最新版啦！</p>";
+                let str = "<p class='text-info'>恭喜，您当前已经是最新版啦！</p>";
                 $("#latest_tip").append(str);
                 return;
                 
@@ -329,12 +335,14 @@ print(resp.read().decode())</code></pre>
             
             let version_body = data.body;
             version_body = version_body.replace(/\r\n/g,"<br>");
+                
+            let up_time = new Date(data.published_at);
+            let time_str = up_time.format("YYYY-MM-DD HH:MM:SS"); 
             
             str += `<tr><td>版本描述：</td><td>${version_body}</td></tr>`
-            str += `<tr><td>更新时间</td><td>${data.published_at}</td></tr>`
-            str += `<tr><td>github下载地址</td><td><a href="https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip">https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip</a></td></tr>  `
+            str += `<tr><td>更新时间</td><td>${time_str}</td></tr>`
             str += `<tr><td>更新方式</td><td><button class="btn btn-primary" onclick="auto_update()">自动更新</button></td></tr>`;
-            str += `<tr><td>更新说明</td><td>使用自动更新时，后台全程自动进行更新(特别感谢<a href="https://www.kumanyun.com/" target="_blank">@火鸟门户</a>)<br>如需手动上传，请使用下方的导入压缩包</td></tr>`;
+            str += `<tr><td>更新说明</td><td>如果刚检测到新版，请等待半小时后再更新，我们可能正在上传新代码<br>如果想提高成功率：①选择合适的更新源，②下载后手动上传</td></tr>`;
             str += `</table>`;
             $("#latest_tip").append(str);
         },"json");
@@ -433,6 +441,45 @@ print(resp.read().decode())</code></pre>
         xhr.send(formData);
 	})
 	
+	// 还原设置
+	function reset_basic(){
+        let check = confirm("确定要还原默认设置吗？（很安全）");
+        if(check){
+            $.post("../controller/reset_basic.php",{"reset":1},function(data){
+                if(data.errno==0){
+                    alert("还原成功，请重新查看设置！");
+                }
+            },"json")
+        }else{
+            message("还原设置取消","info");
+        }
+	}
+	
+    Date.prototype.format = function (fmt) {
+      var o = {
+        "M+": this.getMonth() + 1,                   //月份
+        "d+": this.getDate(),                        //日
+        "h+": this.getHours(),                       //小时
+        "m+": this.getMinutes(),                     //分
+        "s+": this.getSeconds(),                     //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds()                  //毫秒
+      };
+    
+      //  获取年份 
+      if (/(y+)/i.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+      }
+    
+      for (var k in o) {
+        if (new RegExp("(" + k + ")", "i").test(fmt)) {
+          fmt = fmt.replace(
+            RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        }
+      }
+      return fmt;
+    }
+
 </script>
 </body>
 </html>

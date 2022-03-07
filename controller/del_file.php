@@ -5,7 +5,7 @@
     $config = require('../config.php');
     require_once('../functions.php');
     
-    force_login();  // 强制登录
+    force_login("/controller/del_file.php");  // 强制登录
     
     // 获取path
     $path = force_get_param("path");

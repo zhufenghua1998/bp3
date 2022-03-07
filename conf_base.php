@@ -1,9 +1,7 @@
-<?php return array (
-  'version'=>"v1.2.9",
+<?php return array (  // 至多2维、务必是关联数组的基础配置文件
+  'version'=>"v1.3.0",
   'user' => 
   array (
-    'name' => 'bp3',
-    'pwd' => 'bp3',
     'lock' => '3',
     'chance' => '3',
   ),
@@ -25,6 +23,8 @@
     'open_grant2' => 1,
     'open_session' => 1,
     'grant_type' =>'url',
+    'update_type' => 'sps',
+    'update_url' => 'https://gh.1344694396.workers.dev/https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip',
   ),
   'inner'=>array(
     'app_id' => 'NtcmMLFqq4Vf0IKBlVIDFGXAqjuYpvWN',

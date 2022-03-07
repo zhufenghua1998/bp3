@@ -4,7 +4,7 @@
     $config = require('../config.php');
     require_once("../functions.php");
     
-    force_login();
+    force_login("/admin/settings.php");
     
     $base_url = get_base_url("/admin/settings.php");
     // 授权地址
@@ -266,6 +266,25 @@
           <td class="br"><?php echo $config['inner']['secret_key'];?></td>
           <td><input name="s23" value="<?php echo $config['inner']['secret_key'];?>" class="form-control"/></td>
         </tr>
+        <tr>
+            <th scope="row">24</th>
+          <td>更新地址 <span class="tip fa fa-question-circle-o"  tip="可以直接下载最新版bp3的地址，请自己验证连接速度并选择合适的选项，允许自定义，不懂不要别乱动，请使用默认选项"></span></td>
+          <td><input id="show_update_url" name="s24" class="form-control"/></td>
+            <td>
+                <label class="radio-inline">
+                  <input id="s24_cn"  type="radio" name="s24" value="cn"> 国内
+                </label>
+                <label class="radio-inline">
+                  <input id="s24_en" type="radio" name="s24" value="en"> 国外
+                </label>
+                <label class="radio-inline">
+                  <input id="s24_sps" type="radio" name="s24" value="sps"> 赞助商
+                </label>
+                <label class="radio-inline">
+                  <input id="s24_cus" type="radio" name="s24" value="cus"> 自定义
+                </label>
+            </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -299,6 +318,7 @@
             $(".m-btns").addClass("btn-group-vertical");
         }
         show_grant_url();
+        show_update_url();
     });
     
     /**
@@ -323,6 +343,7 @@
         }
     }
     
+    // 修改授权地址
     $("input[name=s17s]").change(function(){
         let checked = $(event.target).val();
         let grant_url = '<?php echo $config['identify']['grant_url'];?>';
@@ -339,6 +360,57 @@
         else if(checked == 'inner'){
             $("#show_grant_url").val(inner_url);
             $("#show_grant_url").prop("readonly",true);
+        }
+    });
+    
+    // 显示更新地址
+    function show_update_url(){
+        let update_type = '<?php echo $config['control']['update_type']?>';
+        let update_cn = 'https://gh.1344694396.workers.dev/https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip';
+        let update_en = 'https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip';
+        let update_sps = "http://bp3-plus.52dixiaowo.com/bp3-main.zip";
+        let update_url = '<?php echo $config['control']['update_url'];?>';
+        if(update_type == 'cus'){
+            $("#show_update_url").val(update_url);
+            $("#s24_cus").trigger("click");
+        }
+        else if(update_type == 'cn'){
+            $("#show_update_url").val(update_cn);
+            $("#s24_cn").trigger("click");
+        }
+        else if(update_type == 'sps'){
+            $("#show_update_url").val(update_sps);
+            $("#s24_sps").trigger("click");
+        }
+        else if(update_type == 'en'){
+            $("#show_update_url").val(update_en);
+            $("#s24_en").trigger("click");
+        }
+    }
+    
+    // 修改更新地址
+    $("input[name=s24]").change(function(){
+        let checked = $(event.target).val();
+        let update_type = '<?php echo $config['control']['update_type']?>';
+        let update_cn = 'https://gh.1344694396.workers.dev/https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip';
+        let update_en = 'https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip';
+        let update_sps = "http://bp3-plus.52dixiaowo.com/bp3-main.zip";
+        let update_url = '<?php echo $config['control']['update_url'];?>';
+        if(checked == 'cus'){
+            $("#show_update_url").val(update_url);
+            $("#show_update_url").prop("readonly",false);
+        }
+        else if(checked == 'cn'){
+            $("#show_update_url").val(update_cn);
+            $("#show_update_url").prop("readonly",true);
+        }
+        else if(checked == 'sps'){
+            $("#show_update_url").val(update_sps);
+            $("#show_update_url").prop("readonly",true);
+        }
+        else if(checked == 'en'){
+            $("#show_update_url").val(update_en);
+            $("#show_update_url").prop("readonly",true);
         }
     });
     

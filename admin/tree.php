@@ -5,7 +5,7 @@
 
     $access_token = $config['identify']['access_token'];
 
-    force_login();  // 强制登录
+    force_login("/admin/tree.php");  // 强制登录
     $base_dir = force_get_param("base_dir");
     
     if($base_dir=="/"){

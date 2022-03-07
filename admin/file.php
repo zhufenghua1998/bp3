@@ -3,7 +3,7 @@
     session_start();
     $config = require('../config.php');
     require('../functions.php');
-    force_login();  // 强制登录
+    force_login("/admin/file.php");  // 强制登录
     // 取得网站根目录
     $base_url = get_base_url("/admin/file.php");
     

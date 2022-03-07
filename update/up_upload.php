@@ -6,7 +6,7 @@
     
     require_once("../functions.php");
     
-    force_login();
+    force_login("/update/up_upload.php");
     
     
     // 保存上传的文件

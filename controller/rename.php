@@ -5,7 +5,7 @@
     $config = require('../config.php');
     require_once('../functions.php');
 
-    force_login();  // 强制登录
+    force_login("/controller/rename.php");  // 强制登录
     // 获取path
     $path = force_get_param("path");
     //（不需要urlencode，如果有urlencode会自动解码）

@@ -9,10 +9,17 @@
     
     require_once("../functions.php");
     
-    force_login();
+    force_login("/update/up_fast.php");
     
     // 下载最新版代码
-    $url = "http://bp3-plus.52dixiaowo.com/bp3-main.zip";
+    
+    // 使用设置的更新地址
+    $url = $config['control']['update_url'];
+    
+    // 如果地址为空，则默认使用赞助商源
+    if(empty($url)){
+        $url = "http://bp3-plus.52dixiaowo.com/bp3-main.zip";
+    }
     
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

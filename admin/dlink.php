@@ -9,7 +9,7 @@
     $fsid = force_get_param("fsid");
 
     if($config['control']['close_dlink']!=0){
-        force_login();//强制登录
+        force_login("/admin/dlink.php");//强制登录
     }
     
     // 获取根目录

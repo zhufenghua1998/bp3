@@ -17,7 +17,7 @@
     // 尝试合并
     $base = require("../conf_base.php");
     
-    $config = $config_cache + $base;
+    $config = arr2_merge($config_cache,$base);
     
     save_config("../config.php");
     

@@ -32,6 +32,7 @@
     $config['inner']['app_id'] = $_POST['s22'];
     $config['inner']['secret_key'] = $_POST['s23'];
     $config['control']['update_type'] = $_POST['s24'];
+    $config['control']['update_url'] = $_POST['s24u'];
     
     save_config("../config.php");
     

@@ -51,3 +51,14 @@
         }
         setTimeout("location.reload()", time );
     }
+    
+    /**
+     * 延迟后跳转到指定页面，单位毫秒，默认1500
+     */ 
+    function easy_load(href,time){
+        let def_time = 1500;
+        if(!time){
+            time = def_time;
+        }
+        setTimeout("location.href='"+href+"'", time );
+    }

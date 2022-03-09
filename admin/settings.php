@@ -269,7 +269,7 @@
         <tr>
             <th scope="row">24</th>
           <td>更新地址 <span class="tip fa fa-question-circle-o"  tip="可以直接下载最新版bp3的地址，请自己验证连接速度并选择合适的选项，允许自定义，不懂不要别乱动，请使用默认选项"></span></td>
-          <td><input id="show_update_url" name="s24" class="form-control"/></td>
+          <td><input id="show_update_url" name="s24u" class="form-control"/></td>
             <td>
                 <label class="radio-inline">
                   <input id="s24_cn"  type="radio" name="s24" value="cn"> 国内

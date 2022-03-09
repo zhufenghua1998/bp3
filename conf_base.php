@@ -1,5 +1,5 @@
 <?php return array (  // 至多2维、务必是关联数组的基础配置文件
-  'version'=>"v1.3.0",
+  'version'=>"v1.3.1",
   'user' => 
   array (
     'lock' => '3',

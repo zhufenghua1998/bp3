@@ -22,6 +22,9 @@
         
         $config = arr2_merge($config_cache,$base);
         
+        // 尝试更新版本号（可能从旧版本配置文件导入！！）
+        $config['version'] = $base['version'];
+        
         save_config("./config.php");
         
         unlink($temp_uri);

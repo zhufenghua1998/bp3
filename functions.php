@@ -48,9 +48,9 @@
             $pass_time = time()-$config['identify']['conn_time'];
             $express_time = $config['identify']['expires_in']-$pass_time;
             if($express_time<1728000){ //有效期小于20天，自动刷新token
-            
+                
                 $opt = easy_build_http("GET");
-                easy_file_get_content($url,$opt);
+                easy_file_get_content($refresh_php,$opt);
                 
                 return false;
             }

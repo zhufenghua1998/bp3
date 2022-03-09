@@ -479,7 +479,7 @@
         foreach ($append as $key=>$value){
             
             // 如果第一层不存在，直接添加
-            if(empty($old[$key])){
+            if(!array_key_exists($key,$old)){
                 $old[$key] = $value;
             }
             // 第一层已存在这个键
@@ -488,7 +488,7 @@
                 if(is_array($append[$key])){
                     foreach($append[$key] as $k=>$v){
                         // 第二层不存在这个键
-                        if(empty($old[$key][$k])){
+                        if(!array_key_exists($k,$old[$key])){
                             $old[$key][$k] = $v;
                         }
                     }

@@ -18,6 +18,18 @@
     $bind_controller = urlencode($base_url."/controller/bind_account.php");
     
     $bind_account_url = "$guant_url?display=$bind_controller";
+    
+    $refresh_url = "$base_url/admin/refresh_token.php";
+    
+    // 统计授权信息时间
+    if(isset($config['identify'])){
+        $pass_time = time()-$config['identify']['conn_time'];
+        $express_time = $config['identify']['expires_in']-$pass_time;
+        if($express_time<1296000){ //有效期小于15天，给出警告
+            $wanging = true;
+            $express_day = number_format($express_time/3600/24, 2);
+        }
+    }
 ?>
 <!doctype html>
 <html>
@@ -81,6 +93,12 @@
         <p>本程序需要连接到百度网盘。</p>
         <p>如果您是首次配置，请点击<b>获取授权</b>（如已授权则覆盖原授权信息），登录百度账号以完成授权（30天有效期）</p>
         <p>每次访问首页时，程序会自动检测token有效期并智能刷新，如果你的网站没有任何流量，需30天后再次点击授权。</p>
+    <?php if($wanging){ ?>
+        <div class="text-danger">
+            <P>警告，我们发现您的系统有些异常，您当前授权信息只有<?php echo $express_day;?>天。</P>
+            <p>如果需要请定时刷新，可定时访问地址：<?php echo $refresh_url;?></p>
+        </div>
+    <?php } ?>
         <p>一般来说，如果您的站点正常使用，一般不会出现token失效的情况。</p>
         <p></p>
         <p>在完成授权后，在下方会自动获取你的百度基础信息。</p>

@@ -1,37 +1,28 @@
 <?php
     // 快速配置
-    $config = require('./conf_base.php');
     require_once("./functions.php");
-    
-    $init = false;
-    if(file_exists("./config.php"))
-    {
-        $init = true;
-    }
-    
-    $username = $_POST['username'];
-    
-    $pageUrl = urlencode(get_page_url());
-    
-    $dirUrl = get_dir_url(basename(__FILE__));
-    
-    $grant_url = $dirUrl.'grant2/';
 
-    // 如果请求初始化($username非空)，且还未初始化（init==0）
-    if(!empty($username) && !$init){
+    $config = $base;
+    $username = $_POST['username'];
+
+    // 请求配置，且还未配置
+    if(!empty($username) && !$install){
         
         $config['user']['name']= $_POST['username'];
         $config['user']['pwd']= $_POST['password'];
         
         
-        $config['identify']['grant_url'] = $grant_url;
+        $config['identify']['grant_url'] = $grant2;
         
-        save_config("./config.php"); 
-        
-        echo "<script>alert('提交成功！正在前往登录页面...');window.location.href='./login.php';</script>";
-    }else if(!empty($username)){
-        // 请求初始化，但已经初始化了
-        echo "<script>alert('你已经配置过了，如果需要重新配置，请把config.php文件删掉');window.location.href='./login.php';</script>";
+        save_config();
+        js_alert('提交成功！正在前往登录页面...');
+        js_location($login_url);
+    }
+    // 请求初始化，但已经初始化了
+    elseif(!empty($username)){
+
+        js_alert('你已经配置过了，如果需要重新配置，请把config.php文件删掉');
+        js_location($login_url);
     }
     
 ?>

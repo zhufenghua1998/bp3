@@ -1,12 +1,8 @@
 <?php
 
-    session_start();
-    
     require_once("../functions.php");
     
-    $config = require("../config.php");
-    
-    force_login("/controller/bind_account.php");
+    force_login();
     
     $param = force_get_param("param"); 
 
@@ -16,14 +12,12 @@
     
     $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$access_token&method=uinfo";
     
-    $opt = easy_build_http("GET");
-    $result = easy_file_get_content($url,$opt);
+    $result = easy_file_get_content($url);
     
     $arr = json_decode($result,true);
     
     $config['account'] = $arr;
     
-    save_config("../config.php");
+    save_config();
     
-    easy_location("../admin/index.php");
-?>
+    js_location("../admin/index.php");

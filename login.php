@@ -1,37 +1,26 @@
 <?php 
-    session_start();
-    $config = require('./config.php');
     require_once("./functions.php");
     
-    $url = './admin';
     // 已登陆，重定向
-    if($_SESSION['user']){
-        header("Location: $url");
+    if($check_login){
+        redirect($admin_url);
     }
-    // 未登陆
-    $base_url = get_base_url("/login.php");
-    
-    $login_url = "";
-    
+    // 校验是否配置百度登录
     $bind_baidu = false;
     if(isset($config) && isset($config['identify']) && isset($config['account'])){
-        
         $bind_baidu = true;
-        
     }
+    $login_baidu_url = null;
     if($bind_baidu){
-        $grant_url = $config['identify']['grant_url'];
-        
+
         $login_controller = urlencode("$base_url/login_baidu.php");
-        
-        $login_url = "$grant_url?display=$login_controller";
+
+        $login_baidu_url = "$grant_url?display=$login_controller"; // 快速登录百度地址
     }
-    
-    
+
     $name = $_POST['user'];
     $pwd = $_POST['pwd'];
-    $lock = $config['user']['lock'];
-    $chance =$config['user']['chance'];
+
     // 用户密码为空，不处理
     if(!$name && !$pwd){
         // 表示未输入
@@ -39,25 +28,30 @@
     else if($config['user']['name']==$name && $config['user']['pwd']==$pwd && $chance>0){
         // 登陆成功
         $_SESSION['user'] = $name;
-        $_SESSION['expiretime'] = time() + 3600;
-        // 重置机会
-        $config['user']['chance']=$lock;
-        save_config("./config.php");
-        header("Location: $url");
+        // 是否重置机会
+        if($lock!=$chance){
+            $config['user']['chance']=$lock;
+            save_config();
+        }
+        redirect($admin_url);
     }else{
         // 次数减少
         $chance--;
         $config['user']['chance'] = $chance;
-        save_config("./config.php");
-        if($chance<=0){echo "<script>alert('账户已经锁定！请ftp编辑配置文件 或使用百度登录')</script>";}
-        else{echo "<script>alert('用户名或密码错误！')</script>";}
+        save_config();
+        if($chance<=0){
+            js_alert('账户已经锁定！请ftp编辑或删除配置文件，或使用百度登录');
+        }
+        else{
+            js_alert('用户名或密码错误！');
+        }
     }
 ?>
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>登录 | <?php echo $config['site']['title'];?></title>
+    <title>登录 | <?php echo $title;?></title>
     <link href="./favicon.ico" rel="shortcut icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/bootstrap.min.css" rel="stylesheet">
@@ -77,7 +71,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="./"><?php echo $config['site']['title'];?></a>
+          <a class="navbar-brand" href="./"><?php echo $title;?></a>
         </div>
     
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -93,8 +87,8 @@
           </form>
           <ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="./login.php">登录<i class="fa fa-user-circle-o" aria-hidden="true"></i></a></li>
-            <li><a href="<?php echo $config['site']['blog'];?>">官博<i class="fa fa-rss"></i></a></li>
-            <li><a href="<?php echo $config['site']['github'];?>">github<i class="fa fa-github" aria-hidden="true"></i></a></li>
+            <li><a href="<?php echo $blog;?>">官博<i class="fa fa-rss"></i></a></li>
+            <li><a href="<?php echo $github;?>">github<i class="fa fa-github" aria-hidden="true"></i></a></li>
             <li><a href="./user/login.php">免部署版<i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
           </ul>
     
@@ -132,7 +126,7 @@
     </div><!-- /.modal -->
 <footer class="copyright">
     <div class="navbar navbar-default navbar-fixed-bottom navbar-inverse">
-        <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © <?php echo $config['site']['title'];?> <?php echo date('Y')?></p>
+        <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © <?php echo $title;?> <?php echo date('Y')?></p>
     </div>
 </footer>
 <style>
@@ -144,7 +138,7 @@
 <script>
     function baidu_login(){
         
-        let login_url = "<?php echo $login_url; ?>";
+        let login_url = "<?php echo $login_baidu_url; ?>";
         if(login_url){
             location.href = login_url;
         }else{

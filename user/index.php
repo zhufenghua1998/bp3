@@ -1,19 +1,16 @@
 <?php
 
     // session域解析版
-    
-    session_start();
     require_once("../functions.php");
-    $config = require("../config.php");
-    
+
     // 未登录，重定向至登录页面
-    if(empty($_SESSION['access_token'])){
-        header("Location: ./login.php");
+    if(!check_session("access_token")){
+        redirect("./login.php");
     }
     // 正在注销
     if($_GET['logout']){
         $_SESSION['access_token'] = null;
-        header("Location: ./login.php");
+        redirect("./login.php");
     }
 
 ?>

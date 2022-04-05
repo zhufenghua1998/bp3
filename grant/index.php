@@ -1,14 +1,9 @@
 <?php
 
-    session_start();
-    $config = require('../config.php');
     require_once("../functions.php");
 
-    $base_url = get_base_url("/grant/index.php");
-    $login_url = $base_url."/login.php";
-    
-    if($config['control']['open_grant']==0){
-        force_login($login_url);
+    if($open_grant==0){
+        force_login();
     }
         
     // 允许携带重定向参数，参数为get，参数名display

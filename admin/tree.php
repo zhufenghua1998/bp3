@@ -1,11 +1,8 @@
 <?php
-    session_start();
-    $config = require("../config.php");
     require_once("../functions.php");
 
-    $access_token = $config['identify']['access_token'];
+    force_login();  // 强制登录
 
-    force_login("/admin/tree.php");  // 强制登录
     $base_dir = force_get_param("base_dir");
     
     if($base_dir=="/"){
@@ -15,12 +12,11 @@
     // 一次至多查找1000条
     $limit = 1000;
     
-    $encode_dir = re_urlencode($base_dir);
+    $encode_dir = re_url_encode($base_dir);
     
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?method=listall&path=$encode_dir&access_token=$access_token&order=name&recursion=1&limit=$limit";
     
-    $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
-    $result = easy_file_get_content($url,$opt);
+    $result = easy_file_get_content($url);
 
     $json = json_decode($result);
     

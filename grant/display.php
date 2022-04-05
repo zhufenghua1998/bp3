@@ -1,8 +1,6 @@
 <?php
-    session_start();
-    $config = require('../config.php');
-    
-    
+    require_once("../functions.php");
+
     $result = $_SESSION['result'];
     
     if(empty($result)){

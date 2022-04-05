@@ -1,11 +1,11 @@
 <?php
 
     /*  保存用户修改的设置  */
-    session_start();
     require_once("../functions.php");
-    $config = require("../config.php");
-    
-    force_login("/controller/save_settings.php");
+
+    force_login();
+
+    $check = true;
     
     $config['site']['title'] = $_POST['s1'];
     $config['site']['subtitle'] = $_POST['s2'];
@@ -33,8 +33,16 @@
     $config['inner']['secret_key'] = $_POST['s23'];
     $config['control']['update_type'] = $_POST['s24'];
     $config['control']['update_url'] = $_POST['s24u'];
-    
-    save_config("../config.php");
-    
-    echo '{"errno": 0, "errmsg": "success"}';
-?>
+    $config['control']['dn_limit'] = $_POST['s25'];
+    $config['control']['dn_speed'] = $_POST['s26'];
+    if(!is_numeric($_POST['s26'])){
+        $check = false;
+    }
+
+    if($check){
+        save_config("../config.php");
+        echo '{"errno": 0, "errmsg": "success"}';
+    }else{
+        echo '{"errno": -1, "errmsg": "请填写正确的数据格式"}';
+    }
+

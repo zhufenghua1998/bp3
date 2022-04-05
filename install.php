@@ -1,24 +1,16 @@
 <?php
-
-    $config = require('./conf_base.php');
     require_once("./functions.php");
-    
-    $init = false;
-    if(file_exists("./config.php"))
-    {
-        $init = true;
-    }
-    
-    $dirUrl = get_dir_url(basename(__FILE__));
-    $redirect = $dirUrl."grant/callback.php";  // redirect_uri
-    $grant_url = $dirUrl."grant/";
-    
+
+    $config = $base;
+
     $username = $_POST['username'];
     $password = $_POST['password'];
     $app = $_POST['app'];
     $secret = $_POST['secret'];
-    
-    if(!empty($username) && !$init){
+    $redirect = get_file_url("/grant/callback.php");
+    $grant_url = get_file_url("/grant/");
+
+    if(!empty($username) && !$install){
         
         $init = true;
         $config['init']=$init;
@@ -29,12 +21,13 @@
         $config['connect']['redirect_uri']=$redirect;
         $config['identify']['grant_url']=$grant_url;
 
-        save_config('./config.php');
+        save_config();
         
-        
-        echo "<script>alert('提交成功！正在前往登录页面...');window.location.href='./login.php';</script>";
+        js_alert('提交成功！正在前往登录页面...');
+        js_location($login_url);
     }else if(!empty($username)){
-        echo "<script>alert('你已经配置过了，如果需要重新配置，请把config.php文件删掉');window.location.href='./login.php';</script>";
+        js_alert('你已经配置过了，如果需要重新配置，请把config.php文件删掉');
+        js_location($login_url);
    }
 
 ?>
@@ -148,7 +141,7 @@
             }
             xhr.open('post', './install_config.php', true);
             xhr.send(formData);
-            
+
             this.value = "";
     	})
     </script>

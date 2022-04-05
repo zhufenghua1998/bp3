@@ -1,12 +1,8 @@
 <?php
 
-    session_start();
-    
-    $config = require("../config.php");
-    
     require_once("../functions.php");
     
-    force_login("/update/up_upload.php");
+    force_login();
     
     
     // 保存上传的文件
@@ -16,4 +12,3 @@
     // 调用自动更新核心代码
     
     require("./up_core.php");
-?>

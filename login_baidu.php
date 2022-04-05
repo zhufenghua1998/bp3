@@ -1,57 +1,45 @@
 <?php
-
-    session_start();
-    
+/**
+ *  百度登录
+ */
     require_once("./functions.php");
     
-    $config = require("./config.php");
-    
-    // 取得授权身份信息
+    // 取得传递的授权身份信息
     $param = force_get_param("param"); 
 
-    $obj = json_decode($param);
-    
-    $access_token = $obj->access_token;
-    
-    $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$access_token&method=uinfo";
-    
-    $opt = easy_build_http("GET");
-    
-    // 取得basic信息
-    $result = easy_file_get_content($url,$opt);
-    
-    $arr = json_decode($result,true);
-    
-    
+    $identify = json_decode($param,true);
+
+    $access_token = $identify['access_token'];
+
+    // 取得该身份的basic信息
+
+    $basic = m_basic($access_token);
+
     // 再次校验是否已经配置百度登录
     
     if(empty($config) || empty($config['identify'] || empty($config['account']) || empty($config['account']['uk']))){
         
-        echo '{"errmsg":"your identify is invalid","msg_CN":"非法请求"}';
+        echo '{"msg":"your identify is invalid","msg_CN":"管理员未配置百度登录，本次为非法请求"}';
         die;
     }
     
     // 比较用户id
-    if($config['account']['uk'] == $arr['uk']){
+    if($config['account']['uk'] == $basic['uk']){
         // 登录成功
-        $_SESSION['user'] = $arr['baidu_name'];
+        $_SESSION[$user] = $basic['baidu_name'];
         
-        // 解锁普通用户
-        $lock = $config['user']['lock'];
         // 判断是否需要重置
-        if($lock != $config['user']['chance']){
+        if($lock != $chance){
             $config['user']['chance']=$lock;
-            save_config("./config.php");
+            save_config();
         }
         
         // 重定向
-        easy_location("./login.php");
+        redirect($login_url);
         
     }else{
         // 登录失败
-        echo '<script>alert("非法用户，请使用账户：'.$config['account']['baidu_name'].'")</script>';
-        
-        easy_location("./login.php");
+        js_alert("非法用户，请使用账户：'$a_baidu_name'");
+
+        js_location($login_url);
     }
-    
-?>

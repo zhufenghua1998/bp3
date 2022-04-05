@@ -1,12 +1,9 @@
 <?php
-    session_start();
-    $config = require("../config.php");
-    
-    
+    require_once("../functions.php");
+
     $result = $_SESSION['result'];
     // 本页面仅用于展示获取到的信息，包含token，refresh_token等
     $json = json_decode($result);
-
 ?>
 <!doctype html>
 <html>

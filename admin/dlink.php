@@ -1,45 +1,26 @@
 <?php
-    session_start();
-    $config = require('../config.php');
     require_once('../functions.php');
 /**
- *  文件下载模块，访客权限使用时需管理员开启
+ *  文件直链模块，访客权限使用时需管理员开启
  */
     // 1.获取fsid
     $fsid = force_get_param("fsid");
 
-    if($config['control']['close_dlink']!=0){
-        force_login("/admin/dlink.php");//强制登录
+    if($close_dlink!=0){
+        force_login();  //强制登录
     }
     
-    // 获取根目录
-    $base_url = get_base_url("/admin/dlink.php");
-    $refresh_url = $base_url."/admin/refresh_token.php";
+    $info = m_file_info($access_token,$fsid);
     
-    //自动刷新token
-    $access_token = get_token_refresh($refresh_url);
-    if(!$access_token){
-        $config = require('./config.php'); // 重新加载刷新后的config文件
-    }
-    
-    $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
-    
-    $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
-    $result = easy_file_get_content($url,$opt);
-    
-    $json = json_decode($result);
-    $dlink =  $json->list[0]->dlink;
-    $file_size = $json->list[0]->size;
-    $file_name = $json->list[0]->filename;
+    $dlink =  $info['list'][0]['dlink'];
+    $file_size = $info['list'][0]['size'];
+    $file_name = $info['list'][0]['filename'];
     $dlink = $dlink.'&access_token='.$access_token;
     
     $show_size = height_show_size($file_size);
     $check_ua = $_SERVER['HTTP_USER_AGENT']=="pan.baidu.com"?"text-success":"text-danger";
-    $headerArray = array('User-Agent: pan.baidu.com');
-    $getRealLink = head($dlink, $headerArray); // 禁止重定向
-	$getRealLink = strstr($getRealLink, "Location");
-	$realLink =  substr($getRealLink, 10);
-	$realLink = substr($realLink,0,strpos($realLink,"\n")-1);
+
+	$realLink = m_redirect_dlink($dlink);
 	$client_link = $realLink."&filename=|".$file_name;
 ?>
 <!doctype html>
@@ -69,21 +50,21 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand <?php if(empty($_SESSION['user'])) echo "hidden" ?>" href="./">管理系统</a>
+          <a class="navbar-brand <?php if(!check_session()) echo "hidden" ?>" href="./">管理系统</a>
         </div>
     
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
          <ul class="nav navbar-nav">
           </ul>
-          <ul class="nav navbar-nav <?php if(empty($_SESSION['user'])) echo "hidden" ?>">
+          <ul class="nav navbar-nav <?php if(!check_session()) echo "hidden" ?>">
             <li><a href="./file.php">文件管理<i class="fa fa-th-large" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
             <li><a href="./settings.php">修改设置<i class="fa fa-cog"></i></a></li>
             <li><a href="./help.php">帮助与支持<i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="../">前台<i class="fa fa-home"></i></a></li>
-            <li class="<?php if(empty($_SESSION['user'])) echo "hidden" ?>"><a href="./logout.php">注销<i class="fa fa-sign-out" aria-hidden="true"></i></i></a></li>
+            <li class="<?php if(!check_session()) echo "hidden" ?>"><a href="./logout.php">注销<i class="fa fa-sign-out" aria-hidden="true"></i></i></a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -100,7 +81,7 @@
         点击==><button id="cbtn1">复制链接</button>
     </div>
     <?php
-        if(isset($_SESSION['user'])){
+        if(check_session()){
             echo "<p>以下短链接仅管理员可见，如果你需要，我们提供了较短的链接：</p>";
             echo "<pre class='br'>".$dlink."</pre>";
         }

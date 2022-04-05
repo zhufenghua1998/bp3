@@ -1,9 +1,8 @@
 <?php
 
-session_start();
 require_once("../functions.php");
 
-force_login("/controller/backup.php");
+force_login();
 
 // 备份缓存文件
 $filename = "bp3-main-back.zip";
@@ -17,7 +16,7 @@ if(file_exists($filename)){
 
 // 整站备份
 
-ExtendedZip::zipTree('../', $filename, ZipArchive::CREATE);
+ExtendedZip::zipTree(get_base_root(), $filename, ZipArchive::CREATE);
 
 // 开始下载
 

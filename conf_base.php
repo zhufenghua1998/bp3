@@ -1,9 +1,11 @@
-<?php return array (  // 至多2维、务必是关联数组的基础配置文件
-  'version'=>"v1.3.2",
+<?php return array (
+  'version'=>"v1.3.3",
   'user' => 
   array (
     'lock' => '3',
     'chance' => '3',
+    'name' => 'bp3',
+    'pwd' => 'bp3',
   ),
   'site' => 
   array (
@@ -25,6 +27,8 @@
     'grant_type' =>'url',
     'update_type' => 'sps',
     'update_url' => 'http://bp3-plus.52dixiaowo.com/bp3-main.zip',
+    'dn_limit' => 0,
+    'dn_speed' => 10240,
   ),
   'inner'=>array(
     'app_id' => 'NtcmMLFqq4Vf0IKBlVIDFGXAqjuYpvWN',

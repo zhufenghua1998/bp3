@@ -1,22 +1,13 @@
 <?php 
-    session_start();
-    
     require_once("../functions.php");
-    $config = require('../config.php');
-    
-    $base_url = get_base_url("/user/login.php");
-    $con_login_url = $base_url."/login.php";
-    
-    if($config['control']['open_session']==0){
-        force_login($con_login_url);//强制登录
+
+    if($open_session==0){
+        force_login();//强制登录
     }
-    
-    $grant_url = $config['identify']['grant_url'];
-    
-    $url = './index.php';
+
     // 已登陆，重定向
-    if($_SESSION['access_token']){
-        header("Location: $url");
+    if(check_session("access_token")){
+        redirect($dir_url);
     }
     
     // 正在登录
@@ -28,8 +19,7 @@
         
         $url2 = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$access_token&method=uinfo";
         
-        $opt = easy_build_http("GET");
-        $basic = easy_file_get_content($url2,$opt);
+        $basic = easy_file_get_content($url2);
         
         if(isset($basic)){
             $_SESSION['access_token'] = $obj->access_token;
@@ -41,7 +31,7 @@
             
         }
         
-        header("Location: $url");
+        redirect($dir_url);
     }
     
     if($_SESSION['access_token']){
@@ -49,13 +39,8 @@
     }else{
         $action = '登录';
     }
-    // 检测系统是否初始化
-    
-    
+
     // 未登陆，给出登录方法
-    $page_url = get_page_url();
-    
-    $enc_page_url = urlencode($page_url);
 ?>
 <!doctype html>
 <html>
@@ -90,9 +75,9 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="./login.php"><?php echo $action;?><i class="fa fa-user-circle-o" aria-hidden="true"></i></a></li>
-            <li><a href="../">返回<?php echo $config['site']['title'];?><i class="fa fa-map" aria-hidden="true"></i></a></li>
-            <li><a href="<?php echo $config['site']['blog'];?>">官博<i class="fa fa-rss"></i></a></li>
-            <li><a href="<?php echo $config['site']['github'];?>">github<i class="fa fa-github" aria-hidden="true"></i></a></li>
+            <li><a href="../">返回<?php echo $title;?><i class="fa fa-map" aria-hidden="true"></i></a></li>
+            <li><a href="<?php echo $blog;?>">官博<i class="fa fa-rss"></i></a></li>
+            <li><a href="<?php echo $github;?>">github<i class="fa fa-github" aria-hidden="true"></i></a></li>
           </ul>
     
         </div><!-- /.navbar-collapse -->

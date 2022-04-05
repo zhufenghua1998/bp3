@@ -1,15 +1,10 @@
 <?php
 // 文件管理
-    session_start();
     require('../functions.php');
-    if(empty($_SESSION['access_token'])){
-        header("Location: ./login.php");
+    if(!check_session("access_token")){
+        redirect("./login.php");
     }
     $access_token = $_SESSION['access_token'];
-    // 获取当前路径
-    $page_url = get_page_url();
-    // 取得网站根目录
-    $base_url = str_replace("/user/file.php","",$page_url);
 ?>
 <!doctype html>
 <html>
@@ -114,8 +109,7 @@
         if(empty($page)){$page=1;}
         $url = "http://pan.baidu.com/rest/2.0/xpan/file?dir=$predir&access_token=$access_token&web=1&recursion=1&page=$page&num=20&method=search&key=$key";
         
-        $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
-        $result = easy_file_get_content($url,$opt);
+        $result = easy_file_get_content($url);
         
         $json = json_decode($result);
         $has_more = $json->has_more;
@@ -163,8 +157,7 @@
         $dir = urlencode($dir);
         $url = "https://pan.baidu.com/rest/2.0/xpan/file?method=list&dir=$dir&order=name&start=0&limit=100&web=web&folder=0&access_token=$access_token&desc=0";
         
-        $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
-        $result = easy_file_get_content($url,$opt);
+        $result = easy_file_get_content($url);
         
         // var_dump($result);
         $json = json_decode($result);

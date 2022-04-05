@@ -1,24 +1,8 @@
 <?php
 // 文件管理
-    session_start();
-    $config = require('../config.php');
     require_once("../functions.php");
-    force_login("/admin/help.php");//强制登录
-    // 获取open地址
-    $base_url = get_base_url("/admin/help.php");
-    $open_url = $base_url."/open.php";
-    // 授权地址
-    $grant = $base_url."/grant/";
-    $grant2 = $base_url."/grant2/";
-    
-    // 获取版本号
-    $version = $config['version']; 
-    
-    // 更新地址
-    $update_url = $config['control']['update_url'];
-    if(empty($update_url)){
-        $update_url = "https://gh.1344694396.workers.dev/https://github.com/zhufenghua1998/bp3/archive/refs/heads/main.zip";
-    }
+    force_login();
+
 ?>
 <!doctype html>
 <html>

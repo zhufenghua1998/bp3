@@ -1,27 +1,11 @@
 <?php
-    session_start();
-    $config = require('../config.php');
     require_once("../functions.php");
     
-    force_login("/admin/index.php");
+    force_login();
 
-    // 拼接授权地址
-    
-    $base_url = get_base_url("/admin/index.php");
-    
-    $conn = urlencode($base_url.'/admin/connect.php');
-    
-    $guant_url = $config['identify']['grant_url'];
-    
-    $conn_url = "$guant_url?display=$conn";
-    
-    $bind_controller = urlencode($base_url."/controller/bind_account.php");
-    
-    $bind_account_url = "$guant_url?display=$bind_controller";
-    
-    $refresh_url = "$base_url/admin/refresh_token.php";
-    
     // 统计授权信息时间
+    $wanging = false;
+    $express_day = 0;
     if(isset($config['identify'])){
         $pass_time = time()-$config['identify']['conn_time'];
         $express_time = $config['identify']['expires_in']-$pass_time;
@@ -86,17 +70,17 @@
                 <h2>连接说明</h2>
             </div>
             <div class="col-xs-6">
-                <h2><a id="link"  href="<?php echo $conn_url;?>">获取授权</a></h2>
+                <h2><a id="link"  href="<?php echo $connect_grant_url;?>">获取授权</a></h2>
             </div>
         </div>
         <div>
         <p>本程序需要连接到百度网盘。</p>
         <p>如果您是首次配置，请点击<b>获取授权</b>（如已授权则覆盖原授权信息），登录百度账号以完成授权（30天有效期）</p>
-        <p>每次访问首页时，程序会自动检测token有效期并智能刷新，如果你的网站没有任何流量，需30天后再次点击授权。</p>
+        <p>访问任何页面，程序都会自动检测token有效期并智能刷新，如果你的网站没有任何流量，需30天后再次点击授权。</p>
     <?php if($wanging){ ?>
         <div class="text-danger">
             <P>警告，我们发现您的系统有些异常，您当前授权信息只有<?php echo $express_day;?>天。</P>
-            <p>如果需要请定时刷新，可定时访问地址：<?php echo $refresh_url;?></p>
+            <p>这说明系统自动刷新access_token出现了异常，您可能还未授权，或使用了第三方授权系统且该系统已无法使用。</p>
         </div>
     <?php } ?>
         <p>一般来说，如果您的站点正常使用，一般不会出现token失效的情况。</p>
@@ -124,29 +108,29 @@
                 <tr>
                   <th scope="row">1</th>
                   <td>百度名称</td>
-                  <td id="basic_baidu_name"><?php echo $config['basic']['baidu_name'];?></td>
+                  <td id="basic_baidu_name"><?php echo $baidu_name;?></td>
                 </tr>
                 <tr>
                   <th scope="row">2</th>
                   <td>网盘昵称</td>
-                  <td id="basic_netdisk_name"><?php echo $config['basic']['netdisk_name'];?></td>
+                  <td id="basic_netdisk_name"><?php echo $netdisk_name;?></td>
                 </tr>
                 <tr>
                   <th scope="row">3</th>
                   <td>百度id</td>
-                  <td id="basic_uk"><?php echo $config['basic']['uk'];?></td>
+                  <td id="basic_uk"><?php echo $uk;?></td>
                 </tr>
                 <tr>
                   <th scope="row">4</th>
                   <td>网盘会员</td>
-                  <td id="basic_vip_type"><?php echo str_vip($config['basic']['vip_type']);?></td>
+                  <td id="basic_vip_type"><?php echo m_str_vip($vip_type);?></td>
                 </tr>
               </tbody>
             </table>
           </div><!-- table-example -->
         <div class="row">
             <div class="col-xs-12">
-                <h2>绑定登录账户 <a class="pointer" onclick="copy_basic()">复制上面</a> <a href="<?php echo $bind_account_url;?>">快速绑定</a></h2>
+                <h2>绑定登录账户 <a class="pointer" onclick="copy_basic()">复制上面</a> <a href="<?php echo $bind_account_grant_url;?>">快速绑定</a></h2>
                 <p>为了系统安全，bp3账户如果连续错误3次将会被锁定，此时只能ftp编辑配置信息恢复</p>
                 <p>推荐您绑定一个百度登录账户，bp3账户被封禁时可使用此账户解锁，也可用于直接登录</p>
             </div>
@@ -164,22 +148,22 @@
                 <tr>
                   <th scope="row">1</th>
                   <td>百度名称</td>
-                  <td><?php echo $config['account']['baidu_name'];?></td>
+                  <td><?php echo $a_baidu_name;?></td>
                 </tr>
                 <tr>
                   <th scope="row">2</th>
                   <td>网盘昵称</td>
-                  <td><?php echo $config['account']['netdisk_name'];?></td>
+                  <td><?php echo $a_netdisk_name;?></td>
                 </tr>
                 <tr>
                   <th scope="row">3</th>
                   <td>百度id</td>
-                  <td><?php echo $config['account']['uk'];?></td>
+                  <td><?php echo $a_uk;?></td>
                 </tr>
                 <tr>
                   <th scope="row">4</th>
                   <td>网盘会员</td>
-                  <td><?php echo str_vip($config['account']['vip_type']);?></td>
+                  <td><?php echo m_str_vip($a_vip_type);?></td>
                 </tr>
               </tbody>
             </table>

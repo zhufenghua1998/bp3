@@ -1,11 +1,9 @@
 <?php
 
     // 重置系统
-    session_start();
-    
     require_once("../functions.php");
     
-    force_login("/controller/reset_sys.php");
+    force_login();
     
     $reset = force_post_param("reset");
     
@@ -18,6 +16,3 @@
           echo '{"errno":0,"msg":"success"}';
         }
     }
-
-    
-?>

@@ -1,31 +1,26 @@
 <?php
 
-    session_start();
-    
-    $config = require("../config.php");
-    
     require_once("../functions.php");
     
-    force_login("/update/up_core.php");
-    
-    
+    force_login();
+
     $lock_file = "up_lock.php";  // 版本更新锁定文件
-    
     
     $zip = new \ZipArchive;
     $zip->open($temp_uri, \ZipArchive::CREATE);
     
     $file_name = $zip->getNameIndex(0);
-    
-    
+
     // 简单判断上传的文件是否合法
     if($file_name != "bp3-main/"){
         // 一般来说，仅包含bp3-main的文件夹的压缩包（名字为 bp3-main/）
+        $zip->close();
         unlink("bp3-main.zip");
         echo "请从github下载bp3代码，现在上传的不是bp3代码";
     }else{
         // 解压到当前目录（将取得一个子文件夹：bp3-main）
         $zip->extractTo(__DIR__);
+        $zip->close();
         
         if(file_exists($lock_file)){
             echo "更新失败，已经存在另一个正在执行的升级任务";
@@ -45,17 +40,17 @@
                     
                      // 从原文件夹 bp3-main/dir 到 ../dir 的所有文件全部覆盖
                     // 使用特定函数，递归复制一个目录下的文件
-                    recurse_copy("bp3-main"."/".$value['name'],"../".$value['name']);
+                    recurse_copy("bp3-main".DIRECTORY_SEPARATOR.$value['name'],"../".$value['name']);
 
                 }else{
                     // 是文件
                     if($value['name']=='conf_base.php'){
                         
-                        if(file_exists("bp3-main/config.php")){
+                        if(file_exists("bp3-main".DIRECTORY_SEPARATOR."config.php")){
                             // 如果导入了新的config，那么conf_base不进行特殊处理
                         }else{
                             // 基础配置文件，单独处理
-                            $base = require("bp3-main/conf_base.php");
+                            $base = require("bp3-main".DIRECTORY_SEPARATOR."conf_base.php");
                              // 新增base中独立项，但不会覆盖config原有项
                             $config = arr2_merge($config,$base);
                             // 手动指定更新版本号
@@ -64,10 +59,10 @@
                             save_config("../config.php");
                         }
                         // 覆盖旧conf_base.php
-                        copy("bp3-main/conf_base.php","../conf_base.php");    
+                        copy("bp3-main".DIRECTORY_SEPARATOR."conf_base.php","../conf_base.php");
                     }else{
                         // 全部覆盖
-                        $src_name = "bp3-main".'/'.$value['name'];
+                        $src_name = "bp3-main".DIRECTORY_SEPARATOR.$value['name'];
                         $dest_name = "../".$value['name'];
                         copy($src_name,$dest_name);
                     }
@@ -75,10 +70,8 @@
             }
             // 删除bp3-main.zip，删除bp3-main文件夹, 删除锁定文件
             unlink("bp3-main.zip");
-            deldir("bp3-main");
+            del_dir("bp3-main");
             unlink($lock_file);
             echo "程序已更新完毕，可能看起来无变化，一般版本号会不同";
         }
     }
-    
-?>

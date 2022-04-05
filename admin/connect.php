@@ -1,31 +1,27 @@
 <?php
-    session_start();
-    $config = require('../config.php');
     require_once("../functions.php");
     
-    force_login("/admin/connect.php");  // 强制登录
+    force_login();  // 强制登录
     
     $identify = force_get_param("param");
-    
+
+    $str_identify = urldecode($identify);
     // 取得identify信息
-    $identify = urldecode($identify);
+
+    $config['identify'] =  json_decode($str_identify,true);
     
-    $arr = json_decode($identify,true);
-    $arr['conn_time'] = time();
-    $config['identify'] = $arr;
-    
-    save_config("../config.php");
+    save_config();
 
     // 获取basic
-    get_m_basic();
+    $basic = m_basic($config['identify']['access_token']);
+    
+    $config['basic'] = $basic;
     
     // 保存config
-    save_config("../config.php");
+    save_config();
 
     //返回首页
-    $dirUrl =get_dir_url(basename(__FILE__));
-    header("Location: $dirUrl");
-?>
-    
+    redirect($dir_url);
+
     
     

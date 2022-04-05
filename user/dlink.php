@@ -1,6 +1,4 @@
 <?php
-    session_start();
-    $config = require('../config.php');
     require_once('../functions.php');
     
     // 1.获取fsid
@@ -10,8 +8,7 @@
     
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
     
-    $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
-    $result = easy_file_get_content($url,$opt);
+    $result = easy_file_get_content($url);
     
     $json = json_decode($result);
     $dlink =  $json->list[0]->dlink;
@@ -20,11 +17,7 @@
     $dlink = $dlink.'&access_token='.$access_token;
     $show_size = height_show_size($file_size);
     $check_ua = $_SERVER['HTTP_USER_AGENT']=="pan.baidu.com"?"text-success":"text-danger";
-    $headerArray = array('User-Agent: pan.baidu.com');
-    $getRealLink = head($dlink, $headerArray); // 禁止重定向
-	$getRealLink = strstr($getRealLink, "Location");
-	$realLink =  substr($getRealLink, 10);
-	$realLink = substr($realLink,0,strpos($realLink,"\n")-1);
+	$realLink = m_redirect_dlink($dlink);
 	$client_link = $realLink."&filename=|".$file_name;
 ?>
 <!doctype html>

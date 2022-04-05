@@ -1,20 +1,10 @@
 <?php
     // 不可直接访问，必须登录
-    session_start();
-    
-    $config = require('../config.php');
     require_once('../functions.php');
     
-    force_login("/admin/upload.php");
-    
-    $log = "";  // 日志
-    $log_file = "./upload_php_log.txt";
+    force_login();
     
     // 预上传
-
-    
-    $access_token = $config['identify']['access_token'];
-    
     $method = $_GET['method'];
     
     $path = $_POST['path'];
@@ -35,7 +25,7 @@
                 ));
         $context = stream_context_create($opts);
         $result = @file_get_contents($url, false, $context);
-        errmsg_file_get_content($opts);
+        err_msg_file_get_content($opts);
         if(isset($result)){
             $json_obj = json_decode($result);
             $json_obj->access_token = $access_token;
@@ -45,42 +35,23 @@
     }else if($method=="upload"){
         
         $fastUrl = $_POST['fastUrl'];
-        
-        
-        $temp_dir = "../temp";
+
+        $temp_dir = get_base_root().DIRECTORY_SEPARATOR."temp";
         if (!file_exists($temp_dir)) {
             mkdir($temp_dir);
-        }        
-        $temp_name = date("Y-m-d H:i:s l");
-        $temp_uri =  $temp_dir."/".$temp_name;
-        move_uploaded_file($_FILES["file"]["tmp_name"],$temp_uri);
+        }
+        $temp_name = $_FILES["file"]["name"];
+        $temp_uri =  $temp_dir.DIRECTORY_SEPARATOR.$temp_name;
+        move_uploaded_file($_FILES["file"]["tmp_name"], $temp_uri);
         
-        $file = file_get_contents($temp_uri);
+        $file = file_get_contents($temp_uri);  // 注意要用 rb 形式读取，file_get_contents会失败
         
         $url = $fastUrl;
-        
-        file_put_contents($log_file,$url);
-        
-        //初始化curl对象
-        $ch = curl_init();
-        //设置URL
-        curl_setopt($ch, CURLOPT_URL, $url);
-        // 设置请求方式为post
-        curl_setopt($ch,CURLOPT_POST,true);
-        // 发送数据
-        $payload = array(
-            'file'=>$file,
-            );
-        curl_setopt($ch,CURLOPT_POSTFIELDS,$payload);
-        curl_setopt($ch, CURLOPT_USERAGENT,"pan.baidu.com");
-        //以流形式返回
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // 取消https验证
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-        
-        //执行curl, 将返回md5
-        echo curl_exec($ch);
+
+        $result =  easy_file_get_content($url,easy_build_opt("POST","file=".$file.""));
+        $a = 1;
+        echo $result;
+//        unlink($temp_uri);
 
     }else if($method=="create"){
         // 创建文件
@@ -93,9 +64,6 @@
                 ));
         $context = stream_context_create($opts);
         $result = @file_get_contents($url, false, $context);
-        errmsg_file_get_content($opts);
+        err_msg_file_get_content($opts);
         echo $result;
     }
-
-    // file_put_contents($log_file,$log);
-?>

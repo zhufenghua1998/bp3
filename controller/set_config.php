@@ -1,10 +1,8 @@
 <?php
 
 // 导入配置文件
-    session_start();
-    $config = require('../config.php');
     require_once("../functions.php");
-    force_login("/controller/set_config.php");//强制登录
+    force_login();//强制登录
 
     // 接收上传的config文件
     $temp_uri = "config_cache.php";

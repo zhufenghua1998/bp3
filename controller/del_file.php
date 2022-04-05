@@ -1,17 +1,16 @@
 <?php
 
     // 删除文件功能
-    session_start();
-    $config = require('../config.php');
     require_once('../functions.php');
+    $config = get_config();
     
-    force_login("/controller/del_file.php");  // 强制登录
+    force_login();  // 强制登录
     
     // 获取path
     $path = force_get_param("path");
     //（不需要urlencode，如果有urlencode会自动解码）
     $path = urldecode($path);
-    
+
     
     // 尝试删除
     $access_token = $config['identify']['access_token'];
@@ -24,7 +23,7 @@
             ));
     $context = stream_context_create($opts);
     echo @file_get_contents($url, false, $context);
-    
-    errmsg_file_get_content($opts);
+
+    err_msg_file_get_content($opts);
     
 ?>

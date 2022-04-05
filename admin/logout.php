@@ -1,8 +1,6 @@
 <?php
     // 注销
-    session_start();
+    require_once("../functions.php");
     // session_destroy();
-    $_SESSION['user'] = null;
-    $url = '../';
-    header("Location: $url");
-?>
+    $_SESSION[$user] = null;
+    redirect($base_url);

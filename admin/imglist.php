@@ -1,10 +1,8 @@
 <?php
     // 图片列表展示
-    session_start();
-    $config = require('../config.php');
     require_once("../functions.php");
     
-    force_login("/admin/imglist.php");
+    force_login();
     
     $path = force_get_param("path");
     
@@ -17,8 +15,7 @@
     
     $url = "http://pan.baidu.com/rest/2.0/xpan/file?parent_path=$encode_path&access_token=$access_token&web=1&recursion=1&method=imagelist&num=$num";
     
-    $opt = easy_build_http("GET",["User-Agent:pan.baidu.com"]);
-    $result = easy_file_get_content($url,$opt);
+    $result = easy_file_get_content($url);
     
     $json = json_decode($result);
     

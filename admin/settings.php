@@ -1,16 +1,8 @@
 <?php
     // 设置页面
-    session_start();
-    $config = require('../config.php');
     require_once("../functions.php");
-    
-    force_login("/admin/settings.php");
-    
-    $base_url = get_base_url("/admin/settings.php");
-    // 授权地址
-    $grant = $base_url."/grant/";
-    $grant2 = $base_url."/grant2/";
-    
+    force_login();
+
 ?>
 <!doctype html>
 <html>
@@ -284,6 +276,25 @@
                   <input id="s24_cus" type="radio" name="s24" value="cus"> 自定义
                 </label>
             </td>
+        </tr>
+        <tr class="active">
+            <th scope="row">25</th>
+            <td>下载限速 <span class="tip fa fa-question-circle-o"  tip="开启后，可限制直接下载速度"></span></td>
+            <td></td>
+            <td>
+                <label class="radio-inline">
+                    <input <?php echo $config['control']['dn_limit']==1?"checked":"" ?> type="radio" name="s25" value="1"> 打开
+                </label>
+                <label class="radio-inline">
+                    <input <?php echo $config['control']['dn_limit']==0?"checked":"" ?> type="radio" name="s25" value="0"> 关闭
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">26</th>
+            <td>限速大小 <span class="tip fa fa-question-circle-o"  tip="手动调节限速大小"></span></td>
+            <td class="br"><?php echo $config['control']['dn_speed'];?></td>
+            <td><input type="number" name="s26" value="<?php echo $config['control']['dn_speed'];?>" class="form-control"/></td>
         </tr>
       </tbody>
     </table>

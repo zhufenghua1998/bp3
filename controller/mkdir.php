@@ -1,11 +1,9 @@
 <?php
 
     // 创建文件夹
-    session_start();
-    $config = require('../config.php');
     require_once('../functions.php');
     
-    force_login("/controller/mkdir.php");
+    force_login();
 
     // 获取name参数
     $name = force_post_param("name");
@@ -35,8 +33,8 @@
             ));
     $context = stream_context_create($opts);
     $result = @file_get_contents($url, false, $context);
-    
-    errmsg_file_get_content($opts);
+
+    err_msg_file_get_content($opts);
     // echo $result;
     $precreate = json_decode($result);
     $uploadid = $precreate->uploadid;
@@ -51,6 +49,6 @@
             ));
     $context1 = stream_context_create($opts1);
     echo @file_get_contents($url1, false, $context1);
-    
-    errmsg_file_get_content($opts1);
+
+    err_msg_file_get_content($opts1);
 ?>

@@ -1,11 +1,8 @@
 <?php
 
-    session_start();
     require_once("../functions.php");
-    
-    $config = require("../config.php");
-    
-    force_login("/controller/copy_basic.php");
+
+    force_login();
     
     $copy = force_post_param("copy");
 
@@ -23,4 +20,3 @@
     }else{
         echo '{"errno":1,"errmsg":"error"}';
     }
-?>

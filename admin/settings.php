@@ -283,18 +283,18 @@
             <td></td>
             <td>
                 <label class="radio-inline">
-                    <input <?php echo $config['control']['dn_limit']==1?"checked":"" ?> type="radio" name="s25" value="1"> 打开
+                    <input <?php //echo $config['control']['dn_limit']==1?"checked":"" ?> type="radio" name="s25" value="1"> 打开
                 </label>
                 <label class="radio-inline">
-                    <input <?php echo $config['control']['dn_limit']==0?"checked":"" ?> type="radio" name="s25" value="0"> 关闭
+                    <input <?php //echo $config['control']['dn_limit']==0?"checked":"" ?> type="radio" name="s25" value="0"> 关闭
                 </label>
             </td>
         </tr>
         <tr>
             <th scope="row">26</th>
             <td>限速大小 <span class="tip fa fa-question-circle-o"  tip="手动调节限速大小"></span></td>
-            <td class="br"><?php echo $config['control']['dn_speed'];?></td>
-            <td><input type="number" name="s26" value="<?php echo $config['control']['dn_speed'];?>" class="form-control"/></td>
+            <td class="br"><?php //echo $config['control']['dn_speed'];?></td>
+            <td><input type="number" name="s26" value="<?php //echo $config['control']['dn_speed'];?>" class="form-control"/></td>
         </tr> -->
       </tbody>
     </table>

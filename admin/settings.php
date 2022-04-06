@@ -277,7 +277,7 @@
                 </label>
             </td>
         </tr>
-        <tr class="active">
+        <!-- <tr class="active">
             <th scope="row">25</th>
             <td>下载限速 <span class="tip fa fa-question-circle-o"  tip="开启后，可限制直接下载速度"></span></td>
             <td></td>
@@ -295,7 +295,7 @@
             <td>限速大小 <span class="tip fa fa-question-circle-o"  tip="手动调节限速大小"></span></td>
             <td class="br"><?php echo $config['control']['dn_speed'];?></td>
             <td><input type="number" name="s26" value="<?php echo $config['control']['dn_speed'];?>" class="form-control"/></td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
   </div>

@@ -22,9 +22,9 @@
     // 引入curl模块
     $check_curl = is_callable("curl_init");
     if($check_curl){
-        // 暂无需curl
+        // 启用curl下载等
     }else{
-        
+        echo "<p>警告：当前环境不存在curl扩展</p>";
     }
 
     // 引入百度业务函数

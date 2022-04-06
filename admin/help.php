@@ -61,7 +61,7 @@
     <p>当前版本号：<?php echo $version;?> 可点击 <button onclick="check_update()" class="btn btn-primary">检测更新</button></p>
     <p><b>提示：</b>请保持更新，或向我们提供新功能需求、建议，有概率采纳。</p>
     <p>值得一提的是：修复一个或几个bug，或许不会发布新版本。</p>
-    <p><b>提示：</b>可以点击<a href="<?php echo $update_url ?>" target="_blank">最新下载地址</a>（设置项24）并下载最新版代码</p>
+    <p><b>提示：</b>可以在设置页面中复制（设置项24）最新下载地址并下载最新版代码</p>
     <div id="latest_tip">
     </div>
 
@@ -119,7 +119,7 @@
     
 resp = request.urlopen('<?php echo $open_url;?>')
 print(resp.read().decode())</code></pre>
-    <p>如果你希望直接取得token用于测试，请<a href="../open.php" target="_blank">点击查看</a>。此外，强制刷新token的地址为<a target="_blank" href="refresh_token.php">admin/refresh_token.php</a></p>
+    <p>如果你希望直接取得token用于测试，请<a href="../open.php" target="_blank">点击查看</a>。</p>
     <h3>其他问题</h3>
     <p>可参阅文档：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者官方文档</a>，或 <a href="https://www.52dixiaowo.com/post-3261.html" target="_blank">bp3简易使用手册</a></p>
     <p>如需帮助，请在github发布 <a href="https://github.com/zhufenghua1998/bp3/issues" target="_blank">issure</a>，或者QQ交流群：1150064636，了解我们最新动态</p>

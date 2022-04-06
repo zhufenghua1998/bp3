@@ -33,11 +33,11 @@
     $config['inner']['secret_key'] = $_POST['s23'];
     $config['control']['update_type'] = $_POST['s24'];
     $config['control']['update_url'] = $_POST['s24u'];
-//    $config['control']['dn_limit'] = $_POST['s25'];
-//    $config['control']['dn_speed'] = $_POST['s26'];
-//    if(!is_numeric($_POST['s26'])){
-//        $check = false;
-//    }
+    // $config['control']['dn_limit'] = $_POST['s25'];
+    // $config['control']['dn_speed'] = $_POST['s26'];
+    // if(!is_numeric($_POST['s26'])){
+    //     $check = false;
+    // }
 
     if($check){
         save_config("../config.php");

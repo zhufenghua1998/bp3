@@ -22,7 +22,7 @@
     // 引入curl模块
     $check_curl = is_callable("curl_init");
     if($check_curl){
-        // curl工具类暂未封装
+        // 启用curl下载等
     }else{
         echo "<p>警告：当前环境不存在curl扩展</p>";
     }

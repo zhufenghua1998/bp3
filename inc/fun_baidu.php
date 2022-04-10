@@ -209,13 +209,14 @@
      */
     function m_decode(string $str,bool $to_arr=true){
         $arr = json_decode($str,true);
-        if($arr['errno']=="0"){
+        if(empty($arr['errno'])){
             if($to_arr){
                 return $arr;
             }else{
                 return json_encode($str);
             }
-        }else{
+        }
+        else{
             $msg = array(
                 "2"=>"参数错误",
                 "-6"=>"身份验证失败",

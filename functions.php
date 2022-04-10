@@ -24,8 +24,14 @@
     if($check_curl){
         // curl工具类暂未封装
     }else{
-        echo "<p>警告：当前环境不存在curl扩展</p>";
+        easy_echo("警告：当前环境不存在curl扩展");
     }
+
+    // 检测网站目录是否可写
+    if(!is_writeable(get_base_root())){
+        easy_echo("警告：当前程序根目录无写入权限");
+    }
+
 
     // 引入百度业务函数
     require_once("inc/fun_baidu.php");
@@ -35,7 +41,7 @@
     if($check_zip){
         require_once("inc/zip.class.php");
     }else{
-        echo "<p>警告：当前环境不存在zip扩展</p>";
+        easy_echo("警告：当前环境不存在zip扩展");
     }
 
     /* -------------------- 2.程序需要定义一些全局变量为基本配置 ---------------------- */
@@ -93,6 +99,9 @@
 
     //当前时间
     $time = time();
+
+    //年
+    $year = date("Y");
 
     //服务器IP
     $server_ip = get_server_ip();

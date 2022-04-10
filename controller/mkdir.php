@@ -20,9 +20,6 @@
 
     $uri = $path.$name;
 
-    // 获取access_token
-    $access_token = $config['identify']['access_token'];
-    
     // 预上传
     $url = "http://pan.baidu.com/rest/2.0/xpan/file?method=precreate&access_token=$access_token";
     $opts = array(

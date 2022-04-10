@@ -20,4 +20,4 @@
     
     save_config();
     
-    js_location("../admin/index.php");
+    redirect($admin_url);

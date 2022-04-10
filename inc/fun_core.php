@@ -109,8 +109,7 @@
         if(isset($param)){
             return $param;
         }else{
-            echo '{"error":"miss the get type param, param_name is： '.$param_name.'"}';
-            die;
+            build_err("缺少get参数：".$param_name);
         }
     }
 
@@ -125,8 +124,7 @@
         if(isset($param)){
             return $param;
         }else{
-            echo '{"error":"miss the post type param, param_name is： '.$param_name.'"}';
-            die;
+            build_err("缺少post参数：".$param_name);
         }
     }
 
@@ -164,7 +162,7 @@
      */
     function force_login(string $user='user',string $login_url=""){
         if(!isset($_SESSION[$user])){
-            echo '{"error":"user not login", "zh-CN":"您必须登录系统，才可访问本页面！3秒后自动返回登录页面"}';
+            build_err("您必须登录系统，才可访问本页面！3秒后自动返回登录页面");
             // 重定向
             if(empty($login_url)){
                 global $login_url;
@@ -481,4 +479,98 @@
             }
         }
         return ($ip ? $ip : $_SERVER['REMOTE_ADDR']);
+    }
+
+    /** 31
+     * 构建并输出错误消息（应存在错误项errno，通常为-1）
+     * @param array|string|null $msg
+     * @param bool $die 是否停止解析，默认true
+     */
+    function build_err($msg=null,bool $die=true){
+        // 数组处理
+        if(is_array($msg)){
+            if(!isset($msg['errno'])){
+                $msg['errno'] = -1;
+            }
+            if(!isset($msg['errmsg'])){
+                $msg['errmsg'] = "fail";
+            }
+            echo json_encode($msg,JSON_UNESCAPED_UNICODE);
+        }
+        // 字符串处理
+        elseif(is_string($msg)){
+            echo json_encode(array("errno"=>-1,"errmsg"=>$msg),JSON_UNESCAPED_UNICODE);
+        }
+        // 默认值
+        elseif(empty($msg)){
+            echo json_encode(array("errno"=>-1,"errmsg"=>"fail"),JSON_UNESCAPED_UNICODE);
+        }
+        if($die){
+            die;
+        }
+    }
+
+    /** 32
+     * 获取一个session域的数据
+     * @param string $param
+     * @return mixed
+     */
+    function force_session_param(string $param){
+        if(isset($_SESSION[$param])){
+            return $_SESSION[$param];
+        }else{
+            build_err("缺少session参数：".$param);
+        }
+    }
+
+    /** 32
+     * 打印可换行的消息
+     * @param $msg
+     */
+    function easy_echo($msg){
+        echo "<p>";
+        echo $msg;
+        echo "</p>";
+    }
+
+    /** 33
+     * 去掉字符串前缀
+     * @param string $str
+     * @param string $pre
+     * @return false|string
+     */
+    function str_cut_start(string $str,string $pre){
+        return substr($str,strlen($pre));
+    }
+
+    /** 34
+     * 创建一个请求正确响应消息
+     * @param array|string|null $msg
+     */
+    function build_success($msg=null){
+        $msg_arr = array();
+        if(empty($msg)){
+            $msg_arr = ["errno"=>0,"errmsg"=>"success"];
+        }
+        elseif(is_string($msg)){
+            $msg_arr = ["errno"=>0,"errmsg"=>$msg];
+        }
+        elseif(is_array($msg)){
+            if(!isset($msg['errno'])){
+                $msg['errno'] = 0;
+            }
+            if(!isset($msg['errmsg'])){
+                $msg['errmsg'] = "success";
+            }
+            $msg_arr = $msg;
+        }
+        echo json_encode($msg_arr,JSON_UNESCAPED_UNICODE);
+    }
+
+    /** 35
+     * 获取一个文件的真实地址，这里不使用realpath，这里以程序根目录开始计算的绝对路径
+     * @param string $path
+     */
+    function get_file_root(string $path){
+        echo get_base_root().$path;
     }

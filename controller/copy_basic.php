@@ -14,9 +14,9 @@
         
         $config['account'] = $account;
         
-        save_config("../config.php");
+        save_config();
         
-        echo '{"errno":0,"errmsg":"success"}';
+        build_success();
     }else{
-        echo '{"errno":1,"errmsg":"error"}';
+        build_err("参数错误");
     }

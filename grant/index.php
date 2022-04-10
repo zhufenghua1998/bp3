@@ -17,18 +17,16 @@
         $_SESSION['display'] = "display";
     }
     
-    
-    // 1. 获取基础信息
-    $title = $config['site']['title'];
-    $app_id = $config['connect']['app_id'];
-    $redrect_uri = $config['connect']['redirect_uri'];
-    
     // 2. 拼接授权信息
     $state = rand(10,100);
     $_SESSION['state'] = $state;
+
+    if(empty($app_key)){
+        build_err("授权系统未初始化");
+    }
     
     // 2.1自动检测链接
-    $conn = "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_id&redirect_uri=$redrect_uri&scope=basic,netdisk&display=popup&state=$state&confirm_login=1&login_type=sms";
+    $conn = "https://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=$app_key&redirect_uri=$redirect_uri&scope=basic,netdisk&display=popup&state=$state&confirm_login=1&login_type=sms";
     // 2.2强制登录链接
     $force_conn = $conn.'&force_login=1';
     // 3. 点击下面的链接以获取token
@@ -37,7 +35,7 @@
 <html>
     <head>
     <meta charset="utf-8">
-    <title><?php echo '免app授权系统'.' | '.$config['site']['title'];?></title>
+    <title><?php echo '免app授权系统'.' | '.$title;?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <script src="../js/jquery.min.js"></script>
@@ -76,7 +74,7 @@
         </div>
         <footer class="copyright">
                 <div class="navbar navbar-default navbar-inverse">
-                <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © <?php echo $config['site']['title'];?> <?php echo date('Y')?></p>
+                <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © <?php echo $title?> <?php echo $year?></p>
                 </div>
         </footer>
         <style>

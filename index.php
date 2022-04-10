@@ -16,7 +16,6 @@
     $page = empty($_GET['page'])? 1 : $_GET['page'];
     // data数据，优先查询，然后是dir
     $data = null;
-
     if(isset($key)){
         $data = m_file_search($pre_dir,$page,$key,$access_token);
     }else{

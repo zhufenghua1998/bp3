@@ -3,10 +3,11 @@
     
     
     // 1.获取state
-    $state = $_SESSION['state'];
-    if($state!=$_GET['state']){
-        echo '{"error":"invalid state"}';
-        die;
+    $state = force_get_param("state");
+    $s_state = force_session_param("state");
+    // 校验state，防止csrf攻击
+    if($state!=$s_state){
+        build_err("state无效");
     }
     // 2.获取基础连接信息
     

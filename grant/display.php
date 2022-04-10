@@ -1,22 +1,19 @@
 <?php
+    // 本页面仅用于展示获取到的信息，包含token，refresh_token等
     require_once("../functions.php");
 
-    $result = $_SESSION['result'];
+    $result = $_SESSION['grant_result'];
     
     if(empty($result)){
-        echo '{"error":"not result value"}';
-        die;
+
+        build_err("授权结果不存在");
     }
-    
-    // 本页面仅用于展示获取到的信息，包含token，refresh_token等
-    $json = json_decode($result);
-    
 ?>
 <!doctype html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title><?php echo '授权结果'.' | '.$config['site']['title'];?></title>
+        <title><?php echo '授权结果'.' | '.$title;?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <script src="../js/jquery.min.js"></script>
@@ -48,53 +45,53 @@
                 <tr>
                     <td>expires_in</td>
                     <td>有效期</td>
-                    <td><?php echo $json->expires_in;?></td>
+                    <td><?php echo $result['expires_in'];?></td>
                 </tr>
                 <tr>
                     <td>refresh_token</td>
                     <td>刷新token</td>
-                    <td><?php echo $json->refresh_token;?></td>
+                    <td><?php echo $result['refresh_token'];?></td>
                 </tr>
                 <tr>
                     <td>access_token</td>
                     <td>访问令牌</td>
-                    <td><?php echo $json->access_token;?></td>
+                    <td><?php echo $result['access_token'];?></td>
                 </tr>
                 <tr>
                     <td>session_secret</td>
                     <td>session_secret</td>
-                    <td><?php echo $json->session_secret;?></td>
+                    <td><?php echo $result['session_secret'];?></td>
                 </tr>
                 <tr>
                     <td>session_key</td>
                     <td>session_key</td>
-                    <td><?php echo $json->session_key;?></td>
+                    <td><?php echo $result['session_key'];?></td>
                 </tr>
                 <tr>
                     <td>scope</td>
                     <td>scope</td>
-                    <td><?php echo $json->scope;?></td>
+                    <td><?php echo $result['scope'];?></td>
                 </tr>
                 <tr>
                     <td>授权地址(非原生)</td>
                     <td>grant_url</td>
-                    <td><?php echo $json->grant_url;?></td>
+                    <td><?php echo $result['grant_url'];?></td>
                 </tr>
                 <tr>
                     <td>刷新地址(非原生)</td>
                     <td>refresh_url</td>
-                    <td><?php echo $json->refresh_url;?></td>
+                    <td><?php echo $result['refresh_url'];?></td>
                 </tr>
             </table>
             <h2>授权信息 <button id="copy" class="btn btn-lg btn-primary">复制</button></h2>
             <div>
-                <pre><code id="code"><?php echo $result;?></code></pre>
+                <pre><code id="code"><?php echo json_encode($result);?></code></pre>
             </div>
             <h2><a href="./">返回授权页面</a></h2>
         </div>
         <footer class="copyright">
                 <div class="navbar navbar-default navbar-inverse">
-                <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © <?php echo $config['site']['title'];?> <?php echo date('Y')?></p>
+                <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © <?php echo $title;?> <?php echo date('Y')?></p>
                 </div>
         </footer>
         <style>

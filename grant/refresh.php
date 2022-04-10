@@ -8,10 +8,17 @@
     // 1.获取参数
     $refresh_token = force_get_param('refresh_token');
 
-    $app_id = $config['connect']['app_id'];
-    $secret = $config['connect']['secret_key'];
+    if(!$app_key){
+        $msg = array(
+            'errno' => -1,
+            'errmsg' => "此授权系统还未初始化"
+        );
+        build_err($msg);
+    }
+
     // 获取刷新后的信息
-    $identify = m_refresh($refresh_token,$app_id,$secret,$grant,$grant_refresh);
+    $identify = m_refresh($refresh_token,$app_key,$secret_key,$grant,$grant_refresh);
+
     // 输出
     echo $identify;
 

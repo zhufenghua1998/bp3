@@ -427,7 +427,7 @@
     
     $("#main_form").submit(function(){
         
-        $.post("../controller/save_settings.php",$(this).serialize(),function(data){
+        $.post("../controller/helpapi.php?method=savesettings",$(this).serialize(),function(data){
             if(data.errno==0){
                 alert("保存成功");
                 location.reload();

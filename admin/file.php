@@ -87,11 +87,22 @@
                 <div class="col-xs-12" style="margin-bottom:10px">
                     <div class="btn-group">
                         <input id="upload" type="file" class="hidden"/>
-                        <button class="btn btn-default" onclick="$('#upload').trigger('click');">上传文件</button>
-                        <button class="btn btn-default" onclick="mkdir()">新建文件夹</button>
+                        <button class="btn btn-default btn-sm" onclick="$('#upload').trigger('click');">上传文件</button>
+                        <button class="btn btn-default btn-sm" onclick="mkdir()">新建文件夹</button>
                     </div>
                     <div class="btn-group pull-right">
-                        <a href="?dir=<?php echo urlencode($config['control']['pre_dir']);?>" class="btn btn-default pull-right">前台目录</a>
+                        <a href="?dir=<?php echo urlencode($config['control']['pre_dir']);?>" class="btn btn-default  btn-sm">前台目录</a>
+                        <div class="btn-group-vertical">
+                            <div class="btn-group small" role="group">
+                                <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="false">批量管理<span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a type="button" id="rename" class="btn btn-default btn-sm" target="_blank" >重命名</a></li>
+                                    <li><a type="button" class="btn btn-default btn-sm" target="_blank" >移动</a></li>
+                                    <li><a type="button" class="btn btn-default btn-sm" target="_blank" >复制</a></li>
+                                    <li><a type="button" id="delete" class="btn btn-default btn-sm" target="_blank" >删除</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <?php }else{ ?>
@@ -99,7 +110,18 @@
                     <div class="btn-group">
                     </div>
                     <div class="btn-group pull-right">
-                        <a href="?dir=<?php echo urlencode($config['control']['pre_dir']);?>" class="btn btn-default pull-right">前台目录</a>
+                        <a href="?dir=<?php echo urlencode($config['control']['pre_dir']);?>" class="btn btn-default  btn-sm">前台目录</a>
+                        <div class="btn-group-vertical">
+                            <div class="btn-group small" role="group">
+                                <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="false">批量管理<span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a type="button" id="rename" class="btn btn-default btn-sm" target="_blank" >重命名</a></li>
+                                    <li><a type="button" class="btn btn-default btn-sm" target="_blank" >移动</a></li>
+                                    <li><a type="button" class="btn btn-default btn-sm" target="_blank" >复制</a></li>
+                                    <li><a type="button" id="delete" class="btn btn-default btn-sm" target="_blank" >删除</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <?php } ?> 
@@ -151,7 +173,7 @@
         if(!$data['list']){
             echo("这儿似乎什么也没有...");
         }else{
-            echo "<thead class='active'><tr><th></th><th>文件<i class='glyphicon glyphicon-chevron-down'></i></th><th>大小<i class='glyphicon glyphicon-chevron-down'></i></th><th>下载<i class='glyphicon glyphicon-chevron-down'></i></th></tr></thead><tbody>";
+            echo "<thead class='active'><tr><th><input id='checkall' type='checkbox'></th><th>文件<i class='glyphicon glyphicon-chevron-down'></i></th><th>大小<i class='glyphicon glyphicon-chevron-down'></i></th><th>下载<i class='glyphicon glyphicon-chevron-down'></i></th></tr></thead><tbody>";
 
             foreach ($data['list'] as $row){
                 if($row['isdir']==1){
@@ -159,10 +181,12 @@
                     $path = substr($row['path'],strlen($pre_dir));
                     $encode_path = urlencode($path);
                     $title = $row['path'];
+                    $checkbox = "<input type='checkbox' name='item' data-path='$path'/>";
+                    $rename = "<button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button>";
                     $delete = "<button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>";
-                    if($path=="/apps"){$delete="";}
-                    $tree = "<td class='br'><div class='m-btns btn-group'><a class='btn btn-default' onclick='checkTree(\"/admin/tree.php?base_dir=$encode_path\")'>资源树</a><a class='btn btn-default' target='_blank' href='$base_url/admin/imglist.php?path=$encode_path'>相册</a><button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button>$delete</div></td>";
-                    echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info br' colspan='2' ><a href='?dir=$encode_path' style='display:block'>$path</a></td>$tree</tr>";
+                    if($path=="/apps"){$checkbox="";$rename="";$delete="";}
+                    $tree = "<td class='br'><div class='m-btns btn-group'><a class='btn btn-default' onclick='checkTree(\"/admin/tree.php?base_dir=$encode_path\")'>资源树</a><a class='btn btn-default' target='_blank' href='$base_url/admin/imglist.php?path=$encode_path'>相册</a>$rename $delete</div></td>";
+                    echo "<tr><th scope='row'>$checkbox</th><td class='info br' colspan='2' ><a href='?dir=$encode_path' style='display:block'><i class='glyphicon glyphicon-folder-open'></i> &nbsp;$path</a></td>$tree</tr>";
                 }else{
                     // 取得文件id
                     $fsid = $row['fs_id'];
@@ -182,7 +206,8 @@
                     }
                     // 文件名
                     $server_filename = $row['server_filename'];
-                    echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$server_filename <span tip='$title' class='tip fa fa-question-circle-o'></span></td><td>$show_size</td>
+                    $_path = $row['path'];
+                    echo "<tr><th scope='row'><input type='checkbox' name='item' data-path='$_path'></th><td class='br'><i class='glyphicon glyphicon-file'></i> $server_filename <span tip='$title' class='tip fa fa-question-circle-o'></span></td><td>$show_size</td>
                           <td>
                               <div class='m-btns btn-group' role='group' aria-label='...'>
                               <a href='$dn_url?fsid=$fsid' type='button' class='btn btn-default'>下&nbsp;&nbsp;&nbsp;载</a>
@@ -199,17 +224,19 @@
         if(!$data['list']){
             echo("这儿似乎什么也没有...");
         }else{
-            echo "<thead><tr class='active'><th></th><th>文件<i class='glyphicon glyphicon-chevron-down'></i></th><th>大小<i class='glyphicon glyphicon-chevron-down'></i></th><th>下载<i class='glyphicon glyphicon-chevron-down'></i></th></tr></thead><tbody>";
+            echo "<thead><tr class='active'><th><input id='checkall' type='checkbox'></th><th>文件<i class='glyphicon glyphicon-chevron-down'></i></th><th>大小<i class='glyphicon glyphicon-chevron-down'></i></th><th>下载<i class='glyphicon glyphicon-chevron-down'></i></th></tr></thead><tbody>";
             foreach ($data['list'] as $row){
                 if($row['isdir']==1){
                     // 去掉前缀
                     $path = substr($row['path'],strlen($predir));
                     $encode_path = urlencode($path);
                     $server_filename = $row['server_filename'];
+                    $checkbox = "<input type='checkbox' name='item' data-path='$path'>";
+                    $rename = "<button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button>";
                     $delete = "<button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>";
-                    if($path=="/apps"){$delete="";}
-                    $tree = "<td class='br'><div class='m-btns btn-group'><a class='btn btn-default' onclick='checkTree(\"/admin/tree.php?base_dir=$encode_path\")'>资源树</a><a class='btn btn-default' target='_blank' href='$base_url/admin/imglist.php?path=$encode_path'>相册</a><button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button>$delete</div></td>";
-                    echo "<tr><th scope='row'><i class='glyphicon glyphicon-folder-open'></i></th><td class='info' colspan='2' ><a href='?dir=$encode_path' style='display:block'>$server_filename</a></td>$tree</tr>";
+                    if($path=="/apps"){$checkbox="";$rename="";$delete="";}
+                    $tree = "<td class='br'><div class='m-btns btn-group'><a class='btn btn-default' onclick='checkTree(\"/admin/tree.php?base_dir=$encode_path\")'>资源树</a><a class='btn btn-default' target='_blank' href='$base_url/admin/imglist.php?path=$encode_path'>相册</a>$rename $delete</div></td>";
+                    echo "<tr><th scope='row'>$checkbox</th><td class='info' colspan='2' ><a href='?dir=$encode_path' style='display:block'><i class='glyphicon glyphicon-folder-open'></i> &nbsp;$server_filename</a></td>$tree</tr>";
                 }else{
                     $fsid = $row['fs_id'];
                     $show_size = height_show_size($row['size']);
@@ -225,7 +252,8 @@
                             <button type='button' class='btn btn-default cp' data-clipboard-text='$dn_url?fsid=$fsid'>复制</button>";
                     }
                     $server_filename = $row['server_filename'];
-                    echo "<tr><th scope='row'><i class='glyphicon glyphicon-file'></i></th><td class='br'>$server_filename</td><td>$show_size</td>
+                    $_path = $row['path'];
+                    echo "<tr><th scope='row'><input type='checkbox' name='item' data-path='$_path'></th><td class='br'><i class='glyphicon glyphicon-file'></i> $server_filename</td><td>$show_size</td>
                           <td>
                               <div class='m-btns btn-group' role='group' aria-label='...'>
                               <a type='button' class='btn btn-default' href='$dn_url?fsid=$fsid'>下&nbsp;&nbsp;&nbsp;载</a>
@@ -352,7 +380,8 @@
         let check = confirm("短期内可在百度网盘app回收站找回，请确认删除：");
         if(check){
             let path = $(e.target).attr("path");
-            $.get("../controller/del_file.php",{"path":path},function(data){
+            var filelist = JSON.stringify([{"path":path}]);
+            $.post("../controller/filemanager.php?method=delete",{"filelist":filelist},function(data){
                 if(data.errno===0){
                     message("删除成功","success");
                     setTimeout("location.reload()",200);
@@ -362,13 +391,13 @@
             },"json")
         }
     }
-    // 文件重命名
+    // 单个文件重命名
     function rename(e){
         let name = prompt("请输入文件新名称");
         if(!name){
             message("未输入名称","error");
             return;
-        }
+    }
         name = name.trim();  // 前后不可有空格
         if(name==""){
             message("未输入名称","error");
@@ -378,9 +407,9 @@
             message("名称不可大于255字符","error");
             return;
         }
-        
         let path = $(e.target).attr("path");
-        $.get("../controller/rename.php",{"path":path,"name":name},function(data){
+        var filelist = JSON.stringify([{"path":path,"newname":name}]);
+        $.post("../controller/filemanager.php?method=rename",{"filelist":filelist},function(data){
             if(data.errno===0){
                 message("重命名成功","success");
                 setTimeout("location.reload()",200);
@@ -433,9 +462,80 @@
             }
         },"json");
     }
+    // 全选
+    $("#checkall").click(function(){
+        $(":checkbox[name=item]").prop("checked",this.checked);
+    });
+    // 批量重命名
+    $("#rename").click(function () {
+        let paths = $(":checkbox[name=item]:checked");
+        if(paths.length <= 0){
+            message("未选择文件","error");
+            return;
+        }
+        let newname = prompt("请输入文件新名称，注：重命名成功不可撤销！");
+        if(!newname){
+            message("未输入名称","error");
+            return;
+        }
+        newname = newname.trim();  // 前后不可有空格
+        if(newname==""){
+            message("未输入名称","error");
+            return;
+        }
+        if(newname.length>255){
+            message("名称不可大于255字符","error");
+            return;
+        }
+        let filelist = [];
+        for(let i=0; i< paths.length; i++){
+            let path_i = $(paths[i]).data("path");
+            let filelist_i = {"path":path_i,"newname":newname};
+            filelist[i] = filelist_i;
+        }
+        let str_filelist = JSON.stringify(filelist);
+        $.post("../controller/filemanager.php?method=rename",{"filelist":str_filelist},function(data){
+            if(data.errno===0){
+                message("批量重命名成功","success");
+                setTimeout("location.reload()",200);
+            }else{
+                message("批量重命名失败","error");
+            }
+        },"json")
+    });
+    // 批量删除
+    $("#delete").click(function () {
+        let paths = $(":checkbox[name=item]:checked");
+        if(paths.length <= 0){
+            message("未选择文件","error");
+            return;
+        }
+        let check = confirm("确定要批量删除吗？");
+        if(!check){
+            message("批量删除取消","info");
+            return;
+        }
+        let filelist = [];
+        for(let i=0; i< paths.length; i++){
+            let path_i = $(paths[i]).data("path");
+            filelist[i] = path_i;
+        }
+        let str_filelist = JSON.stringify(filelist);
+        $.post("../controller/filemanager.php?method=delete",{"filelist":str_filelist},function(data){
+            if(data.errno===0){
+                message("批量删除成功","success");
+                setTimeout("location.reload()",200);
+            }else{
+                message("批量删除失败","error");
+            }
+        },"json")
+    });
     $(function(){
-    	let image = document.getElementById('upload');
-    	image.onchange = function(){
+    	let uploadfile = document.getElementById('upload');
+    	if(!uploadfile){
+    	    return;
+        }
+        uploadfile.onchange = function(){
     	    
     	    alert("正在做了...请尝试其他功能");
     	    this.value = "";

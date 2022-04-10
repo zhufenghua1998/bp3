@@ -18,9 +18,8 @@
     // 再次校验是否已经配置百度登录
     
     if(empty($config) || empty($config['identify'] || empty($config['account']) || empty($config['account']['uk']))){
-        
-        echo '{"msg":"your identify is invalid","msg_CN":"管理员未配置百度登录，本次为非法请求"}';
-        die;
+
+        build_err("管理员未配置百度登录，本次为非法请求");
     }
     
     // 比较用户id

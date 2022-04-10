@@ -11,14 +11,9 @@
      * @return false|string 请求结果字符串
      */
     function easy_file_get_content(string $url,array $opt=null){
-        $result = null;
-        if($opt){
-            $result = @file_get_contents($url,false,stream_context_create($opt));
-            err_msg_file_get_content($opt,$http_response_header);
-        }else{
-            $result = @file_get_contents($url,false,stream_context_create(easy_build_opt()));
-            err_msg_file_get_content(null,$http_response_header);
-        }
+        $opt = empty($opt)? easy_build_opt() : $opt;
+        $result = file_get_contents($url,false,stream_context_create($opt));
+        err_msg_file_get_content($opt,$http_response_header);
         return $result;
     }
 
@@ -39,34 +34,26 @@
         }
         // 校验程序是否传递了http返回变量
         if(!is_array($http_response_header)){
-            echo '{"msg":"please give http response info!"}';
-            die;
+            build_err("不存在响应头信息");
         }
         if(empty($user)){
             global $user;
         }
         // 校验程序是否传递了user变量
-        if(!isset($user)){
-            echo '{"msg":"please give user info!"}';
-            die;
-        }
-        if(empty($_SESSION[$user])){
+        if(!check_session($user)){
             // 请求失败且未登录
             if(!check_http_code($http_response_header[0])){
-                echo '{"msg":"http request error!"}';
-                die;
+                build_err("http请求失败");
             }
         }else if(!check_http_code($http_response_header[0])){
             // 请求失败，但已登录
-            echo '{"msg":"http request error!"}';
+            build_err("http请求失败",false);
             easy_dump(error_get_last());
             if($opts){
-                echo '{"msg":"The following is the HTTP request header information!"}';
-                echo '<br>';
+                easy_echo("以下为请求头信息：");
                 easy_dump($opts);
             }
-            echo '{"msg":"The following is the HTTP response header information!"}';
-            echo '<br>';
+            easy_echo("以下为响应头信息：");
             easy_dump($http_response_header);
             die;
         }
@@ -145,12 +132,8 @@
      * @return false|resource
      */
     function easy_fopen(string $filename,string $mode,array $opt=null){
-        $result = null;
-        if($opt){
-            $result = @fopen($filename,$mode,false,stream_context_create($opt));
-        }else{
-            $result = @fopen($filename,$mode,false,stream_context_create(easy_build_opt()));
-        }
-        return $result;
+        $opt = empty($opt)? easy_build_opt() : $opt;
+
+        return @fopen($filename,$mode,false,stream_context_create($opt));
     }
 

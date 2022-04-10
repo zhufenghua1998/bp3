@@ -1,5 +1,7 @@
 <?php
-// 文件管理
+/**
+ * 普通用户帮助文档
+ */
     require_once("../functions.php");
     force_login();
 
@@ -78,8 +80,8 @@
           <p id="time"></p>
         </div>
       </div>
-    <p>如果需要下载站点中所有内容，可 <a class="btn btn-primary" style="text-indent:0px"  href="../controller/backup.php">导出压缩包</a></p>
-    <p><b>导出格式：</b>导出的压缩包中，压缩包文件没有多余的子目录。</p>
+    <p>如果需要下载站点中所有内容，可 <a class="btn btn-primary" style="text-indent:0px"  href="../controller/helpapi.php?method=backup">导出压缩包</a></p>
+    <p><b>导出格式：</b>导出的压缩包中，仍包含一个子目录bp3-main，所有文件在该目录下。</p>
     <p>如果只是想导出配置文件，当然也是可以的，你可以选择<input id="upload_config" type="file" class="hidden"/><button class="btn btn-primary" onclick="$('#upload_config').trigger('click');">导入配置文件</button> 或 <button class="btn btn-primary" onclick="get_config()">导出配置文件</button></p>
     <h3>如何配置前台开放目录？</h3>
     <p>在设置中，写上要省略的前置目录，例如：</p>
@@ -353,7 +355,7 @@ print(resp.read().decode())</code></pre>
     function reset_sys(){
         let check = confirm("确定要重置系统吗？");
         if(check){
-            $.post("../controller/reset_sys.php",{"reset":1},function(data){
+            $.post("../controller/helpapi.php?method=resetsys",function(data){
                 if(data.errno==0){
                     alert("重置成功，即将重新配置！");
                     location.href = "..";
@@ -368,7 +370,7 @@ print(resp.read().decode())</code></pre>
      * 导出config文件
     */
     function get_config(){
-        location.href = "../controller/get_config.php";
+        location.href = "../controller/helpapi.php?method=getconfig";
     }
     
     /**
@@ -421,7 +423,7 @@ print(resp.read().decode())</code></pre>
                 }
             }
         }
-        xhr.open('post', '../controller/set_config.php', true);
+        xhr.open('post', '../controller/helpapi.php?method=setconfig', true);
         xhr.send(formData);
 	})
 	
@@ -429,7 +431,7 @@ print(resp.read().decode())</code></pre>
 	function reset_basic(){
         let check = confirm("确定要还原默认设置吗？（很安全）");
         if(check){
-            $.post("../controller/reset_basic.php",{"reset":1},function(data){
+            $.post("../controller/helpapi.php?method=resetbasic",function(data){
                 if(data.errno==0){
                     alert("还原成功，请重新查看设置！");
                 }

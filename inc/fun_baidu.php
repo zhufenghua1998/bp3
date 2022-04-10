@@ -40,7 +40,7 @@
 
         $result = easy_file_get_content($url);
 
-        return json_decode($result,true);
+        return m_decode($result);
     }
 
 
@@ -59,7 +59,7 @@
 
         $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=authorization_code&code=$code&client_id=$appKey&client_secret=$secret&redirect_uri=$redirect&state=$state";
         $result = easy_file_get_content($url);
-        $identify = json_decode($result,true);
+        $identify = m_decode($result);
         global $time;
         $identify['conn_time'] = $time; // 添加时间
         $identify['grant_url'] = $grant_url; //授权地址
@@ -78,7 +78,7 @@
         $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
         $result =  easy_file_get_content($url);
 
-        return json_decode($result,true);
+        return m_decode($result);
     }
 
     /** 5
@@ -112,7 +112,7 @@
     function m_refresh(string $refresh_token,string $app_key,string $secret,string $grant_url,string $refresh_url){
         $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=refresh_token&refresh_token=$refresh_token&client_id=$app_key&client_secret=$secret";
         $result =  easy_file_get_content($url);
-        $identify = json_decode($result,true);
+        $identify = m_decode($result);
         global $time;
         $identify['conn_time'] = $time; // 添加时间
         $identify['grant_url'] = $grant_url; //授权地址
@@ -161,7 +161,7 @@
                     $url = $refresh_url."?refresh_token=$refresh_token";
                     $param = easy_file_get_content($url);
                 }
-                $identify = json_decode($param,true);
+                $identify = m_decode($param);
                 $config['identify'] = $identify; // 更新身份信息
                 save_config();  // 保存
             }
@@ -169,7 +169,6 @@
         }else{
             return "";
         }
-
     }
 
     /** 8
@@ -186,7 +185,7 @@
         }
         $url = "http://pan.baidu.com/rest/2.0/xpan/file?dir=$pre_dir&access_token=$access_token&web=1&recursion=1&page=$page&num=20&method=search&key=$key";
         $result = easy_file_get_content($url);
-        return json_decode($result,true);
+        return m_decode($result);
     }
 
     /** 9 列出文件
@@ -199,7 +198,44 @@
         $url = "https://pan.baidu.com/rest/2.0/xpan/file?method=list&dir=$enc_dir&order=name&start=0&limit=10000&web=web&folder=0&access_token=$access_token&desc=0";
 
         $result = easy_file_get_content($url);
-        return json_decode($result,true);
+        return m_decode($result);
+    }
+
+    /** 10
+     * 辅助函数，检测并解析响应数据，所有业务请求均应使用此函数
+     * @param string $str
+     * @param bool $to_arr
+     * @return false|string
+     */
+    function m_decode(string $str,bool $to_arr=true){
+        $arr = json_decode($str,true);
+        if($arr['errno']=="0"){
+            if($to_arr){
+                return $arr;
+            }else{
+                return json_encode($str);
+            }
+        }else{
+            $msg = array(
+                "2"=>"参数错误",
+                "-6"=>"身份验证失败",
+                "31034"=>"命中接口频控",
+                "42000"=>"访问过于频繁",
+                "42001"=>"rand校验失败",
+                "42999"=>"功能下线",
+                "9100"=>"一级封禁",
+                "9200"=>"二级封禁",
+                "9300"=>"三级封禁",
+                "9400"=>"四级封禁",
+                "9500"=>"五级封禁"
+            );
+            foreach ($msg as $k=>$v){
+                if($arr['errno']==$k){
+                    $arr['zh-CN'] = $v;
+                }
+            }
+            build_err($arr); // 输出增强后的响应信息
+        }
     }
 
 

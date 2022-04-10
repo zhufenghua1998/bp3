@@ -20,10 +20,10 @@
         save_config();
         
         unlink($temp_uri);
-        
-        echo '{"errno":0,"errmsg":"导入配置文件成功!"}';
-        
+
+        build_success("导入配置文件成功");
+
     }else{
         // 已安装过了
-        echo '{"errno":1,"errmsg":"您已经安装过了，本次导入无效！请删掉config.php再试。"}';
+        build_err("已经安装过了，本次导入无效，请删除config.php再试");
    }

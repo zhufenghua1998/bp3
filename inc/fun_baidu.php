@@ -213,7 +213,7 @@
             if($to_arr){
                 return $arr;
             }else{
-                return json_encode($str);
+                return json_decode($str);
             }
         }
         else{

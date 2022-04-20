@@ -159,12 +159,12 @@
                     $title = substr($row['path'],strlen($pre_dir));
                     //是否前台直链
                     $pre_dlink = "";
-                    if($close_dlink==0  || check_session()){
+                    if($close_dlink==0  || !check_session()){
                         $pre_dlink = "<a target='_blank' href='$dlink_url?fsid=$fsid' type='button' class='btn btn-default'>直链</a><a class='btn btn-default cp2' data-clipboard-text='$dlink_url?fsid=$fsid'>复制</a>";
                     }
                     // 是否前台下载
                     $dn="";
-                    if($close_dload==0 && check_session()){
+                    if($close_dload==0 && !check_session()){
                         $dn = "<a href='$dn_url?fsid=$fsid' type='button' class='btn btn-default'>下载</a><button type='button' class='btn btn-default cp' data-clipboard-text='$dn_url?fsid=$fsid'>复制</button>";
                     }
                     // 文件名

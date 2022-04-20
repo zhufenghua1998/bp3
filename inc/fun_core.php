@@ -162,7 +162,7 @@
      */
     function force_login(string $user='user',string $login_url=""){
         if(!isset($_SESSION[$user])){
-            build_err("您必须登录系统，才可访问本页面！3秒后自动返回登录页面");
+            build_err("您必须登录系统，才可访问本页面！3秒后自动返回登录页面",false);
             // 重定向
             if(empty($login_url)){
                 global $login_url;

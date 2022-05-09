@@ -349,7 +349,9 @@
                 $config = require($file_path);
             }
             // 存入session缓存
-            $_SESSION['config'] = $config;
+            if($config_path!="/conf_base.php"){
+                $_SESSION['config'] = $config;
+            }
             return $config;
         }
     }

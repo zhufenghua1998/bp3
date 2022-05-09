@@ -160,15 +160,13 @@
      * @param string $user 需要检测的session，默认使用全局变量
      * @param string $login_url 需要重定向的地址，默认使用全局变量
      */
-    function force_login(string $user='user',string $login_url=""){
+    define("BASE_URL",get_base_url());  // 根目录URL
+    define("LOGIN_GUIDE_PAGE",BASE_URL."/pages/login_guide.html");
+    function force_login(string $user='user',string $guide_page=""){
         if(!isset($_SESSION[$user])){
-            build_err("您必须登录系统，才可访问本页面！3秒后自动返回登录页面",false);
             // 重定向
-            if(empty($login_url)){
-                global $login_url;
-            }
-            js_location($login_url,3000);
-            die;
+            $url = $guide_page ? $guide_page : LOGIN_GUIDE_PAGE;
+            redirect($url);
         }
     }
 

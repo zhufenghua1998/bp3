@@ -340,12 +340,19 @@
         if(empty($config_path)){
             global $config_path;
         }
-        // 校验文件是否存在
-        $file_path = get_base_root().$config_path;
-        if(!file_exists($file_path)){
-            return array();
+        // 如果存在session缓存，直接取
+        if($_SESSION['config']){
+            return $_SESSION['config'];
         }else{
-            return require($file_path);
+            // 校验文件是否存在
+            $file_path = get_base_root().$config_path;
+            $config = array();
+            if(file_exists($file_path)){
+                $config = require($file_path);
+            }
+            // 存入session缓存
+            $_SESSION['config'] = $config;
+            return $config;
         }
     }
 
@@ -396,6 +403,8 @@
         if(is_null($config)){
             global $config;
         }
+        // 先更新session缓存
+        $_SESSION['config'] = $config;
         $text='<?php return '.var_export($config,true).';';
         return file_put_contents(get_base_root().$config_path,$text);
     }

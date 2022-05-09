@@ -70,32 +70,12 @@
         </style>
     </head>
     <body>
-        <div class="container">
-            <h3 class="text-center">欢迎使用bp3，正在体验免app配置</h3>
-            <p>免app配置时，默认<span class="text-danger">账户密码均为bp3</span></p>
-            <p>如果本次配置未能成功，请把config.php删掉并重新访问本页面</p>
-            <form class="form-inline">
-            <div class="form-group">
-                <input class="form-control" id="customGrant" placeholder="自定义授权系统地址"/>
-            </div>
-            <button type="button"  onclick="customGrantFun()" class="btn btn-primary">确定</button>
-            </form>
-            <p><b>提示：</b>自定义授权系统，安全性请自己鉴别。</p>
-            <p>或从以下列表中选取一个快速授权地址，并访问：</p>
-            <ol>
-                <li><a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $enc_page_url;?>">bp3官方(国内)</a></li>
-                <li><a href="http://bp3.rbusoft.com/grant/?display=<?php echo $enc_page_url;?>">阿布软件网(海外)</a></li>
-            </ol>
-            <p>任意点击上面在一个地址，进行账户授权，即可自动完成</p>
-            <p><b>提示：</b>如果上述地址均不可用，请手动获取授权原始信息，并粘贴到下面：</p>
-            <form method="get">
-                <textarea name="param" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
-                <p><input class="btn btn-primary" type="submit" value="提交"></p>
-            </form>
-            <p><b>提示：</b>安装完毕后，可在后台调整配置app，或者免app授权，以及内置app三种授权方式。</p>
-            <p><b>提示：</b>如果安装遇到问题，可在github求助，或QQ交流群：1150064636。</p>
-            <p><a href="./install.php">返回配置app授权</a> 或 <a href="./install_inner.php">初始化内置app授权</a></p>
-        </div>
+    <div class="container">
+        <h3 class="text-center">欢迎使用bp3，正在体验免app配置</h3>
+        <p><b>提示：</b>bp3开发者已暂停提供免app授权，请使用内置app，或申请成为百度开发者</p>
+        <p><b>提示：</b>如果安装遇到问题，可在github求助，或QQ交流群：1150064636。</p>
+        <p><a href="install.php">返回配置app授权</a> 或 <a href="install_inner.php">初始化内置app授权</a></p>
+    </div>
         <script>
             function customGrantFun(){
                 location.href = ''+$("#customGrant").val()+"?display=<?php echo $enc_page_url;?>";

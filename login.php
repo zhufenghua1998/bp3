@@ -18,8 +18,8 @@
         $login_baidu_url = "$grant_url?display=$login_controller"; // 快速登录百度地址
     }
 
-    $name = $_POST['user'];
-    $pwd = $_POST['pwd'];
+    $name = isset($_POST['user'])?$_POST['user']:null;
+    $pwd = isset($_POST['pwd'])?$_POST['pwd']:null;
 
     // 用户密码为空，不处理
     if(!$name && !$pwd){

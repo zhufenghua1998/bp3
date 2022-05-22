@@ -4,11 +4,11 @@
     force_login();  // 强制登录
 
     // 捕获dir查询参数
-    $dir = $_GET['dir']; // 少了前缀
+    $dir = isset($_GET['dir'])?$_GET['dir']:null; // 少了前缀
     $real_dir = "";  // 真实路径
     $pre_dir = "";   // 无论是否有前缀，指定了空，管理员页面能看到所有文件
     // 捕获查询参数
-    $key = $_GET['s'];
+    $key = isset($_GET['s'])?$_GET['s']:null;
     // 捕获分页参数
     $page = empty($_GET['page'])? 1 : $_GET['page'];
     // data数据，优先查询，然后是dir
@@ -31,7 +31,7 @@
         $data = m_file_list($real_dir,$access_token);
     }
     // 是否还有下一页(仅搜索接口）
-    $has_more = $data['has_more'];
+    $has_more = isset($data['has_more'])?$data['has_more']:null;
 ?>
 <!doctype html>
 <html>
@@ -211,7 +211,7 @@
                           <td>
                               <div class='m-btns btn-group' role='group' aria-label='...'>
                               <a href='$dn_url?fsid=$fsid' type='button' class='btn btn-default'>下&nbsp;&nbsp;&nbsp;载</a>
-                              <a  target='_blank' href='$dlink_url?fsid=$fsid' type='button' class='btn btn-default'>直链</a><button path='$path' onclick='rename(event)' class='btn btn-default'>重命名</button><button class='btn btn-danger' path='$path' onclick='del(event)'>删除</button>
+                              <a  target='_blank' href='$dlink_url?fsid=$fsid' type='button' class='btn btn-default'>直链</a><button path='$_path' onclick='rename(event)' class='btn btn-default'>重命名</button><button class='btn btn-danger' path='$_path' onclick='del(event)'>删除</button>
                               </div>
                           </td>
                         </tr>";
@@ -228,7 +228,7 @@
             foreach ($data['list'] as $row){
                 if($row['isdir']==1){
                     // 去掉前缀
-                    $path = substr($row['path'],strlen($predir));
+                    $path = $row['path'];
                     $encode_path = urlencode($path);
                     $server_filename = $row['server_filename'];
                     $checkbox = "<input type='checkbox' name='item' data-path='$path'>";
@@ -397,7 +397,7 @@
         if(!name){
             message("未输入名称","error");
             return;
-    }
+        }
         name = name.trim();  // 前后不可有空格
         if(name==""){
             message("未输入名称","error");

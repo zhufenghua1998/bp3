@@ -8,10 +8,10 @@
     }
 
     // 捕获dir查询参数
-    $dir = $_GET['dir']; // 少了前缀
+    $dir = isset($_GET['dir'])?$_GET['dir']: null; // 少了前缀
     $real_dir = "";  // 真实路径
     // 捕获查询参数
-    $key = $_GET['s'];
+    $key = isset($_GET['s'])?$_GET['s']: null;
     // 捕获分页参数
     $page = empty($_GET['page'])? 1 : $_GET['page'];
     // data数据，优先查询，然后是dir
@@ -33,7 +33,7 @@
         $data = m_file_list($real_dir,$access_token);
     }
     // 是否还有下一页(仅搜索接口）
-    $has_more = $data['has_more'];
+    $has_more = isset($data['has_more'])?$data['has_more']:null;
 ?>
 <!doctype html>
 <html>

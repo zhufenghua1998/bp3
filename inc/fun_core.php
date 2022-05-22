@@ -583,3 +583,48 @@
     function get_file_root(string $path){
         echo get_base_root().$path;
     }
+
+    /**
+     * 36 截取请求页面
+     */
+    function getTemplate(){
+        $tpl = "";
+        // 1.获取最后一个 / 后的内容
+        $page_url = get_page_url();
+        $arr = explode("/",$page_url);
+        if($arr<=0){
+            return "";
+        }
+        $page_url = end($arr);
+        // 获取第一个 . 前的内容
+        $arr = explode(".",$page_url);
+        if($arr<=0){
+            return "";
+        }
+        $page_url = current($arr);
+        // 指定 .html
+        $tpl = $page_url.".html";
+        return $tpl;
+    }
+    /** 37
+     * 显示主题页面
+     */
+    function display(){
+        // 尝试显示主题模板
+        global $dir_url;
+        global $base_url;
+        global $bp3_tag;
+        try {
+            $tpl = getTemplate();
+            $bp3_tag->assign("dir_url",$dir_url);
+            $bp3_tag->assign("base_url",$base_url);
+            if($tpl!="" && file_exists(BP3_TEMPLATE_DIR.$tpl)){
+                $bp3_tag->display($tpl);
+            }
+        } catch (SmartyException $e) {
+            // 模板不存在
+        } catch (Exception $e) {
+            // 不做任何处理
+        }
+    }
+

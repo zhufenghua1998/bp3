@@ -32,6 +32,13 @@
         easy_echo("警告：当前程序根目录无写入权限");
     }
 
+    // 程序根目录
+    define("BP3_ROOT",get_base_root());
+    // 缓存根目录
+    define("TEMP_DIR",BP3_ROOT."/temp");
+    if(!file_exists(TEMP_DIR)){
+        mkdir(TEMP_DIR);
+    }
 
     // 引入百度业务函数
     require_once("inc/fun_baidu.php");
@@ -194,6 +201,23 @@
     $enc_bind_account_url   = urlencode(get_file_url("/controller/bind_account.php"));
     // 快速绑定百度登录授权地址
     $bind_account_grant_url = "$grant_url?display=$enc_bind_account_url";
+
+
+    // 引入模板
+    require_once("inc/smarty/bp3_tag.class.php");
+    define("THEME","default");  // 当前主题
+    $bp3_tag = new bp3_tag();
+
+    $bp3_tag->assign('app_name', $title);
+    $bp3_tag->assign("app_subtitle",$subtitle);
+    $bp3_tag->assign("app_blog",$blog);
+    $bp3_tag->assign("app_github",$github);
+    $bp3_tag->assign("app_description",$description);
+    $bp3_tag->assign("app_keywords",$keywords);
+    $bp3_tag->assign("year",$year);
+
+
+
 
 
 

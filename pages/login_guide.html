@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>登录引导 | bp3</title>
+    <link href="../favicon.ico" rel="shortcut icon" />
+</head>
+<body>
+
+    <h2>登录已失效，需要重新登录</h2>
+    <div>将在<span id="limit">3</span>秒后重定向到登录页面，或点击<a href="../login.php">立刻跳转</a></div>
+
+    <script>
+
+        // 定义跳转函数
+        function change(){
+            let Ele = document.getElementById("limit");
+            let limit = Ele.innerText;
+            limit--;
+            if(limit>0){
+                Ele.innerText = limit;
+            }else{
+                window.location = "../login.php";
+            }
+        }
+        // 设置定时器
+        setInterval(change,1000);
+
+    </script>
+</body>
+</html>

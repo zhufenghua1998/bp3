@@ -1,45 +1,26 @@
 <?php
-    session_start();
-    require_once('../config.php');
     require_once('../functions.php');
 /**
- *  文件下载模块，访客权限使用时需管理员开启
+ *  文件直链模块，访客权限使用时需管理员开启
  */
     // 1.获取fsid
-    $fsid =  $_GET['fsid'];
-    if(empty($fsid)){
-        echo '无效fsid';
-        die;
-    }
-    if($config['control']['pre_link']!=0){
-        $user = $_SESSION['user'];
-        if(empty($user)){
-            echo '未登录';
-            die;
-        }
-    }
+    $fsid = force_get_param("fsid");
 
-    $access_token = $config['identify']['access_token'];
-    $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
-    $opts = array(
-        'http' => array(
-            'method' => 'GET', 
-            'header' => 'User-Agent: pan.baidu.com'
-            ));
-    $context = stream_context_create($opts);
-    $result = @file_get_contents($url, false, $context);
-    $json = json_decode($result);
-    $dlink =  $json->list[0]->dlink;
-    $file_size = $json->list[0]->size;
-    $file_name = $json->list[0]->filename;
+    if($close_dlink!=0){
+        force_login();  //强制登录
+    }
+    
+    $info = m_file_info($access_token,$fsid);
+    
+    $dlink =  $info['list'][0]['dlink'];
+    $file_size = $info['list'][0]['size'];
+    $file_name = $info['list'][0]['filename'];
     $dlink = $dlink.'&access_token='.$access_token;
+    
     $show_size = height_show_size($file_size);
     $check_ua = $_SERVER['HTTP_USER_AGENT']=="pan.baidu.com"?"text-success":"text-danger";
-    $headerArray = array('User-Agent: pan.baidu.com');
-    $getRealLink = head($dlink, $headerArray); // 禁止重定向
-	$getRealLink = strstr($getRealLink, "Location");
-	$realLink =  substr($getRealLink, 10);
-	$realLink = substr($realLink,0,strpos($realLink,"\n")-1);
+
+	$realLink = m_redirect_dlink($dlink);
 	$client_link = $realLink."&filename=|".$file_name;
 ?>
 <!doctype html>
@@ -69,21 +50,21 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand <?php if(empty($_SESSION['user'])) echo "hidden" ?>" href="./">管理系统</a>
+          <a class="navbar-brand <?php if(!check_session()) echo "hidden" ?>" href="./">管理系统</a>
         </div>
     
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
          <ul class="nav navbar-nav">
           </ul>
-          <ul class="nav navbar-nav <?php if(empty($_SESSION['user'])) echo "hidden" ?>">
+          <ul class="nav navbar-nav <?php if(!check_session()) echo "hidden" ?>">
             <li><a href="./file.php">文件管理<i class="fa fa-th-large" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
             <li><a href="./settings.php">修改设置<i class="fa fa-cog"></i></a></li>
             <li><a href="./help.php">帮助与支持<i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="../">前台<i class="fa fa-home"></i></a></li>
-            <li class="<?php if(empty($_SESSION['user'])) echo "hidden" ?>"><a href="./logout.php">注销<i class="fa fa-sign-out" aria-hidden="true"></i></i></a></li>
+            <li class="<?php if(!check_session()) echo "hidden" ?>"><a href="./logout.php">注销<i class="fa fa-sign-out" aria-hidden="true"></i></i></a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -99,9 +80,19 @@
     <div class="text-info">
         点击==><button id="cbtn1">复制链接</button>
     </div>
+    <?php
+        if(check_session()){
+            echo "<p>以下短链接仅管理员可见，如果你需要，我们提供了较短的链接：</p>";
+            echo "<pre class='br'>".$dlink."</pre>";
+        }
+    ?>
     <h2>通用下载方式：</h2>
     <p>这是一些通用的解决方案，需要设置user-agent：pan.baidu.com</p>
-    <p>IDM、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS)</p>
+    <p>IDM（<a target="_blank" href="https://wwe.lanzoul.com/ixfgPybr93e">破解版下载，仅windows</a>)、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS）等</p>
+    <p>另外，我们提供了curl通用命令</p>
+    <pre class="br">
+curl --connect-timeout 10 -C - -o "<?php echo $file_name;?>" -L -X GET "<?php echo $realLink ?>" -H "User-Agent: pan.baidu.com" 
+</pre>
     <h2>bp3_client</h2>
     <p>这是bp3提供的客户端</p>
     <p>若首次使用，请下载 <a href="./bp3_client_win_x64.zip">bp3客户端（仅windows x64）</a>，解压后点击bp3_client.exe运行，右键粘贴并回车即可下载</p>
@@ -152,6 +143,50 @@
     clipboard1.on('error', function(e) {
         alert("复制失败")
     });
+    // 复制代码
+    $("pre").mouseenter(function (e) {
+        var _that = $(this);
+        _that.css("position", "relative");
+        _that.addClass("activePre");
+        var copyBtn = _that.find('.copyBtn');
+        if (!copyBtn || copyBtn.length <= 0) {
+            var copyBtn = '<span class="copyBtn" style="position:absolute;top:2px;right:2px;z-index:999;padding:2px;font-size:13px;color:black;background-color: blue;cursor: pointer;" onclick="copyCode()">Copy</span>';
+            _that.append(copyBtn);
+        }
+    }).mouseleave(function (e) {
+        var _that = $(this);
+        var copyBtn = _that.find('.copyBtn');
+        var copyBtnHover = _that.find('.copyBtn:hover');
+        if (copyBtnHover.length == 0) {
+            copyBtn.remove();
+            _that.removeClass("activePre");
+        }
+    });
+    function copyCode() {
+        var activePre = $(".activePre");
+        activePre = activePre[0];
+        var code = activePre.firstChild;
+        if(code.nodeName=="CODE"){
+            activePre = code;
+        }
+        var clone = $(activePre).clone();
+        clone.find('.copyBtn').remove();
+        var clipboard = new ClipboardJS('.copyBtn', {
+            text: function () {
+                return clone.text();
+            }
+        });
+        clipboard.on("success", function (e) {
+            $(".copyBtn").html("Copied!");
+            clipboard.destroy();
+            clone.remove();
+        });
+
+        clipboard.on("error", function (e) {
+            clipboard.destroy();
+            clone.remove();
+        });
+    }
 </script>
 </body>
 </html>

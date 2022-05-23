@@ -1,32 +1,27 @@
 <?php
-    session_start();
-    $config_file = "../config.php";
-    require_once($config_file);
     require_once("../functions.php");
-    if(empty($_SESSION['user'])){
-        echo '{"error":"user not login"}';
-        die;
-    }
-    $identify = $_GET['param'];
-    // 如果不存在param参数
-    if(empty($identify)){
-        echo '{"error":"not param"}';
-        die;
-    }
-    // 填写identify信息
-    $identify = urldecode($identify);
-    $json = json_decode($identify,true);
-    $json['conn_time'] = time();
-    $config['identify'] = $json;
-    $text='<?php $config='.var_export($config,true).';'; 
-    file_put_contents($config_file,$text);
+    
+    force_login();  // 强制登录
+    
+    $identify = force_get_param("param");
+
+    $str_identify = urldecode($identify);
+    // 取得identify信息
+
+    $config['identify'] =  json_decode($str_identify,true);
+    
+    save_config();
 
     // 获取basic
-    require('./basic.php');
-    // 返回首页
-    $dirUrl =getDirUrl(basename(__FILE__));
-    header("Location: $dirUrl");
-?>
+    $basic = m_basic($config['identify']['access_token']);
     
+    $config['basic'] = $basic;
+    
+    // 保存config
+    save_config();
+
+    //返回首页
+    redirect($dir_url);
+
     
     

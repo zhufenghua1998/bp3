@@ -1,52 +1,46 @@
 <?php
-    // 体验版
-    $config_file = "./config.php";
-    require_once($config_file);
+    // 快速配置
     require_once("./functions.php");
-    //仅在config['init']==false时该配置才可生效
-    $init = $config['init'];
-    
-    $identify = $_GET['param'];
-    $json = null;
-    
-    // 如果存在参数param
-    if(isset($identify)){
-        $identify = urldecode($identify);
-        $json = json_decode($identify,true);
-        
-        $json['conn_time'] = time();
-    }
-    
-    $pageUrl = urlencode(getPageUrl());
-    
-    $dirUrl = getDirUrl(basename(__FILE__));
-    
-    $redirect = $dirUrl.'grant/callback.php';
 
-    // 如果存在参数，且还未初始化
-    if(!empty($identify) && !$init){
-        $init = true;
+    $config = $base;
+
+    $param = $_GET['param']; //取得的安装信息
+
+    $identify = null; //身份信息
+    
+    // 补全callback.php信息
+    $redirect = $dir_url.'/grant/callback.php';
+
+    // 如果未安装，且接收到了参数，开始安装
+    if(!$install && !empty($param)){
+        
         $config['user']['name']='bp3';
         $config['user']['pwd']='bp3';
-        $config['init']=$init;
+
         $config['connect']['redirect_uri']=$redirect;
-        $config['identify'] = $json;
+
+        $param = urldecode($param); // 这是一个转码后的字符串，先转码，再转数组
+        $identify = json_decode($param,true);
+
+        $identify['conn_time'] = $time; // 使用外部系统可能比较旧缺少此项，在这里重新添加一次
+
+        $config['identify'] = $identify;
+
+        // 先保存config
+        save_config();
+    
+        // 获取basic
+        $basic = m_basic($identify['access_token']);
         
-        // 2.获取basic
-        $token = $config['identify']['access_token'];
-        $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$token&method=uinfo";
-        $result = file_get_contents($url,false);
-        $json = json_decode($result);
-        $config['basic']['baidu_name'] = $json->baidu_name;
-        $config['basic']['netdisk_name'] = $json->netdisk_name;
-        $config['basic']['uk'] = $json->uk;
-        $config['basic']['vip_type'] = $json->vip_type;
-        //
-        $text='<?php $config='.var_export($config,true).';'; 
-        file_put_contents($config_file,$text);
-        echo "<script>alert('提交成功！正在前往登录页面...');window.location.href='./login.php';</script>";
-    }else if(!empty($identify)){
-        echo "<script>alert('你已经配置过了，如果需要重新配置，请把conf_base.php文件覆盖config.php文件');window.location.href='./login.php';</script>";
+        $config['basic'] = $basic;
+        
+        // 保存config
+        save_config();
+        redirect($login_url,0);
+    }else if(!empty($param)){
+        // 请求初始化，但已经初始化了
+        js_alert("你已经配置过了，如果需要重新配置，请把config.php文件删掉");
+        js_location($login_url);
     }
     
 ?>
@@ -54,7 +48,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>bp3 | 免app体验版</title>
+        <title>bp3 | 免app安装</title>
         <link href="./favicon.ico" rel="shortcut icon" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./css/bootstrap.min.css" rel="stylesheet">
@@ -76,23 +70,16 @@
         </style>
     </head>
     <body>
-        <div class="container">
-            <h3 class="text-center">欢迎使用bp3，正在体验免app配置</h3>
-            <p>免app配置时，默认<span class="text-danger">账户密码均为bp3</span></p>
-            <p>如果本次配置未能成功，请使用conf_base.php覆盖config.php重新配置</p>
-            <p>请从以下列表中选取一个快速授权地址，并访问：</p>
-            <ol>
-                <li><a href="https://bp3.52dixiaowo.com/grant/?display=<?php echo $pageUrl;?>">bp3官方</a></li>
-            </ol>
-            <p>任意点击上面在一个地址，进行账户授权，即可自动完成</p>
-            <p><b>提示：</b>如果上述地址均不可用，请手动获取授权原始信息，并粘贴到下面：</p>
-            <form method="get">
-                <textarea name="param" rows="4" cols="30" placeholder="请粘贴授权原始信息"></textarea>
-                <p><input type="submit" value="提交"></p>
-            </form>
-            <p><b>提示：</b>如果后期需要使用内置app，可在后台填写app信息、修改授权地址、重新点击获取授权即可</p>
-            <p><b>提示：</b>如果安装遇到问题，可在github求助，或QQ交流群：1150064636。</p>
-            <p><a href="./install.php">返回配置app授权</a></p>
-        </div>
+    <div class="container">
+        <h3 class="text-center">欢迎使用bp3，正在体验免app配置</h3>
+        <p><b>提示：</b>bp3开发者已暂停提供免app授权，请使用内置app，或申请成为百度开发者</p>
+        <p><b>提示：</b>如果安装遇到问题，可在github求助，或QQ交流群：1150064636。</p>
+        <p><a href="install.php">返回配置app授权</a> 或 <a href="install_inner.php">初始化内置app授权</a></p>
+    </div>
+        <script>
+            function customGrantFun(){
+                location.href = ''+$("#customGrant").val()+"?display=<?php echo $enc_page_url;?>";
+            }
+        </script>
     </body>
 </html>

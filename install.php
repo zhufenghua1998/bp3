@@ -1,20 +1,16 @@
 <?php
-
-    $config_file = "./config.php";
-    require_once($config_file);
     require_once("./functions.php");
-    //仅在config['init']==false时该配置才可生效
-    $init = $config['init'];
-    $dirUrl = getDirUrl(basename(__FILE__));
-    $redirect = $dirUrl."grant/callback.php";  // redirect_uri
-    $grant_url = $dirUrl."grant/";
-    
+
+    $config = $base;
+
     $username = $_POST['username'];
     $password = $_POST['password'];
     $app = $_POST['app'];
     $secret = $_POST['secret'];
-    
-    if(!empty($username) && !$init){
+    $redirect = get_file_url("/grant/callback.php");
+    $grant_url = get_file_url("/grant/");
+
+    if(!empty($username) && !$install){
         
         $init = true;
         $config['init']=$init;
@@ -24,14 +20,15 @@
         $config['connect']['secret_key']=$secret;
         $config['connect']['redirect_uri']=$redirect;
         $config['identify']['grant_url']=$grant_url;
-        $text='<?php $config='.var_export($config,true).';'; 
-        file_put_contents($config_file,$text);
+
+        save_config();
         
-        
-        echo "<script>alert('提交成功！正在前往登录页面...');window.location.href='./login.php';</script>";
+        js_alert('提交成功！正在前往登录页面...');
+        js_location($login_url);
     }else if(!empty($username)){
-        echo "<script>alert('你已经配置过了，如果需要重新配置，请把conf_base.php文件覆盖config.php文件');window.location.href='./login.php';</script>";
-    }
+        js_alert('你已经配置过了，如果需要重新配置，请把config.php文件删掉');
+        js_location($login_url);
+   }
 
 ?>
 <!doctype html>
@@ -44,6 +41,7 @@
         <link href="./css/bootstrap.min.css" rel="stylesheet">
         <script src="./js/jquery.min.js"></script>
         <script src="./js/bootstrap.min.js"></script>
+        <script src="./js/functions.js"></script>
         <link href="./fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
         <style>
             body{
@@ -63,9 +61,10 @@
         <div class="container">
             <h3 class="text-center">欢迎使用bp3，当前正在配置config.php文件</h3>
             <p>您当前正在使用"一键配置"</p>
-            <p>如果本次配置未能成功，请使用conf_base.php覆盖config.php重新配置</p>
-            <h3><b>提示：</b>已推出免app方式，无须任何配置<a href="./install_fast.php">点击体验</a></h3>
-            <p>如果非免app配置，你需要明白，使用本程序需要申请成为百度网盘开发者，并申请App，点击跳转<a href="https://pan.baidu.com/union/console/applist" target="_blank">百度网盘开发者控制台</a></p>
+            <p>如果本次配置未能成功，请把config.php删掉并重新访问本页面</p>
+            <h3><b>提示：</b>简化方式（不推荐）中，您可以<a href="./install_fast.php">免app授权系统</a>，或者初始化<a href="./install_inner.php">内置app授权系统</a></h3>
+            <p>您需要明白，在完整的流程中，使用本程序需要申请成为百度网盘开发者，并申请App，点击跳转<a href="https://pan.baidu.com/union/console/applist" target="_blank">百度网盘开发者控制台</a></p>
+            <p>（导入配置文件）如果您的的站点崩溃了，或者从其他站点导入数据安装，您还可以：<input id="upload" class="hidden" type="file" /><button class="btn btn-primary" onclick="$('#upload').trigger('click');">从配置文件安装</button></p>
             <p>现在就开始配置吧：</p>
             <form method="post">
               <div class="form-group">
@@ -92,5 +91,59 @@
               <p class="text-center"><button type="submit" class="btn btn-default">提交</button></p>
             </form>
         </div>
+    <script>
+    /**
+     * 导入配置文件
+     */
+    $("#upload").change(function(){
+        
+            if(!this.files[0]) {
+                this.value = "";
+                return;
+            }
+            let ext,idx;   
+            let imgName = this.value;
+            idx = imgName.lastIndexOf(".");   
+            if (idx != -1){   
+            ext = imgName.substr(idx+1).toUpperCase();   
+            ext = ext.toLowerCase(); 
+            // alert("ext="+ext);
+            if (ext != 'php'){
+                alert("只能上传.php 类型的文件!"); 
+                this.value="";
+                return;  
+            }
+            }
+            if(this.files[0].size>20971520) {
+                alert('文件不得超过20M')
+                this.value = "";
+                return
+            }
+            let formData = new FormData();
+            formData.append('file', this.files[0]);
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4 && xhr.status == 200)
+                {
+                    if(this.responseText){
+                        let jsonObj = JSON.parse(this.responseText);
+                        if(jsonObj.errno==0){
+                            message("安装成功","success");
+                            
+                            easy_load("./login.php");
+                        }else{
+                            message(jsonObj.errmsg,"error");
+                        }
+                    }else{
+                        message("导入失败","error");
+                    }
+                }
+            }
+            xhr.open('post', './install_config.php', true);
+            xhr.send(formData);
+
+            this.value = "";
+    	})
+    </script>
     </body>
 </html>

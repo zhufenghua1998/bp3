@@ -1,0 +1,22 @@
+
+# 忽略文件列表
+
+# 忽略idea
+
+*.idea
+
+# 忽略user.ini
+.user.ini
+
+# 忽略temp目录
+/temp
+
+# 忽略日志文件
+/log
+
+# 忽略config.php
+config.php
+
+# 忽略备份zip
+
+controller/bp3-main-back.zip
